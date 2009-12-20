@@ -107,9 +107,9 @@ void SendMetaData()
 {
 	char str[256];
 	int i;
-	
+
 	InitDeck();
-	
+
 	for (i=0;i<102;i++)
 		str[i]=GetCard()+1;
 	str[102]=1;Send(str,103,1);
@@ -215,7 +215,7 @@ int main(int argc,char **argv)
 	atexit(QuitProc);
 
 	srand((unsigned)time(NULL));
-	
+
 	SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE);
 
 	Network_Init();

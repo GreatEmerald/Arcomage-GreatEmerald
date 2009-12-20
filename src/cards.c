@@ -144,10 +144,10 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn,int *sound)
 			break;
 		case 8:		// Copping the Tech
 			if (s1->q<s2->q)
-   			{
-      			s1->q=s2->q;
-      			*sound=RESB_UP;
-   			}
+			{
+				s1->q=s2->q;
+				*sound=RESB_UP;
+			}
 			break;
 		case 9:		// Basic Wall
 			s1->w+=3;
@@ -165,10 +165,10 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn,int *sound)
 			break;
 		case 12:		// Foundations
 			if (!s1->w)
-   				s1->w+=6;
-   			else
-      			s1->w+=3;
-   			*sound=WALL_UP;
+				s1->w+=6;
+			else
+				s1->w+=3;
+				*sound=WALL_UP;
 			break;
 		case 13:		// Tremors
 			s1->w-=5;
@@ -273,10 +273,10 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn,int *sound)
 			s1->w+=6;
 			*sound=WALL_UP;
 			if (s1->d<s2->d)
-   			{
-      			s1->d++;
-      			*sound=RESB_UP;
-   			}
+			{
+				s1->d++;
+				*sound=RESB_UP;
+			}
 			break;
 		case 33:		// Battlements
 			s1->w+=7;

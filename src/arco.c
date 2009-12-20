@@ -37,9 +37,9 @@ void DrawCards(int turn)
 	else 
 		for (i=0;i<6;i++)
 			if (Requisite(&Player[turn],i))
-   				DrawCard(Player[turn].Hand[i],8+106*i,342);
+				DrawCard(Player[turn].Hand[i],8+106*i,342);
 			else
-   				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,160);
+				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,160);
 }
 
 void Boss()
@@ -93,7 +93,7 @@ void PlayCard(int c,int discrd)
 		Blit(BUFFER,SCREEN);
 		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,128);
 		if (discrd)
-  			DrawCard(0x200,(int)x,(int)y);
+			DrawCard(0x200,(int)x,(int)y);
 		UpdateScreen();
 		SDL_Delay(20);
 	}
@@ -189,8 +189,8 @@ void DoGame()
 	// init screen
 	Blit(GAMEBG,SCREEN);
 	DrawStatus(turn,Player);
- 	DrawCards(turn);
- 	UpdateScreen();
+	DrawCards(turn);
+	UpdateScreen();
 
 	Sound_Play(SHUFFLE);
 	
@@ -250,13 +250,13 @@ void DoGame()
 				i=aiplayer;if (i==-1) i=netplayer;i=!i;
 				if (Winner(i))
 				{
-    				DialogBox(DLGWINNER,"You win!");
-    				Sound_Play(VICTORY);
+					DialogBox(DLGWINNER,"You win!");
+					Sound_Play(VICTORY);
 				}
 				else
 				{
 			 		DialogBox(DLGLOOSER,"You loose!");
- 					Sound_Play(DEFEAT);
+					Sound_Play(DEFEAT);
 		 		}
 			} else {										 // 2 local Players
 				DialogBox(DLGWINNER,"Winner is\n%s !",Player[Winner(1)].Name);

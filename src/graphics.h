@@ -5,20 +5,20 @@
 
 enum {	SCREEN=0,
 		BUFFER,
-  		MENU,
-    	MENUITEMS,
-     	CREDITS,
-      	DECK,
-       	NUMSBIG,
-        GAMEBG,
-        CASTLE,
-        BOSS,
-        DLGWINNER,
-        DLGLOOSER,
-        DLGNETWORK,
-        DLGERROR,
-        DLGMSG,
-        GFX_CNT};
+		MENU,
+		MENUITEMS,
+		CREDITS,
+		DECK,
+		NUMSBIG,
+		GAMEBG,
+		CASTLE,
+		BOSS,
+		DLGWINNER,
+		DLGLOOSER,
+		DLGNETWORK,
+		DLGERROR,
+		DLGMSG,
+		GFX_CNT};
 
 void Graphics_Init();
 void Graphics_Quit();

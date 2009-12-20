@@ -17,18 +17,18 @@ void Sound_Init()
 	if (Mix_OpenAudio(22050,AUDIO_S16LSB,2,4096)==0)
 	{
 		SoundEnabled=1;
-		LoadSound("data/damage.wav",&SfxData[DAMAGE]);
-		LoadSound("data/deal.wav",&SfxData[DEAL]);
-		LoadSound("data/defeat.wav",&SfxData[DEFEAT]);
-		LoadSound("data/resb_down.wav",&SfxData[RESB_DOWN]);
-		LoadSound("data/resb_up.wav",&SfxData[RESB_UP]);
-		LoadSound("data/ress_down.wav",&SfxData[RESS_DOWN]);
-		LoadSound("data/ress_up.wav",&SfxData[RESS_UP]);
-		LoadSound("data/shuffle.wav",&SfxData[SHUFFLE]);
-		LoadSound("data/title.wav",&SfxData[TITLE]);
-		LoadSound("data/tower_up.wav",&SfxData[TOWER_UP]);
-		LoadSound("data/victory.wav",&SfxData[VICTORY]);
-		LoadSound("data/wall_up.wav",&SfxData[WALL_UP]);
+		LoadSound(DATADIR "damage.wav",&SfxData[DAMAGE]);
+		LoadSound(DATADIR "deal.wav",&SfxData[DEAL]);
+		LoadSound(DATADIR "defeat.wav",&SfxData[DEFEAT]);
+		LoadSound(DATADIR "resb_down.wav",&SfxData[RESB_DOWN]);
+		LoadSound(DATADIR "resb_up.wav",&SfxData[RESB_UP]);
+		LoadSound(DATADIR "ress_down.wav",&SfxData[RESS_DOWN]);
+		LoadSound(DATADIR "ress_up.wav",&SfxData[RESS_UP]);
+		LoadSound(DATADIR "shuffle.wav",&SfxData[SHUFFLE]);
+		LoadSound(DATADIR "title.wav",&SfxData[TITLE]);
+		LoadSound(DATADIR "tower_up.wav",&SfxData[TOWER_UP]);
+		LoadSound(DATADIR "victory.wav",&SfxData[VICTORY]);
+		LoadSound(DATADIR "wall_up.wav",&SfxData[WALL_UP]);
 	}
 }
 

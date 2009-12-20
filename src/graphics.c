@@ -20,37 +20,37 @@ void Graphics_Init(int fullscreen)
 	switch (OPERATINGSYSTEM)
 	{
 		case 1:
-			LoadSurface("data/boss_linux.png",&GfxData[BOSS]);break;
+			LoadSurface(DATADIR "boss_linux.png",&GfxData[BOSS]);break;
 		default:
-			LoadSurface("data/boss_windows.png",&GfxData[BOSS]);break;
+			LoadSurface(DATADIR "boss_windows.png",&GfxData[BOSS]);break;
 	}
-	LoadSurface("data/menu.png",&GfxData[MENU]);
-	LoadSurface("data/menuitems.png",&GfxData[MENUITEMS]);
-	LoadSurface("data/credits.png",&GfxData[CREDITS]);
-	LoadSurface("data/deck.png",&GfxData[DECK]);
+	LoadSurface(DATADIR "menu.png",&GfxData[MENU]);
+	LoadSurface(DATADIR "menuitems.png",&GfxData[MENUITEMS]);
+	LoadSurface(DATADIR "credits.png",&GfxData[CREDITS]);
+	LoadSurface(DATADIR "deck.png",&GfxData[DECK]);
 	SDL_SetColorKey(GfxData[DECK],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[DECK]->format,255,0,255));
-	LoadSurface("data/nums_big.png",&GfxData[NUMSBIG]);
+	LoadSurface(DATADIR "nums_big.png",&GfxData[NUMSBIG]);
 	SDL_SetColorKey(GfxData[NUMSBIG],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[NUMSBIG]->format,255,0,255));
-	LoadSurface("data/gamebg.png",&GfxData[GAMEBG]);
-	LoadSurface("data/castle.png",&GfxData[CASTLE]);
+	LoadSurface(DATADIR "gamebg.png",&GfxData[GAMEBG]);
+	LoadSurface(DATADIR "castle.png",&GfxData[CASTLE]);
 
-	LoadSurface("data/dlgmsg.png",&GfxData[DLGMSG]);
-	LoadSurface("data/dlgerror.png",&GfxData[DLGERROR]);
-	LoadSurface("data/dlgnetwork.png",&GfxData[DLGNETWORK]);
-	LoadSurface("data/dlgwinner.png",&GfxData[DLGWINNER]);
-	LoadSurface("data/dlglooser.png",&GfxData[DLGLOOSER]);
+	LoadSurface(DATADIR "dlgmsg.png",&GfxData[DLGMSG]);
+	LoadSurface(DATADIR "dlgerror.png",&GfxData[DLGERROR]);
+	LoadSurface(DATADIR "dlgnetwork.png",&GfxData[DLGNETWORK]);
+	LoadSurface(DATADIR "dlgwinner.png",&GfxData[DLGWINNER]);
+	LoadSurface(DATADIR "dlglooser.png",&GfxData[DLGLOOSER]);
 
 	SDL_SetColorKey(GfxData[CASTLE],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[CASTLE]->format,255,0,255));
 
-	numssmall=BFont_LoadFont("data/nums_small.png");
+	numssmall=BFont_LoadFont(DATADIR "nums_small.png");
 	if (!numssmall)
- 		FatalError("File 'data/nums_small.png' is missing or corrupt.");
-	bigfont=BFont_LoadFont("data/bigfont.png");
+		FatalError("Data file 'nums_small.png' is missing or corrupt.");
+	bigfont=BFont_LoadFont(DATADIR "bigfont.png");
 	if (!bigfont)
- 		FatalError("File 'data/bigfont.png' is missing or corrupt.");
-	font=BFont_LoadFont("data/font.png");
+		FatalError("Data file 'bigfont.png' is missing or corrupt.");
+	font=BFont_LoadFont(DATADIR "font.png");
 	if (!font)
- 		FatalError("File 'data/font.png' is missing or corrupt.");
+		FatalError("Data file 'font.png' is missing or corrupt.");
 	BFont_SetCurrentFont(font);
 
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE)<0)
@@ -61,7 +61,7 @@ void Graphics_Init(int fullscreen)
 		FatalError("Couldn't set 640x480 video mode");
 	GfxData[BUFFER]=SDL_AllocSurface(GfxData[SCREEN]->flags,GfxData[SCREEN]->w,GfxData[SCREEN]->h,GfxData[SCREEN]->format->BitsPerPixel,GfxData[SCREEN]->format->Rmask,GfxData[SCREEN]->format->Gmask,GfxData[SCREEN]->format->Bmask,0);
 	if (!GfxData[BUFFER])
- 		FatalError("Unable to create double buffer!");
+		FatalError("Unable to create double buffer!");
 }
 
 void Graphics_Quit()
@@ -300,8 +300,8 @@ char *DialogBox(int type,const char *fmt,...)
 
 		while (event.type!=SDL_KEYDOWN)
 		{
-            SDL_PollEvent(&event);		// wait for keypress
-       		SDL_Delay(CPUWAIT);
+			SDL_PollEvent(&event);		// wait for keypress
+			SDL_Delay(CPUWAIT);
 		}
 		if (event.type==SDL_KEYDOWN)
 		{
@@ -320,10 +320,10 @@ char *DialogBox(int type,const char *fmt,...)
 			if ((event.key.keysym.sym==SDLK_KP_ENTER)||(event.key.keysym.sym==SDLK_RETURN)) h=1;
 			if (event.key.keysym.sym==SDLK_ESCAPE) h=2;
 			while (event.type!=SDL_KEYUP)
-            {
-                SDL_PollEvent(&event);	// wait for keyrelease
-           		SDL_Delay(CPUWAIT);
-            }
+			{
+				SDL_PollEvent(&event);	// wait for keyrelease
+					SDL_Delay(CPUWAIT);
+			}
 		}
 	}
 	if (h==2)
@@ -370,8 +370,8 @@ void DoCredits()
 		while (text[i])
 		{
 			if (ypos+i*HGHT>=-20 && ypos+i*HGHT<=640)
-   		 		BFont_CenteredPutString(GfxData[SCREEN],ypos+i*HGHT,text[i]);
-   		 	i++;
+				BFont_CenteredPutString(GfxData[SCREEN],ypos+i*HGHT,text[i]);
+			i++;
 		}
 		UpdateScreen();
 		SDL_Delay(20);

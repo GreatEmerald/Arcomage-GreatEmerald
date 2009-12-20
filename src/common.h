@@ -15,11 +15,13 @@
 #ifdef linux
 	#define OPERATINGSYSTEM 1
 	#define CONFIGFILE "~/.config/arcomage.cfg"
+	#define DATADIR "/usr/share/arcomage/"
 #endif
 
 #ifdef WIN32
 	#define OPERATINGSYSTEM 2
 	#define CONFIGFILE ".\\arcomage.cfg"
+	#define DATADIR "data/"
 #endif
 
 #if !defined(linux) && !defined(WIN32)
