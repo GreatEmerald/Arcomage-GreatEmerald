@@ -13,7 +13,7 @@ void PutCard(int c);
 void InitDeck();
 void SetDeck(int *d);
 int Requisite(struct Stats *s,int card);
-int Turn(struct Stats *s1,struct Stats *s2,int card,int turn,int *sound);
+int Turn(struct Stats *s1,struct Stats *s2,int card,int turn);
 char* CardName(int card);
 
 #endif

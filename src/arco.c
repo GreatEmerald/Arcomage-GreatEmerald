@@ -99,8 +99,7 @@ void PlayCard(int c,int discrd)
 	}
 	sound=-1;
 	if (discrd) nextturn=!turn;
-			else nextturn=Turn(&Player[turn],&Player[!turn],Player[turn].Hand[c],turn,&sound);
-	Sound_Play(sound);
+			else nextturn=Turn(&Player[turn],&Player[!turn],Player[turn].Hand[c],turn);
 	Player[turn].b+=Player[turn].q;
 	Player[turn].g+=Player[turn].m;
 	Player[turn].r+=Player[turn].d;
