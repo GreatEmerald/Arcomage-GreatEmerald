@@ -20,35 +20,35 @@ void Graphics_Init(int fullscreen)
 	switch (OPERATINGSYSTEM)
 	{
 		case 1:
-			LoadSurface(DATADIR "boss_linux.png",&GfxData[BOSS]);break;
+			LoadSurface(ARCODATADIR "boss_linux.png",&GfxData[BOSS]);break;
 		default:
-			LoadSurface(DATADIR "boss_windows.png",&GfxData[BOSS]);break;
+			LoadSurface(ARCODATADIR "boss_windows.png",&GfxData[BOSS]);break;
 	}
-	LoadSurface(DATADIR "menu.png",&GfxData[MENU]);
-	LoadSurface(DATADIR "menuitems.png",&GfxData[MENUITEMS]);
-	LoadSurface(DATADIR "credits.png",&GfxData[CREDITS]);
-	LoadSurface(DATADIR "deck.png",&GfxData[DECK]);
+	LoadSurface(ARCODATADIR "menu.png",&GfxData[MENU]);
+	LoadSurface(ARCODATADIR "menuitems.png",&GfxData[MENUITEMS]);
+	LoadSurface(ARCODATADIR "credits.png",&GfxData[CREDITS]);
+	LoadSurface(ARCODATADIR "deck.png",&GfxData[DECK]);
 	SDL_SetColorKey(GfxData[DECK],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[DECK]->format,255,0,255));
-	LoadSurface(DATADIR "nums_big.png",&GfxData[NUMSBIG]);
+	LoadSurface(ARCODATADIR "nums_big.png",&GfxData[NUMSBIG]);
 	SDL_SetColorKey(GfxData[NUMSBIG],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[NUMSBIG]->format,255,0,255));
-	LoadSurface(DATADIR "gamebg.png",&GfxData[GAMEBG]);
-	LoadSurface(DATADIR "castle.png",&GfxData[CASTLE]);
+	LoadSurface(ARCODATADIR "gamebg.png",&GfxData[GAMEBG]);
+	LoadSurface(ARCODATADIR "castle.png",&GfxData[CASTLE]);
 
-	LoadSurface(DATADIR "dlgmsg.png",&GfxData[DLGMSG]);
-	LoadSurface(DATADIR "dlgerror.png",&GfxData[DLGERROR]);
-	LoadSurface(DATADIR "dlgnetwork.png",&GfxData[DLGNETWORK]);
-	LoadSurface(DATADIR "dlgwinner.png",&GfxData[DLGWINNER]);
-	LoadSurface(DATADIR "dlglooser.png",&GfxData[DLGLOOSER]);
+	LoadSurface(ARCODATADIR "dlgmsg.png",&GfxData[DLGMSG]);
+	LoadSurface(ARCODATADIR "dlgerror.png",&GfxData[DLGERROR]);
+	LoadSurface(ARCODATADIR "dlgnetwork.png",&GfxData[DLGNETWORK]);
+	LoadSurface(ARCODATADIR "dlgwinner.png",&GfxData[DLGWINNER]);
+	LoadSurface(ARCODATADIR "dlglooser.png",&GfxData[DLGLOOSER]);
 
 	SDL_SetColorKey(GfxData[CASTLE],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[CASTLE]->format,255,0,255));
 
-	numssmall=BFont_LoadFont(DATADIR "nums_small.png");
+	numssmall=BFont_LoadFont(ARCODATADIR "nums_small.png");
 	if (!numssmall)
 		FatalError("Data file 'nums_small.png' is missing or corrupt.");
-	bigfont=BFont_LoadFont(DATADIR "bigfont.png");
+	bigfont=BFont_LoadFont(ARCODATADIR "bigfont.png");
 	if (!bigfont)
 		FatalError("Data file 'bigfont.png' is missing or corrupt.");
-	font=BFont_LoadFont(DATADIR "font.png");
+	font=BFont_LoadFont(ARCODATADIR "font.png");
 	if (!font)
 		FatalError("Data file 'font.png' is missing or corrupt.");
 	BFont_SetCurrentFont(font);
