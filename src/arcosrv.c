@@ -18,6 +18,11 @@ HWND hwnd;
 DWORD thrd1,thrd2;
 HANDLE hThrd1,hThrd2;
 
+int Sound_Play(int which) //GE: Disable sound support for the server.
+{
+	return 0;
+}
+
 void output(const char *fmt,...)
 {
 	va_list args;
