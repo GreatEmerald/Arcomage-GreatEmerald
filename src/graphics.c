@@ -11,6 +11,14 @@
 SDL_Event event;
 SDL_Surface *GfxData[GFX_CNT];
 
+int resX=640;
+int resY=480;
+int buttonWidth=125;
+int buttonHeight=54;
+int buttonDistanceX=257; //resX/2-buttonWidth/2 = 240
+int buttonDistanceY=105; //resY/2-(buttonHeight/2)*5 = 70
+int buttonNum=5;
+
 BFont_Info *numssmall=NULL;
 BFont_Info *font=NULL;
 BFont_Info *bigfont=NULL;
@@ -56,7 +64,7 @@ void Graphics_Init(int fullscreen)
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE)<0)
 		FatalError("Couldn't initialize SDL");
 	SDL_WM_SetCaption("Arcomage v" ARCOVER,NULL);
-	GfxData[SCREEN]=SDL_SetVideoMode(640,480,0,SDL_SWSURFACE|(fullscreen*SDL_FULLSCREEN));
+	GfxData[SCREEN]=SDL_SetVideoMode(resX,resY,0,SDL_SWSURFACE|(fullscreen*SDL_FULLSCREEN));
 	if (!GfxData[SCREEN])
 		FatalError("Couldn't set 640x480 video mode");
 	GfxData[BUFFER]=SDL_AllocSurface(GfxData[SCREEN]->flags,GfxData[SCREEN]->w,GfxData[SCREEN]->h,GfxData[SCREEN]->format->BitsPerPixel,GfxData[SCREEN]->format->Rmask,GfxData[SCREEN]->format->Gmask,GfxData[SCREEN]->format->Bmask,0);
@@ -146,7 +154,7 @@ void DrawStatus(int turn,struct Stats *Players)
 	sprintf(b,"%d",Players[0].t);BFont_PutString(GfxData[SCREEN],160-BFont_TextWidth(b)/2,317,b);
 	sprintf(b,"%d",Players[0].w);BFont_PutString(GfxData[SCREEN],242-BFont_TextWidth(b)/2,317,b);
 	sprintf(b,"%d",Players[1].w);BFont_PutString(GfxData[SCREEN],398-BFont_TextWidth(b)/2,317,b);
-	sprintf(b,"%d",Players[1].t);BFont_PutString(GfxData[SCREEN],480-BFont_TextWidth(b)/2,317,b);
+	sprintf(b,"%d",Players[1].t);BFont_PutString(GfxData[SCREEN],resY-BFont_TextWidth(b)/2,317,b);
 //	draw left tower
 	rectb.x=0;rectb.y=0;rectb.w=68;rectb.h=292-(200-Players[0].t);
 	recta.x=126;recta.y=16+(200-Players[0].t);recta.w=68;recta.h=292-(200-Players[0].t);
@@ -169,8 +177,13 @@ void DrawMenuItem(int i,int active)
 {
 	SDL_Rect recta,rectb;
 
-	recta.x=240;recta.y=i*32+160;recta.w=160;recta.h=32;
-	rectb.x=active*160;rectb.y=i*32;rectb.w=160;rectb.h=32;
+	//GE: x=distance from left border, y=number*height+distance from top border
+	//w=width, h=height; rectb is location in file, x=activated*width, y=number*height
+	//w=width, h=height.
+	//recta.x=240;recta.y=i*32+160;recta.w=160;recta.h=32;
+	//rectb.x=active*160;rectb.y=i*32;rectb.w=160;rectb.h=32;
+	recta.x=buttonDistanceX;recta.y=i*buttonHeight+buttonDistanceY;recta.w=buttonWidth;recta.h=buttonHeight;
+	rectb.x=active*buttonWidth;rectb.y=i*buttonHeight;rectb.w=buttonWidth;rectb.h=buttonHeight;
 
 	if (active)
 		SDL_BlitSurface(GfxData[MENUITEMS],&rectb,GfxData[SCREEN],&recta);
@@ -183,7 +196,7 @@ int Menu()
 	int i,j,value=0;
 
 	SDL_BlitSurface(GfxData[MENU],NULL,GfxData[SCREEN],NULL);
-	for (i=0;i<5;i++)
+	for (i=0;i<buttonNum;i++)
 		DrawMenuItem(i,0);
 	
 	UpdateScreen();
@@ -197,15 +210,15 @@ int Menu()
 			value=5;
 			break;
 		case SDL_MOUSEMOTION:
-			j=(event.motion.y-160)/32;
-			for (i=0;i<5;i++)
-				DrawMenuItem(i,(i==j)&&(event.motion.x>=240) && (event.motion.x<=240+160) && (event.motion.y>=160) && (event.motion.y<=160+160));
-			SDL_UpdateRect(GfxData[SCREEN],240,160,240+160,160+160);
+			j=(event.motion.y-buttonDistanceY)/buttonHeight;
+			for (i=0;i<buttonNum;i++)
+				DrawMenuItem(i,(i==j)&&(event.motion.x>=buttonDistanceX) && (event.motion.x<=buttonDistanceX+buttonWidth) && (event.motion.y>=buttonDistanceY) && (event.motion.y<=buttonDistanceY+buttonHeight*buttonNum));
+			SDL_UpdateRect(GfxData[SCREEN],buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum);
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			if ((event.button.button==SDL_BUTTON_LEFT) && InRect(event.button,240,160,240+160,160+160))
+			if ((event.button.button==SDL_BUTTON_LEFT) && InRect(event.button,buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum))
 			{	// menuitem
-				j=(event.button.y-160)/32;
+				j=(event.button.y-buttonDistanceY)/buttonHeight;
 				value=j+1;
 			}
 			break;
@@ -259,8 +272,8 @@ char *DialogBox(int type,const char *fmt,...)
 	}
 	rect.w=352;
 	rect.h=128;
-	rect.x=(640-rect.w) >> 1;
-	rect.y=(480-rect.h) >> 1;
+	rect.x=(resX-rect.w) >> 1;
+	rect.y=(resY-rect.h) >> 1;
 	SDL_BlitSurface(GfxData[type],NULL,GfxData[SCREEN],&rect);
 	rect.w-=4;
 	rect.h-=4;
@@ -351,17 +364,34 @@ void DoCredits()
 	#define HGHT 30
 	char *text[]={
 		"Arcomage v" ARCOVER,
-		"by STiCK (2005)",
+		"by STiCK and GreatEmerald (2005-2009)",
 		"",
-		"This program was created",
+		"This program was originally created",
 		"as Individual Software Project",
 		"at Charles University",
 		"Prague, Czech Republic",
 		"",
+		"Since 2009 it became easier to access",
+		"and its development was continued.",
+		"",
 		"http://stick.gk2.sk/projects/arcomage/",
+		"",
+		"This is a clone of Arcomage, a card game",
+		"originally released by New World Computing",
+		"and the 3DO Company as a part of",
+		"Might and Magic VII: For Blood and Honor",
+		"and re-released in 2001 as a stand-alone",
+		"application.",
+		"Since it didn't support any kind of",
+		"modifications, this open source project",
+		"aims to completely remake the original",
+		"and make it more flexible.",
+		"",
+		"Original credits follow.",
+		"",
 		NULL
 	};
-	int i,ypos=480;
+	int i,ypos=resY;
 	BFont_SetCurrentFont(bigfont);
 	while (event.type!=SDL_KEYDOWN || event.key.keysym.sym!=SDLK_ESCAPE)
 	{
@@ -369,7 +399,7 @@ void DoCredits()
 		i=0;
 		while (text[i])
 		{
-			if (ypos+i*HGHT>=-20 && ypos+i*HGHT<=640)
+			if (ypos+i*HGHT>=-20 && ypos+i*HGHT<=resX)
 				BFont_CenteredPutString(GfxData[SCREEN],ypos+i*HGHT,text[i]);
 			i++;
 		}

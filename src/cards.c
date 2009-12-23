@@ -55,12 +55,12 @@ void SetDeck(int *d)
 
 void normalize(struct Stats *s)
 {
-	if (s->q<1) s->q=0;
-	if (s->m<1) s->m=0;
-	if (s->d<1) s->d=0;
-	if (s->q>9) s->q=9;
-	if (s->m>9) s->m=9;
-	if (s->d>9) s->d=9;
+	if (s->q<1) s->q=1;
+	if (s->m<1) s->m=1;
+	if (s->d<1) s->d=1;
+	if (s->q>99) s->q=99;
+	if (s->m>99) s->m=99;
+	if (s->d>99) s->d=99;
 
 	if (s->b<0) s->b=0;
 	if (s->g<0) s->g=0;
@@ -495,9 +495,9 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)
 			break;
 		case (1<<8)+33:	// Lightning Shard
 			if (s1->t>s2->w)
-				damage(s2,8);
+				s2->t-=8;
 			else
-				damage(s2,4);
+				damage(s2,8);
 			Sound_Play(DAMAGE);
 			break;
 		case (1<<8)+34:	// Phase Jewel
@@ -519,6 +519,7 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)
 			break;
 		case (2<<8)+3:	// Moody Goblins
 			Sound_Play(DAMAGE);
+			Sound_Play(RESS_DOWN);
 			damage(s2,4);
 			s1->g-=3;
 			break;

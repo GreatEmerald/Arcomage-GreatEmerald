@@ -16,6 +16,7 @@ int fullscreen=0;
 int soundenabled=1;
 int turn=0;
 int nextturn=0;
+int lastturn=0;
 int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
@@ -39,7 +40,7 @@ void DrawCards(int turn)
 			if (Requisite(&Player[turn],i))
 				DrawCard(Player[turn].Hand[i],8+106*i,342);
 			else
-				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,160);
+				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,64);
 }
 
 void Boss()
@@ -80,6 +81,7 @@ void PlayCard(int c,int discrd)
 #define STEPS 10
 	int sound;
 	double d,x,y;
+	int bGiveResources=0;
 	
 	if (Player[turn].Hand[c] == 6+(1<<8) && discrd)
 		return;		// LodeStone can't be discarded
@@ -91,7 +93,7 @@ void PlayCard(int c,int discrd)
 		x=(8.0+106.0*c)+d*(272.0-(8.0+106.0*c));
 		y=342.0+d*(96.0-342.0);
 		Blit(BUFFER,SCREEN);
-		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,128);
+		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,64);
 		if (discrd)
 			DrawCard(0x200,(int)x,(int)y);
 		UpdateScreen();
@@ -100,17 +102,23 @@ void PlayCard(int c,int discrd)
 	sound=-1;
 	if (discrd) nextturn=!turn;
 			else nextturn=Turn(&Player[turn],&Player[!turn],Player[turn].Hand[c],turn);
-	Player[turn].b+=Player[turn].q;
-	Player[turn].g+=Player[turn].m;
-	Player[turn].r+=Player[turn].d;
+	if (turn != nextturn)
+		bGiveResources = 1;
 	Blit(GAMEBG,SCREEN);
 	DrawCard(Player[turn].Hand[c],272,96);
 	if (discrd) DrawCard(0x200,272,96);
 	PutCard(Player[turn].Hand[c]);
 	Player[turn].Hand[c]=GetCard();
+	lastturn=turn;
 	turn=nextturn;
 		
-	DrawStatus(turn,Player);	
+	DrawStatus(turn,Player);
+	if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
+	{
+		Player[!lastturn].b+=Player[!lastturn].q; //GE: The enemy gets resources.
+		Player[!lastturn].g+=Player[!lastturn].m;
+		Player[!lastturn].r+=Player[!lastturn].d;
+	}	
 	DrawCards(turn);
 	UpdateScreen();
 }
