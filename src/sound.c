@@ -4,6 +4,7 @@
 
 Mix_Chunk *SfxData[SFX_CNT];
 int SoundEnabled=0;
+int bUseMMSounds=1;
 
 void LoadSound(char *filename,Mix_Chunk **snd)
 {
@@ -14,7 +15,9 @@ void LoadSound(char *filename,Mix_Chunk **snd)
 void Sound_Init()
 {
 	// initialize audio
-	if (Mix_OpenAudio(22050,AUDIO_S16LSB,2,4096)==0)
+	if (Mix_OpenAudio(22050,AUDIO_S16LSB,2,4096)!=0)
+		return;
+	if (bUseMMSounds)
 	{
 		SoundEnabled=1;
 		LoadSound(ARCODATADIR "damage.wav",&SfxData[DAMAGE]);
@@ -29,6 +32,22 @@ void Sound_Init()
 		LoadSound(ARCODATADIR "tower_up.wav",&SfxData[TOWER_UP]);
 		LoadSound(ARCODATADIR "victory.wav",&SfxData[VICTORY]);
 		LoadSound(ARCODATADIR "wall_up.wav",&SfxData[WALL_UP]);
+	}
+	else
+	{
+		SoundEnabled=1;
+		LoadSound(ARCODATADIR "damageO.wav",&SfxData[DAMAGE]);
+		LoadSound(ARCODATADIR "dealO.wav",&SfxData[DEAL]);
+		LoadSound(ARCODATADIR "defeatO.wav",&SfxData[DEFEAT]);
+		LoadSound(ARCODATADIR "resb_downO.wav",&SfxData[RESB_DOWN]);
+		LoadSound(ARCODATADIR "resb_upO.wav",&SfxData[RESB_UP]);
+		LoadSound(ARCODATADIR "ress_downO.wav",&SfxData[RESS_DOWN]);
+		LoadSound(ARCODATADIR "ress_upO.wav",&SfxData[RESS_UP]);
+		LoadSound(ARCODATADIR "shuffleO.wav",&SfxData[SHUFFLE]);
+		LoadSound(ARCODATADIR "titleO.wav",&SfxData[TITLE]);
+		LoadSound(ARCODATADIR "tower_upO.wav",&SfxData[TOWER_UP]);
+		LoadSound(ARCODATADIR "victoryO.wav",&SfxData[VICTORY]);
+		LoadSound(ARCODATADIR "wall_upO.wav",&SfxData[WALL_UP]);
 	}
 }
 
