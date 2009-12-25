@@ -13,10 +13,10 @@ SDL_Surface *GfxData[GFX_CNT];
 
 int resX=640;
 int resY=480;
-int buttonWidth=125;
-int buttonHeight=54;
-int buttonDistanceX=257; //resX/2-buttonWidth/2 = 240
-int buttonDistanceY=105; //resY/2-(buttonHeight/2)*5 = 70
+int buttonWidth=160;
+int buttonHeight=32;
+int buttonDistanceX=240; //resX/2-buttonWidth/2 = 240
+int buttonDistanceY=160; //resY/2-buttonHeight/2*5 = 160
 int buttonNum=5;
 
 BFont_Info *numssmall=NULL;
@@ -286,7 +286,7 @@ char *DialogBox(int type,const char *fmt,...)
 	h=BFont_FontHeight(BFont_GetCurrentFont());
 	for (i=0;i<cnt;i++)
 		BFont_CenteredPutString(GfxData[SCREEN],240-h*cnt/2+h*i,ptr[i]);
-	UpdateScreen(rect.x-2,rect.y-2,rect.w+4,rect.h+4);
+	UpdateScreenRect(rect.x-2,rect.y-2,rect.w+4,rect.h+4);
 	
 	if (type==DLGWINNER || type==DLGLOOSER)
 		BFont_SetCurrentFont(font);

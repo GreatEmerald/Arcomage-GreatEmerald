@@ -34,7 +34,7 @@ unsigned long WaitForClient(int i,char **name)
 {
 	char *s,*msg="ARCOMAGE v" ARCOVER;
 
-	if (i!=0 && i!=1) return; 
+	if (i!=0 && i!=1) return 0;
 
 	while (!client[i])
 	{

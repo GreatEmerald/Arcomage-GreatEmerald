@@ -42,7 +42,7 @@ void InitDeck()
 	{
 		a=rand()%CARDS;
 		b=rand()%CARDS;
-		t=Q[a];Q[a]=Q[b];Q[b]=t;				
+		t=Q[a];Q[a]=Q[b];Q[b]=t;
 	}
 }
 
@@ -95,21 +95,11 @@ int Requisite(struct Stats *s,int card)
 	return 1;
 }
 
-int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)
+void Require(struct Stats *s1, int bricks, int gems, int recruits)
 {
-	int next=!turn;
-
-/*	switch (s1->Hand[card]>>8)
-	{
-		case 0:s1->b-=req[0][s1->Hand[card]&0xFF];break;
-		case 1:s1->g-=req[1][s1->Hand[card]&0xFF];break;
-		case 2:s1->r-=req[2][s1->Hand[card]&0xFF];break;
-	}*/
-	next=Deck(s1, s2, card, turn);
-
-	normalize(s1);
-	normalize(s2);
-	return next;
+	s1->b-=bricks;
+	s1->g-=gems;
+	s1->r-=recruits;
 }
 
 int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
@@ -826,11 +816,21 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	return next;
 }
 
-Require(struct Stats *s1, int bricks, int gems, int recruits)
+int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)
 {
-	s1->b-=bricks;
-	s1->g-=gems;
-	s1->r-=recruits;
+	int next=!turn;
+
+/*	switch (s1->Hand[card]>>8)
+	{
+		case 0:s1->b-=req[0][s1->Hand[card]&0xFF];break;
+		case 1:s1->g-=req[1][s1->Hand[card]&0xFF];break;
+		case 2:s1->r-=req[2][s1->Hand[card]&0xFF];break;
+	}*/
+	next=Deck(s1, s2, card, turn);
+
+	normalize(s1);
+	normalize(s2);
+	return next;
 }
 
 char* CardName(int card)

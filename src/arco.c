@@ -277,8 +277,8 @@ void DoGame()
 void DoNetwork()
 {
 	char *host,*str,*name,remname[17];
-	int len,i,deck[102];
-	
+	int i,deck[102];
+
 	host=DialogBox(DLGNETWORK,"Connect to server:");
 
 	if (!host) return;

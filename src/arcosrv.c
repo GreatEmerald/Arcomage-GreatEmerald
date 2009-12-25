@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <SDL/SDL.h>
 #include "cards.h"
 #include "network.h"
@@ -20,11 +21,12 @@ HANDLE hThrd1,hThrd2;
 
 int Sound_Play(int which) //GE: Disable sound support for the server.
 {
-	return 0;
+	return which;
 }
 
 void output(const char *fmt,...)
 {
+	Sound_Play(0);
 	va_list args;
 	static char buf[4096];
 
@@ -126,8 +128,7 @@ void SendMetaData()
 int DoServerCycle()
 {
 	char *s=NULL;
-	static int p=0,l,t,d,turn,c;
-	static char buf[256];
+	static int p=0,t,d,turn,c;
 	int ret;
 
 	s=NULL;
@@ -160,14 +161,12 @@ int DoServer()
 	names=(char**)malloc(sizeof(char*)*2);
 	names[0]=(char*)malloc(sizeof(char)*17);
 	names[1]=(char*)malloc(sizeof(char)*17);
-	
-	
+
 	ip = WaitForClient(0,&names[0]);
 	output("Player #1 [%s] connected from %d.%d.%d.%d",names[0],ip&0xFF,(ip>>8)&0xFF,(ip>>16)&0xFF,ip>>24);
 
 	ip = WaitForClient(1,&names[1]);
 	output("Player #2 [%s] connected from %d.%d.%d.%d",names[1],ip&0xFF,(ip>>8)&0xFF,(ip>>16)&0xFF,ip>>24);
-
 
 	output("Game starting ...");
 

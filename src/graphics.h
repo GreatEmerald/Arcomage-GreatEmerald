@@ -20,7 +20,7 @@ enum {	SCREEN=0,
 		DLGMSG,
 		GFX_CNT};
 
-void Graphics_Init();
+void Graphics_Init(int fullscreen);
 void Graphics_Quit();
 void Blit(int a,int b);
 void UpdateScreen();
