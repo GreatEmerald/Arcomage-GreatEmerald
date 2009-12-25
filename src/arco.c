@@ -115,9 +115,9 @@ void PlayCard(int c,int discrd)
 	DrawStatus(turn,Player);
 	if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
 	{
-		Player[!lastturn].b+=Player[!lastturn].q; //GE: The enemy gets resources.
-		Player[!lastturn].g+=Player[!lastturn].m;
-		Player[!lastturn].r+=Player[!lastturn].d;
+		Player[lastturn].b+=Player[lastturn].q; //GE: The enemy gets resources.
+		Player[lastturn].g+=Player[lastturn].m;
+		Player[lastturn].r+=Player[lastturn].d;
 	}	
 	DrawCards(turn);
 	UpdateScreen();
