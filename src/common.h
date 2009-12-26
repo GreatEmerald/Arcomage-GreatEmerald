@@ -24,9 +24,15 @@
 	#define ARCODATADIR "data/"
 #endif
 
-#if !defined(linux) && !defined(WIN32)
+#ifdef __APPLE__
+	#define OPERATINGSYSTEM 3
+	#define CONFIGFILE "~/.config/arcomage.cfg"
+	#define ARCODATADIR "data/"
+#endif
 
-#error Arcomage has been compiled and tested only under Windows and Linux
+#if !defined(linux) && !defined(WIN32) && !defined(__APPLE__)
+
+#error Arcomage has been compiled and tested only under Windows, Linux and Mac OS
 #error It would take some effort to compile on other platforms
 
 #endif

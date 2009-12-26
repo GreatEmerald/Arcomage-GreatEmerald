@@ -1,6 +1,6 @@
 #include "common.h"
 
-#ifdef linux	// LINUX CODE BEGIN
+#if defined(linux) || defined(__APPLE__)	// LINUX AND MACOS CODE BEGIN
 
 #include <stdio.h>
 #include <stdlib.h>

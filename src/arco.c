@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"

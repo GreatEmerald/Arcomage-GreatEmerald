@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "cards.h"
 #include "network.h"
 #include "common.h"
 
 char **names;
+
+int Sound_Play(int which) //GE: Disable sound support for the server.
+{
+	return which;
+}
 
 #ifdef WIN32
 
@@ -18,11 +23,6 @@ char **names;
 HWND hwnd;
 DWORD thrd1,thrd2;
 HANDLE hThrd1,hThrd2;
-
-int Sound_Play(int which) //GE: Disable sound support for the server.
-{
-	return which;
-}
 
 void output(const char *fmt,...)
 {
@@ -89,7 +89,7 @@ void CreateInterface()
 
 #endif
 
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 
 void output(const char *fmt,...)
 {
@@ -148,7 +148,7 @@ int DoServerCycle()
 #ifdef WIN32
 unsigned long WINAPI DoServer()
 #endif
-#ifdef linux
+#if defined(linux) || defined(__APPLE__)
 int DoServer()
 #endif
 {

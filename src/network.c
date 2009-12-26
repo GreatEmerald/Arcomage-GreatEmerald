@@ -1,6 +1,6 @@
 #include <string.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_net.h>
+#include <SDL.h>
+#include <SDL_net.h>
 #include "network.h"
 #include "common.h"
 
