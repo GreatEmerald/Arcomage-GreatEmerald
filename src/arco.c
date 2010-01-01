@@ -20,10 +20,28 @@ int lastturn=0;
 int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
+int TowerLevels=20;
+int WallLevels=10;
+int QuarryLevels=1;
+int MagicLevels=1;
+int DungeonLevels=1;
+int BrickQuantities=15;
+int GemQuantities=15;
+int RecruitQuantities=15;
+int TowerVictory=200;//GE: Needs to be synced with cards.c
+int ResourceVictory=500;
+int NumCursed=1;//GE: Number of cards that can not be discarded.
+int CursedIDs[50];//GE: Bump this number up for support of more than 50 cursed cards.
+int bOneResourceVictory=0;//GE: Allow victory for getting only one of the resources to required level
 
 int Winner(int a)
 {
-	return (Player[a].t>=200)||(Player[!a].t<=0);
+	if (bOneResourceVictory)
+		return (Player[a].t>=TowerVictory)||(Player[!a].t<=0)||
+			(Player[a].b>=ResourceVictory)||(Player[a].g>=ResourceVictory)||(Player[a].r>=ResourceVictory);
+	else
+		return (Player[a].t>=TowerVictory)||(Player[!a].t<=0)||
+			((Player[a].b>=ResourceVictory)&&(Player[a].g>=ResourceVictory)&&(Player[a].r>=ResourceVictory));
 }
 
 void DrawCards(int turn)
@@ -65,6 +83,8 @@ void Boss()
 
 void Init()
 {
+	CursedIDs[0]=6+(1<<8); //LodeStone
+
 	atexit(SDL_Quit);
 	if (soundenabled) Sound_Init();
 	Graphics_Init(fullscreen);
@@ -81,10 +101,13 @@ void PlayCard(int c,int discrd)
 #define STEPS 10
 	int sound;
 	double d,x,y;
-	int bGiveResources=0;
+	int bGiveResources=0, i;
 	
-	if (Player[turn].Hand[c] == 6+(1<<8) && discrd)
-		return;		// LodeStone can't be discarded
+	for (i=0; i<NumCursed; i++)
+	{
+		if (Player[turn].Hand[c] == CursedIDs[i] && discrd)
+			return;		// Cursed cards like LodeStone can't be discarded
+	}
 	
 	FillRect(8+106*c,342,96,128,0,0,0);
 	Blit(SCREEN,BUFFER);
@@ -158,11 +181,11 @@ void InitGame()
 		Player[0].Hand[i]=GetCard();
 		Player[1].Hand[i]=GetCard();
 	}
-	for (i=0;i<2;i++)
+	for (i=0;i<2;i++)//GE: Set up conditions here.
 	{
-		Player[i].b=5;Player[i].g=5;Player[i].r=5;
-		Player[i].q=2;Player[i].m=2;Player[i].d=2;
-		Player[i].t=100;Player[i].w=0;
+		Player[i].b=BrickQuantities;Player[i].g=GemQuantities;Player[i].r=RecruitQuantities;
+		Player[i].q=QuarryLevels;Player[i].m=MagicLevels;Player[i].d=DungeonLevels;
+		Player[i].t=TowerLevels;Player[i].w=WallLevels;
 	}
 }
 
@@ -191,6 +214,8 @@ void DoGame()
 	int i;
 	int crd,netcard,discrd;
 	int quit=0;
+	//GE: Stupid C not supporting string functions :(
+	//GE: I correct myself: stupid C not supporting strings at all! Who designed this?!
 
 	InitGame();
 	// init screen
@@ -198,8 +223,6 @@ void DoGame()
 	DrawStatus(turn,Player);
 	DrawCards(turn);
 	UpdateScreen();
-
-	Sound_Play(SHUFFLE);
 	
 	while (!quit && !Winner(0) && !Winner(1))
 	{
@@ -257,12 +280,20 @@ void DoGame()
 				i=aiplayer;if (i==-1) i=netplayer;i=!i;
 				if (Winner(i))
 				{
-					DialogBox(DLGWINNER,"You win!");
+					if (Player[i].t>=TowerVictory)
+						DialogBox(DLGWINNER, "You win by a tower building victory!");
+					else if (Player[!i].t<=0)
+						DialogBox(DLGWINNER, "You win by a tower destruction victory!");
+					else DialogBox(DLGWINNER, "You win by a resource victory!");
 					Sound_Play(VICTORY);
 				}
 				else
 				{
-			 		DialogBox(DLGLOOSER,"You loose!");
+					if (Player[!i].t>=TowerVictory)
+						DialogBox(DLGLOOSER, "You lose by a tower building defeat!");
+					else if (Player[i].t<=0)
+						DialogBox(DLGLOOSER, "You lose by a tower destruction defeat!");
+					else DialogBox(DLGLOOSER, "You lose by a resource defeat!");
 					Sound_Play(DEFEAT);
 		 		}
 			} else {										 // 2 local Players

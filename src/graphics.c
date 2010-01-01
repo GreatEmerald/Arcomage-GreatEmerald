@@ -18,6 +18,7 @@ int buttonHeight=32;
 int buttonDistanceX=240; //resX/2-buttonWidth/2 = 240
 int buttonDistanceY=160; //resY/2-buttonHeight/2*5 = 160
 int buttonNum=5;
+int bUseOriginalMenu=0;
 
 BFont_Info *numssmall=NULL;
 BFont_Info *font=NULL;
@@ -32,14 +33,17 @@ void Graphics_Init(int fullscreen)
 		default:
 			LoadSurface(ARCODATADIR "boss_windows.png",&GfxData[BOSS]);break;
 	}
-	LoadSurface(ARCODATADIR "menu.png",&GfxData[MENU]);
-	LoadSurface(ARCODATADIR "menuitems.png",&GfxData[MENUITEMS]);
+	if (!bUseOriginalMenu)
+	{
+		LoadSurface(ARCODATADIR "menu.png",&GfxData[MENU]);
+		LoadSurface(ARCODATADIR "menuitems.png",&GfxData[MENUITEMS]);
+		LoadSurface(ARCODATADIR "gamebg.png",&GfxData[GAMEBG]);
+	}
 	LoadSurface(ARCODATADIR "credits.png",&GfxData[CREDITS]);
 	LoadSurface(ARCODATADIR "deck.png",&GfxData[DECK]);
 	SDL_SetColorKey(GfxData[DECK],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[DECK]->format,255,0,255));
 	LoadSurface(ARCODATADIR "nums_big.png",&GfxData[NUMSBIG]);
 	SDL_SetColorKey(GfxData[NUMSBIG],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[NUMSBIG]->format,255,0,255));
-	LoadSurface(ARCODATADIR "gamebg.png",&GfxData[GAMEBG]);
 	LoadSurface(ARCODATADIR "castle.png",&GfxData[CASTLE]);
 
 	LoadSurface(ARCODATADIR "dlgmsg.png",&GfxData[DLGMSG]);
@@ -70,6 +74,16 @@ void Graphics_Init(int fullscreen)
 	GfxData[BUFFER]=SDL_AllocSurface(GfxData[SCREEN]->flags,GfxData[SCREEN]->w,GfxData[SCREEN]->h,GfxData[SCREEN]->format->BitsPerPixel,GfxData[SCREEN]->format->Rmask,GfxData[SCREEN]->format->Gmask,GfxData[SCREEN]->format->Bmask,0);
 	if (!GfxData[BUFFER])
 		FatalError("Unable to create double buffer!");
+	if (bUseOriginalMenu)
+	{
+		buttonWidth=125;
+		buttonHeight=54;
+		buttonDistanceX=257;
+		buttonDistanceY=105;
+		LoadSurface(ARCODATADIR "menuO.png",&GfxData[MENU]);
+		LoadSurface(ARCODATADIR "menuitemsO.png",&GfxData[MENUITEMS]);
+		LoadSurface(ARCODATADIR "gamebgO.png",&GfxData[GAMEBG]);
+	}
 }
 
 void Graphics_Quit()
@@ -281,7 +295,7 @@ char *DialogBox(int type,const char *fmt,...)
 	rect.y+=2;
 	
 	if (type==DLGWINNER || type==DLGLOOSER)
-		BFont_SetCurrentFont(bigfont);
+		BFont_SetCurrentFont(font);
 	
 	h=BFont_FontHeight(BFont_GetCurrentFont());
 	for (i=0;i<cnt;i++)

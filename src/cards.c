@@ -9,10 +9,10 @@ int req[3][35] = {
 };
 
 #define CARDS 102
-int Q[CARDS];
+int Q[CARDS];//GE: Queue?
 int Qs=0,Qe=0;
 
-int GetCard()
+int GetCard()//GE: Returns next card in the Q array.
 {
 	int i;
 	i=Q[Qs];
@@ -37,19 +37,24 @@ void InitDeck()
 		Q[i          ]=i+1;
 		Q[i+  CARDS/3]=i+1+(1<<8);
 		Q[i+2*CARDS/3]=i+1+(2<<8);
+/*		printf("%d\n", Q[i]);
+		printf("%d\n", Q[i+  CARDS/3]);
+		printf("%d\n", Q[i+2*CARDS/3]);*/
 	}
-	for (i=0;i<65535;i++)
+	for (i=0;i<65535;i++) //GE: A ludicrous way to randomise the Q array.
 	{
 		a=rand()%CARDS;
 		b=rand()%CARDS;
 		t=Q[a];Q[a]=Q[b];Q[b]=t;
 	}
+	
+	Sound_Play(SHUFFLE);
 }
 
 void SetDeck(int *d)
 {
 	int i;
-	for (i=0;i<102;i++)
+	for (i=0;i<CARDS;i++)
 		Q[i]=d[i];
 }
 
@@ -301,13 +306,13 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			break;
 		case 31:		// Flood Water
 			Require(s1, 6, 0, 0);
-			if (s1->w>s2->w)
+			if (s1->w<s2->w)
 			{
-				s2->d--;
-				s2->t-=2;
-			} else {
 				s1->d--;
 				s1->t-=2;
+			} else {	//GE: Originally it's beneficial
+				s2->d--;
+				s2->t-=2;
 			}
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
