@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <SDL.h>
+#include <SDL_config_lib.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
@@ -83,6 +84,20 @@ void Boss()
 
 void Init()
 {
+	CFG_File CF;
+
+	if (CFG_OK != CFG_OpenFile(CONFIGFILE, &CF))
+	{
+		printf("Error reading config file! Falling back to defaults.\n");
+	}
+
+	if ( CFG_OK == CFG_SelectGroup("Arcomage", 0) )
+	{
+		CursedIDs[0]=CFG_ReadInt("CursedIDs", 6+(1<<8));
+	}
+
+	CFG_CloseFile(0);
+
 	CursedIDs[0]=6+(1<<8); //LodeStone
 
 	atexit(SDL_Quit);

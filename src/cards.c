@@ -356,7 +356,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 		case (1<<8)+2:	// Smoky Quartz
 			Require(s1, 0, 2, 0);
 			Sound_Play(DAMAGE);
-			damage(s2,1);
+			s2->t--;
 			next=turn;
 			break;
 		case (1<<8)+3:	// Amethyst
@@ -619,7 +619,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 		case (2<<8)+8:	// Shadow Faerie
 			Require(s1, 0, 0, 6);
 			Sound_Play(DAMAGE);
-			damage(s2,2);
+			s2->t-=2;
 			next=turn;
 			break;
 		case (2<<8)+9:	// Orc
