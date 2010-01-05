@@ -44,6 +44,6 @@ void WaitForInput()
 	do {
 		SDL_PollEvent(&event);
 		SDL_Delay(CPUWAIT);
-	} while (!((event.type==SDL_KEYDOWN)||((event.type==SDL_MOUSEBUTTONDOWN)&&(event.button.button==SDL_BUTTON_LEFT))));
+	} while (!((event.type==SDL_KEYUP)||((event.type==SDL_MOUSEBUTTONUP)&&(event.button.button==SDL_BUTTON_LEFT))));
 	SDL_PumpEvents();
 }

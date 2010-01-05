@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <SDL.h>
-#include <SDL_config_lib.h>
+//#include <SDL_config_lib.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
@@ -84,7 +84,7 @@ void Boss()
 
 void Init()
 {
-	CFG_File CF;
+/*	CFG_File CF;
 
 	if (CFG_OK != CFG_OpenFile(CONFIGFILE, &CF))
 	{
@@ -96,7 +96,7 @@ void Init()
 		CursedIDs[0]=CFG_ReadInt("CursedIDs", 6+(1<<8));
 	}
 
-	CFG_CloseFile(0);
+	CFG_CloseFile(0);*/
 
 	CursedIDs[0]=6+(1<<8); //LodeStone
 
@@ -261,10 +261,10 @@ void DoGame()
    			{
 				SDL_Delay(CPUWAIT);
 				SDL_PollEvent(&event);
-				quit=(event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_ESCAPE);
-				if (event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_b)
+				quit=(event.type==SDL_KEYUP&&event.key.keysym.sym==SDLK_ESCAPE);
+				if (event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_b) //GE: Keeping as "down" since it's urgent ;)
 				    Boss();
-				if (event.type!=SDL_MOUSEBUTTONDOWN || event.button.button>3) continue;
+				if (event.type!=SDL_MOUSEBUTTONUP || event.button.button>3) continue;
 				discrd=(event.button.button==2)||(event.button.button==3);
 				if (InRect(event.button,  8,342,  8+94,468)&&(discrd||Requisite(&Player[turn],0))) {crd=0;break;}
 				if (InRect(event.button,114,342,114+94,468)&&(discrd||Requisite(&Player[turn],1))) {crd=1;break;}

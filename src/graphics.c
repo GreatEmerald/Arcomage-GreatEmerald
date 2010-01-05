@@ -229,7 +229,7 @@ int Menu()
 				DrawMenuItem(i,(i==j)&&(event.motion.x>=buttonDistanceX) && (event.motion.x<=buttonDistanceX+buttonWidth) && (event.motion.y>=buttonDistanceY) && (event.motion.y<=buttonDistanceY+buttonHeight*buttonNum));
 			SDL_UpdateRect(GfxData[SCREEN],buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum);
 			break;
-		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
 			if ((event.button.button==SDL_BUTTON_LEFT) && InRect(event.button,buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum))
 			{	// menuitem
 				j=(event.button.y-buttonDistanceY)/buttonHeight;
