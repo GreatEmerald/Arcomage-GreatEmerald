@@ -7,6 +7,7 @@
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
+#include "sound.h"
 
 SDL_Event event;
 SDL_Surface *GfxData[GFX_CNT];
@@ -214,6 +215,8 @@ int Menu()
 		DrawMenuItem(i,0);
 	
 	UpdateScreen();
+	
+	Sound_Play(TITLE);
 
 	while (!value)
 	{
@@ -295,7 +298,7 @@ char *DialogBox(int type,const char *fmt,...)
 	rect.y+=2;
 	
 	if (type==DLGWINNER || type==DLGLOOSER)
-		BFont_SetCurrentFont(font);
+		BFont_SetCurrentFont(bigfont);
 	
 	h=BFont_FontHeight(BFont_GetCurrentFont());
 	for (i=0;i<cnt;i++)

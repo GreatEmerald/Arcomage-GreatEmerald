@@ -107,6 +107,10 @@ void Require(struct Stats *s1, int bricks, int gems, int recruits)
 	s1->r-=recruits;
 }
 
+/*
+ * GE: Use 'next=-1;' to indicate cards that initiate a "discard turn".
+ * Use 'next=turn;' to indicate cards that don't cost a turn.
+ */
 int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 {
 	int next=!turn;
@@ -371,8 +375,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			break;
 		case (1<<8)+5:	// Prism
 			Require(s1, 0, 2, 0);
-			// TODO
-			next=turn;
+			next=-1;
 			break;
 		case (1<<8)+6:	// Lodestone
 			Require(s1, 0, 5, 0);
@@ -601,8 +604,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			break;
 		case (2<<8)+5:	// Elven Scout
 			Require(s1, 0, 0, 2);
-			// TODO
-			next=turn;
+			next=-1;
 			break;
 		case (2<<8)+6:	// Goblin Mob
 			Require(s1, 0, 0, 3);

@@ -1,6 +1,7 @@
 CC=gcc
 BIN=arcomage
 BINSERVER=arcomage-server
+CFLAGS=-I ../include -L ../include -I ../lib -L ../lib
 
 all: $(BIN) $(BINSERVER)
 

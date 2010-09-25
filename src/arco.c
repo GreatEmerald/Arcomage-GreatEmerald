@@ -18,6 +18,7 @@ int soundenabled=1;
 int turn=0;
 int nextturn=0;
 int lastturn=0;
+int bSpecialTurn=0; //GE: used for determining whether or not this is a discarding turn.
 int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
@@ -124,6 +125,9 @@ void PlayCard(int c,int discrd)
 			return;		// Cursed cards like LodeStone can't be discarded
 	}
 	
+	if (bSpecialTurn && !discrd) //GE: You're trying to play a card during a discard round. Bad.
+	   return;
+	
 	FillRect(8+106*c,342,96,128,0,0,0);
 	Blit(SCREEN,BUFFER);
 	for (d=0.0;d<=1.0;d+=1.0/STEPS)
@@ -138,8 +142,23 @@ void PlayCard(int c,int discrd)
 		SDL_Delay(20);
 	}
 	sound=-1;
-	if (discrd) nextturn=!turn;
-			else nextturn=Turn(&Player[turn],&Player[!turn],Player[turn].Hand[c],turn);
+	if (discrd)
+  { 
+	    if (!bSpecialTurn)
+          nextturn=!turn;
+      else
+      {
+          nextturn=turn;
+          bSpecialTurn=0;
+      }
+  }
+	else 
+      nextturn=Turn(&Player[turn],&Player[!turn],Player[turn].Hand[c],turn);
+  if (nextturn == -1) //GE: If the card inits a discard turn.
+	{
+	    bSpecialTurn=1;
+	    nextturn=turn;
+  }
 	if (turn != nextturn)
 		bGiveResources = 1;
 	Blit(GAMEBG,SCREEN);
@@ -169,8 +188,8 @@ void AIPlay(int *t,int *d)
 	for (i=0;i<6;i++)
 	{
 		c=Player[turn].Hand[i];
-		if (Requisite(&Player[turn],i))
-			fuzzy[i]=(float) ( (req[c>>8][c&0xFF]+1) );
+		if (Requisite(&Player[turn],i) && !bSpecialTurn)
+			fuzzy[i]=(float) ( (req[c>>8][c&0xFF]+1) ); //GE: AI wants to play this?
 		else
 			fuzzy[i]=(float) ( (req[c>>8][c&0xFF]+1)-100.0 );
 	}
@@ -296,19 +315,19 @@ void DoGame()
 				if (Winner(i))
 				{
 					if (Player[i].t>=TowerVictory)
-						DialogBox(DLGWINNER, "You win by a tower building victory!");
+						DialogBox(DLGWINNER, "You win by a\ntower building victory!");
 					else if (Player[!i].t<=0)
-						DialogBox(DLGWINNER, "You win by a tower destruction victory!");
-					else DialogBox(DLGWINNER, "You win by a resource victory!");
+						DialogBox(DLGWINNER, "You win by a tower\ndestruction victory!");
+					else DialogBox(DLGWINNER, "You win by a\nresource victory!");
 					Sound_Play(VICTORY);
 				}
 				else
 				{
 					if (Player[!i].t>=TowerVictory)
-						DialogBox(DLGLOOSER, "You lose by a tower building defeat!");
+						DialogBox(DLGLOOSER, "You lose by a\ntower building defeat!");
 					else if (Player[i].t<=0)
-						DialogBox(DLGLOOSER, "You lose by a tower destruction defeat!");
-					else DialogBox(DLGLOOSER, "You lose by a resource defeat!");
+						DialogBox(DLGLOOSER, "You lose by a\ntower destruction defeat!");
+					else DialogBox(DLGLOOSER, "You lose by a\nresource defeat!");
 					Sound_Play(DEFEAT);
 		 		}
 			} else {										 // 2 local Players
@@ -391,8 +410,6 @@ int main(int argc,char *argv[])
 	ParseArgs(argc,argv);
 	
 	Init();
-
-	Sound_Play(TITLE);
 
 	while ((m=Menu())!=5)
 	{
