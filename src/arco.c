@@ -85,7 +85,7 @@ void Boss()
 
 void Init()
 {
-/*	CFG_File CF;
+	/*CFG_File CF;
 
 	if (CFG_OK != CFG_OpenFile(CONFIGFILE, &CF))
 	{
@@ -97,7 +97,7 @@ void Init()
 		CursedIDs[0]=CFG_ReadInt("CursedIDs", 6+(1<<8));
 	}
 
-	CFG_CloseFile(0);*/
+	CFG_CloseFile(0); */
 
 	CursedIDs[0]=6+(1<<8); //LodeStone
 

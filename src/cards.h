@@ -8,8 +8,17 @@ struct Stats {
 	int Hand[6];		// player's hand
 };
 
+struct CardInfo {
+    int ID;
+    int Frequency; //GE: This is the number of cards of this type in the deck.
+    char *Name; 
+};                                  
+//GE: The longest names are with 16 characters right now. ...blasted char arrays :\
+//GE: Also funny that it's an array of structs of arrays.
 int GetCard();
 void PutCard(int c);
+//int CardFrequencies(int i);
+//void InitCardDB();
 void InitDeck();
 void SetDeck(int *d);
 int Requisite(struct Stats *s,int card);

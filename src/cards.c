@@ -9,8 +9,11 @@ int req[3][35] = {
 };
 
 #define CARDS 102
-int Q[CARDS];//GE: Queue?
+struct CardInfo CardDB[CARDS];
+int TidyQ[CARDS];
+int *Q;//GE: Queue?
 int Qs=0,Qe=0;
+int DeckTotal; //GE: The total card number in the deck.
 
 int GetCard()//GE: Returns next card in the Q array.
 {
@@ -26,22 +29,78 @@ void PutCard(int c)
 	Q[Qe]=c;
 }
 
+int CardFrequencies(int i) //GE: Set special frequencies. Some of them are not known, defaulting to 1.
+{
+    switch(CardDB[i].ID)
+    {
+        case (2<<8)+3: return 2; //Moody Goblins
+        case (2<<8)+2: return 2; // Faerie
+        case (2<<8)+6: return 2;	// Goblin Mob
+        case (2<<8)+9: return 2;	// Orc
+        case (2<<8)+10: return 2;	// Dwarves
+        case (2<<8)+16: return 2;	// Ogre
+        case (2<<8)+12: return 2;	// Troll Trainer
+        case (1<<8)+1: return 2;	// Quartz
+        case (1<<8)+9: return 2;	// Gemstone Flaw
+        case (1<<8)+3: return 2;	// Amethyst
+        case (1<<8)+4: return 2;	// Spell Weavers
+        case (1<<8)+10: return 2;	// Ruby
+        case (1<<8)+15: return 2;	// Emerald
+        case (1<<8)+19: return 2;	// Sapphire
+        case 3: return 2;		// Friendly Terrain
+        case 7: return 2;		// Work Overtime
+        case 9: return 2;		// Basic Wall
+        case 12: return 2;		// Foundations
+        case 4: return 2;		// Miners
+        case 16: return 2;		// Big Wall
+        case 20: return 2;		// Reinforced Wall
+        
+        
+        default: return 1;
+    }
+}
+
+void InitCardDB()
+{
+    int i;
+    
+    for (i=0; i<CARDS; i++)
+    {
+        CardDB[i].ID = TidyQ[i]; //GE: [At this time?], TidyQ is neatly made. Let's use this to our advantage.
+        CardDB[i].Name = CardName(CardDB[i].ID);
+        CardDB[i].Frequency = CardFrequencies(i);
+        DeckTotal += CardDB[i].Frequency;
+    }
+}
+
 void InitDeck()
 {
-	int i,a,b;
+	int i,a,b, i2=0, i3=0;
 	int t;
 	Qs=0;
 	Qe=0;
-	for (i=0;i<CARDS/3;i++)
+	struct CardInfo LastEntry;
+	for (i=0;i<CARDS/3;i++) //GE: Creates a neat array of cards.
 	{
-		Q[i          ]=i+1;
-		Q[i+  CARDS/3]=i+1+(1<<8);
-		Q[i+2*CARDS/3]=i+1+(2<<8);
+		TidyQ[i          ]=i+1;
+		TidyQ[i+  CARDS/3]=i+1+(1<<8);
+		TidyQ[i+2*CARDS/3]=i+1+(2<<8);
 /*		printf("%d\n", Q[i]);
 		printf("%d\n", Q[i+  CARDS/3]);
 		printf("%d\n", Q[i+2*CARDS/3]);*/
 	}
-	for (i=0;i<65535;i++) //GE: A ludicrous way to randomise the Q array.
+	InitCardDB();
+	Q = (int*) malloc((sizeof (int)) * DeckTotal); //GE: Make Q as big as we want it to be.
+	//printf("DeckTotal: %d\n", DeckTotal);
+	for (i=0; i<CARDS; i++) //GE: Fill up Q with correct frequency.
+	{
+	   for( i2 = 0; i2 < CardDB[i].Frequency; i2++, i3++)
+	   {
+        Q[i3] = CardDB[i].ID;
+        //printf("Q[%d]: %d\n", i3, CardDB[i].ID);
+     }   
+  }
+  for (i=0;i<65535;i++) //GE: A ludicrous way to randomise the Q array.
 	{
 		a=rand()%CARDS;
 		b=rand()%CARDS;
