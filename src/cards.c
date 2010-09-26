@@ -14,6 +14,7 @@ int TidyQ[CARDS];
 int *Q;//GE: Queue?
 int Qs=0,Qe=0;
 int DeckTotal; //GE: The total card number in the deck.
+int bInitComplete=0;
 
 int GetCard()//GE: Returns next card in the Q array.
 {
@@ -73,14 +74,43 @@ void InitCardDB()
     }
 }
 
+void ShuffleQ()
+{
+  int i,a,b,t;
+  printf("DeckTotal before: %d\n", DeckTotal);
+  for (i=0; i<DeckTotal; i++)
+	{
+      printf("Before: Q[%d]=%d\n", i, Q[i]);
+  }
+  for (i=0;i<65535;i++) //GE: A ludicrous way to randomise the Q array.
+	{
+		a=rand()%DeckTotal;
+		b=rand()%DeckTotal;
+		t=Q[a];Q[a]=Q[b];Q[b]=t;
+	}
+	printf("DeckTotal after: %d\n", DeckTotal);
+  for (i=0; i<DeckTotal; i++)
+	{
+      printf("After: Q[%d]=%d\n", i, Q[i]);
+  }
+	Sound_Play(SHUFFLE);
+}
+
 void InitDeck()
 {
-	int i,a,b, i2=0, i3=0;
-	int t;
+	int i, i2=0, i3=0;
 	Qs=0;
 	Qe=0;
-	struct CardInfo LastEntry;
-	for (i=0;i<CARDS/3;i++) //GE: Creates a neat array of cards.
+	//struct CardInfo LastEntry;
+	//free(Q);
+	printf("Init complete: %d\n", bInitComplete);
+  if (bInitComplete)
+	{
+      ShuffleQ();
+      return;
+  }
+	
+  for (i=0;i<CARDS/3;i++) //GE: Creates a neat array of cards.
 	{
 		TidyQ[i          ]=i+1;
 		TidyQ[i+  CARDS/3]=i+1+(1<<8);
@@ -100,14 +130,8 @@ void InitDeck()
         //printf("Q[%d]: %d\n", i3, CardDB[i].ID);
      }   
   }
-  for (i=0;i<65535;i++) //GE: A ludicrous way to randomise the Q array.
-	{
-		a=rand()%CARDS;
-		b=rand()%CARDS;
-		t=Q[a];Q[a]=Q[b];Q[b]=t;
-	}
-	
-	Sound_Play(SHUFFLE);
+  bInitComplete = 1;
+  ShuffleQ();
 }
 
 void SetDeck(int *d)
