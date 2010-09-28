@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include "BFont.h"
+#include "minIni.h"
 #include "cards.h"
 #include "common.h"
 #include "graphics.h"
@@ -27,7 +28,10 @@ BFont_Info *bigfont=NULL;
 
 void Graphics_Init(int fullscreen)
 {
-	switch (OPERATINGSYSTEM)
+	
+  bUseOriginalMenu = ini_getl("Graphics", "bUseOriginalMenu", 0, CONFIGFILE);
+  
+  switch (OPERATINGSYSTEM)
 	{
 		case 1:
 			LoadSurface(ARCODATADIR "boss_linux.png",&GfxData[BOSS]);break;

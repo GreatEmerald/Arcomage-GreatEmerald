@@ -3,11 +3,14 @@
 #include <string.h>
 #include <time.h>
 #include <SDL.h>
+//#include <SDL_Config.lib>
+//#include <libSDL_Config.a>
 //#include <SDL_config_lib.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
 #include "network.h"
+#include "minIni.h"
 #include "sound.h"
 #include "cards.h"
 
@@ -85,19 +88,15 @@ void Boss()
 
 void Init()
 {
-	/*CFG_File CF;
-
-	if (CFG_OK != CFG_OpenFile(CONFIGFILE, &CF))
-	{
-		printf("Error reading config file! Falling back to defaults.\n");
-	}
-
-	if ( CFG_OK == CFG_SelectGroup("Arcomage", 0) )
-	{
-		CursedIDs[0]=CFG_ReadInt("CursedIDs", 6+(1<<8));
-	}
-
-	CFG_CloseFile(0); */
+	//int k, key;
+	//char str[4];
+  
+  /*for (k = 0; ini_getkey("CursedIDs", k, str, 4, CONFIGFILE) > 0; k++) 
+  {   //GE: What we get here are all the key names from the CursedIDs section of the config file.;
+      key = str[3] - '0';//(int) str[0]*1000+(int)str[1]*100+(int)str[2]*100+(int)str[3];
+      //key *= 1000;
+      printf("\t Keys:%d\n", key);
+  }   */
 
 	CursedIDs[0]=6+(1<<8); //LodeStone
 

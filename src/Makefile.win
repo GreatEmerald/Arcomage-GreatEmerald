@@ -6,13 +6,13 @@ CFLAGS=-I ../include -L ../include -I ../lib -L ../lib
 all: $(BIN) $(BINSERVER)
 
 clean:
-	del arco.o arcosrv.o common.o cards.o graphics.o input.o network.o sound.o BFont.o $(BIN) $(BINSERVER)
+	del minIni.o arco.o arcosrv.o common.o cards.o graphics.o input.o network.o sound.o BFont.o $(BIN) $(BINSERVER)
 
-$(BIN): arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o
-	$(CC) arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o -lmingw32 -lSDL_Config -lSDLmain -lSDL -lSDL_image -lSDL_net -lSDL_mixer -o $(BIN)
+$(BIN): minIni.o arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o
+	$(CC) minIni.o arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o -lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_net -lSDL_mixer -o $(BIN)
 
-$(BINSERVER): arcosrv.o network.o common.o cards.o
-	$(CC) arcosrv.o common.o cards.o network.o -lmingw32 -lSDL_Config -lSDLmain -lSDL -lSDL_net -o $(BINSERVER)
+$(BINSERVER): minIni.o arcosrv.o network.o common.o cards.o
+	$(CC) minIni.o arcosrv.o common.o cards.o network.o -lmingw32 -lSDLmain -lSDL -lSDL_net -o $(BINSERVER)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

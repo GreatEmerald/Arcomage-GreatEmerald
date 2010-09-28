@@ -20,13 +20,19 @@ int GetCard()//GE: Returns next card in the Q array.
 {
 	int i;
 	i=Q[Qs];
-	Qs=(Qs+1)%CARDS;
+	if (Qs+1 < DeckTotal)
+	   Qs++;
+	else
+	{
+      ShuffleQ();
+      Qs=0;
+  }
 	return i;
 }
 
 void PutCard(int c)
 {
-	Qe=(Qe+1)%CARDS;
+	Qe=(Qe+1)%DeckTotal;
 	Q[Qe]=c;
 }
 
