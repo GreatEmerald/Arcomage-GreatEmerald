@@ -16,8 +16,8 @@
 
 SDL_Event event;
 
-int fullscreen=0;
-int soundenabled=1;
+int /*config*/ fullscreen=0;
+int /*config*/ soundenabled=1;
 int turn=0;
 int nextturn=0;
 int lastturn=0;
@@ -25,19 +25,20 @@ int bSpecialTurn=0; //GE: used for determining whether or not this is a discardi
 int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
-int TowerLevels=20;
-int WallLevels=10;
-int QuarryLevels=1;
-int MagicLevels=1;
-int DungeonLevels=1;
-int BrickQuantities=15;
-int GemQuantities=15;
-int RecruitQuantities=15;
-int TowerVictory=200;//GE: Needs to be synced with cards.c
-int ResourceVictory=500;
+int /*config*/ TowerLevels=20;
+int /*config*/ WallLevels=40;
+int /*config*/ QuarryLevels=1;
+int /*config*/ MagicLevels=1;
+int /*config*/ DungeonLevels=1;
+int /*config*/ BrickQuantities=15;
+int /*config*/ GemQuantities=15;
+int /*config*/ RecruitQuantities=15;
+int /*config*/ TowerVictory=200;
+int /*config*/ ResourceVictory=500;
 int NumCursed=1;//GE: Number of cards that can not be discarded.
-int CursedIDs[50];//GE: Bump this number up for support of more than 50 cursed cards.
-int bOneResourceVictory=0;//GE: Allow victory for getting only one of the resources to required level
+int CursedIDs[1];//GE: Bump this number up for support of more than 50 cursed cards.
+int /*config*/ bOneResourceVictory=0;//GE: Allow victory for getting only one of the resources to required level
+int /*config*/ CardTranslucency=64;//GE: Controls the level of alpha channel on the inactive cards.
 
 int Winner(int a)
 {
@@ -56,6 +57,7 @@ void DrawCards(int turn)
 	{
 		j=aiplayer;if (j==-1) j=netplayer;
 		for (i=0;i<6;i++)
+		//GE: This is info on where to put in on the screen.
 			DrawCard(0x100*j,8+106*i,342);
 	}
 	else 
@@ -63,7 +65,7 @@ void DrawCards(int turn)
 			if (Requisite(&Player[turn],i))
 				DrawCard(Player[turn].Hand[i],8+106*i,342);
 			else
-				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,64);
+				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,CardTranslucency);
 }
 
 void Boss()
@@ -86,17 +88,29 @@ void Boss()
 	WaitForKey(0);	
 }
 
+void ReadConfig()
+{
+    fullscreen=ini_getl("Engine", "Fullscreen", 0, CONFIGFILE);
+    soundenabled=ini_getl("Engine", "SoundEnabled", 1, CONFIGFILE);
+    
+    TowerLevels=ini_getl("StartingConditions", "TowerLevels", 20, CONFIGFILE);
+    WallLevels=ini_getl("StartingConditions", "WallLevels", 40, CONFIGFILE);
+    QuarryLevels=ini_getl("StartingConditions", "QuarryLevels", 1, CONFIGFILE);
+    MagicLevels=ini_getl("StartingConditions", "MagicLevels", 1, CONFIGFILE);
+    DungeonLevels=ini_getl("StartingConditions", "DungeonLevels", 1, CONFIGFILE);
+    BrickQuantities=ini_getl("StartingConditions", "BrickQuantities", 15, CONFIGFILE);
+    GemQuantities=ini_getl("StartingConditions", "GemQuantities", 15, CONFIGFILE);
+    RecruitQuantities=ini_getl("StartingConditions", "RecruitQuantities", 15, CONFIGFILE);
+    TowerVictory=ini_getl("VictoryConditions", "TowerVictory", 200, CONFIGFILE);
+    ResourceVictory=ini_getl("VictoryConditions", "ResourceVictory", 500, CONFIGFILE);
+    bOneResourceVictory=ini_getl("VictoryConditions", "bOneResourceVictory", 0, CONFIGFILE);
+    
+    CardTranslucency=ini_getl("Graphics", "CardTranslucency", 64, CONFIGFILE);
+}
+
 void Init()
 {
-	//int k, key;
-	//char str[4];
-  
-  /*for (k = 0; ini_getkey("CursedIDs", k, str, 4, CONFIGFILE) > 0; k++) 
-  {   //GE: What we get here are all the key names from the CursedIDs section of the config file.;
-      key = str[3] - '0';//(int) str[0]*1000+(int)str[1]*100+(int)str[2]*100+(int)str[3];
-      //key *= 1000;
-      printf("\t Keys:%d\n", key);
-  }   */
+	ReadConfig();
 
 	CursedIDs[0]=6+(1<<8); //LodeStone
 
@@ -134,7 +148,7 @@ void PlayCard(int c,int discrd)
 		x=(8.0+106.0*c)+d*(272.0-(8.0+106.0*c));
 		y=342.0+d*(96.0-342.0);
 		Blit(BUFFER,SCREEN);
-		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,64);
+		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,CardTranslucency);
 		if (discrd)
 			DrawCard(0x200,(int)x,(int)y);
 		UpdateScreen();
@@ -161,8 +175,13 @@ void PlayCard(int c,int discrd)
 	if (turn != nextturn)
 		bGiveResources = 1;
 	Blit(GAMEBG,SCREEN);
-	DrawCard(Player[turn].Hand[c],272,96);
-	if (discrd) DrawCard(0x200,272,96);
+	if (discrd)
+  {
+     DrawCardAlpha(Player[turn].Hand[c],272,96,CardTranslucency);
+	   DrawCard(0x200,272,96);
+	}
+	else
+	   DrawCard(Player[turn].Hand[c],272,96);
 	PutCard(Player[turn].Hand[c]);
 	Player[turn].Hand[c]=GetCard();
 	lastturn=turn;

@@ -16,6 +16,8 @@ int Qs=0,Qe=0;
 int DeckTotal; //GE: The total card number in the deck.
 int bInitComplete=0;
 
+void ShuffleQ();
+
 int GetCard()//GE: Returns next card in the Q array.
 {
 	int i;
@@ -83,22 +85,22 @@ void InitCardDB()
 void ShuffleQ()
 {
   int i,a,b,t;
-  printf("DeckTotal before: %d\n", DeckTotal);
+  /*printf("DeckTotal before: %d\n", DeckTotal);
   for (i=0; i<DeckTotal; i++)
 	{
       printf("Before: Q[%d]=%d\n", i, Q[i]);
-  }
+  } */
   for (i=0;i<65535;i++) //GE: A ludicrous way to randomise the Q array.
 	{
 		a=rand()%DeckTotal;
 		b=rand()%DeckTotal;
 		t=Q[a];Q[a]=Q[b];Q[b]=t;
 	}
-	printf("DeckTotal after: %d\n", DeckTotal);
+	/*printf("DeckTotal after: %d\n", DeckTotal);
   for (i=0; i<DeckTotal; i++)
 	{
       printf("After: Q[%d]=%d\n", i, Q[i]);
-  }
+  } */
 	Sound_Play(SHUFFLE);
 }
 
@@ -109,7 +111,7 @@ void InitDeck()
 	Qe=0;
 	//struct CardInfo LastEntry;
 	//free(Q);
-	printf("Init complete: %d\n", bInitComplete);
+	//printf("Init complete: %d\n", bInitComplete);
   if (bInitComplete)
 	{
       ShuffleQ();
