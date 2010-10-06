@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "cards.h"
 #include "sound.h"
 
@@ -15,6 +16,8 @@ int *Q;//GE: Queue?
 int Qs=0,Qe=0;
 int DeckTotal; //GE: The total card number in the deck.
 int bInitComplete=0;
+
+void ShuffleQ();
 
 int GetCard()//GE: Returns next card in the Q array.
 {
