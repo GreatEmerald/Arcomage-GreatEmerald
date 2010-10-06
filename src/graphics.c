@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include "BFont.h"
@@ -20,16 +21,29 @@ int buttonHeight=32;
 int buttonDistanceX=240; //resX/2-buttonWidth/2 = 240
 int buttonDistanceY=160; //resY/2-buttonHeight/2*5 = 160
 int buttonNum=5;
-int bUseOriginalMenu=0;
+int /*config*/ bUseOriginalMenu=0;
+int /*config*/ bUseOriginalCards=0; //GE: Whether to use original graphics for the cards.
+char /*config*/ OriginalDataDir[128]; //GE: You can hook up the data dir of the original Arcomage through this and get the stock graphics!
+char JoinedString[128+12];
 
 BFont_Info *numssmall=NULL;
 BFont_Info *font=NULL;
 BFont_Info *bigfont=NULL;
 
+char* JoinStrings(char *FirstString, char *SecondString)
+{
+    strcpy(JoinedString, FirstString);
+    strcat(JoinedString, SecondString);
+    return JoinedString;
+}
+
 void Graphics_Init(int fullscreen)
 {
+	//char JoinedString[128+12];
 	
   bUseOriginalMenu = ini_getl("Graphics", "bUseOriginalMenu", 0, CONFIGFILE);
+  bUseOriginalCards = ini_getl("Graphics", "bUseOriginalCards", 0, CONFIGFILE);
+  ini_gets("Graphics", "OriginalDataDir", "data/", OriginalDataDir, sizeof(OriginalDataDir), CONFIGFILE); //GE: 128 symbols max path. 80 is known to be too few for some Unreal installs.
   
   switch (OPERATINGSYSTEM)
 	{
@@ -45,7 +59,10 @@ void Graphics_Init(int fullscreen)
 		LoadSurface(ARCODATADIR "gamebg.png",&GfxData[GAMEBG]);
 	}
 	LoadSurface(ARCODATADIR "credits.png",&GfxData[CREDITS]);
-	LoadSurface(ARCODATADIR "deck.png",&GfxData[DECK]);
+	if (!bUseOriginalCards)
+      LoadSurface(ARCODATADIR "deck.png",&GfxData[DECK]);
+  else
+      LoadSurface(JoinStrings(OriginalDataDir, "SPRITES.bmp"),&GfxData[DECK]);
 	SDL_SetColorKey(GfxData[DECK],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[DECK]->format,255,0,255));
 	LoadSurface(ARCODATADIR "nums_big.png",&GfxData[NUMSBIG]);
 	SDL_SetColorKey(GfxData[NUMSBIG],SDL_SRCCOLORKEY,SDL_MapRGB(GfxData[NUMSBIG]->format,255,0,255));
@@ -123,12 +140,56 @@ inline void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
 	SDL_FillRect(GfxData[SCREEN],&rect,SDL_MapRGB(GfxData[SCREEN]->format,r,g,b));
 }
 
-
+//GE: c - card ID, x,y - position on the screen.
 void DrawCard(int c,int x,int y)
 {
 	SDL_Rect recta,rectb;
-	recta.x=x;recta.y=y;recta.w=96;recta.h=128;
-	rectb.x=(c&0xFF)*96;rectb.y=(c>>8)*128;rectb.w=96;rectb.h=128;
+	int RawX, RawY;
+	
+	if (!bUseOriginalCards)
+	{
+	   recta.x=x;recta.y=y;recta.w=96;recta.h=128;
+     rectb.x=(c&0xFF)*96;rectb.y=(c>>8)*128;rectb.w=96;rectb.h=128;
+	}
+	else
+	{
+    	/*
+    	 * GE: Transform.
+    	 * Got 1*96, 1*128
+    	 * Got 11*96, 1*128 -> 1*96, 2*128
+    	 * Got 1*96, 2*128 -> 1*96, 5*128
+    	 * Three special cards: 0,0 is red, 0,1 is blue, 0,3 is Discard.
+    	 * Original doesn't have blue, and Discard is not in a shape of a card.             
+    	 */
+    	
+      RawX=(c&0xFF);
+    	RawY=(c>>8);
+    	
+    	//GE: Start special case handling --------------------------------------------
+    	if (RawX == 0)
+    	{
+          if (RawY == 0 || RawY == 1) //GE: back of the card
+          {
+              rectb.x=192;rectb.y=0;rectb.w=96;rectb.h=128;
+              recta.x=x;recta.y=y;
+          }
+          else //GE: Discard
+          {
+              rectb.x=843;rectb.y=200;rectb.w=73;rectb.h=16;
+              SDL_SetColorKey(GfxData[DECK], SDL_SRCCOLORKEY, 0x000000FF);
+              recta.x=x+11;recta.y=y+56;
+          }
+      }
+      else //GE: End special case handling -----------------------------------------
+      {
+        	RawX-=1;
+          RawY=RawX/10+(RawY*4);
+          RawX=RawX%10;
+        	
+        	recta.x=x;recta.y=y;recta.w=96;recta.h=128;
+          rectb.x=RawX*96;rectb.y=RawY*128+220;rectb.w=96;rectb.h=128;
+      }
+  }
 	SDL_BlitSurface(GfxData[DECK],&rectb,GfxData[SCREEN],&recta);
 }
 
