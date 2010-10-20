@@ -310,14 +310,18 @@ void DoGame()
 				if (InRect(event.button,432,342,432+94,468)&&(discrd||Requisite(&Player[turn],4))) {crd=4;break;}
 				if (InRect(event.button,535,342,532+94,468)&&(discrd||Requisite(&Player[turn],5))) {crd=5;break;}
 			}
-			netcard = Player[turn].Hand[crd];
-			PlayCard(crd,discrd);
-			if (netplayer!=-1)
-				NetLocPlay(crd,discrd,netcard);
+			if (!quit)
+            {
+                netcard = Player[turn].Hand[crd];
+    			PlayCard(crd,discrd);
+    			if (netplayer!=-1)
+    				NetLocPlay(crd,discrd,netcard);
+            }
 		}
 		SDL_Delay(CPUWAIT);
 	}
-	SDL_Delay(1000);
+	if (!quit)
+       SDL_Delay(1000);
 	if (Winner(0) || Winner(1))
 	{
 		if (Winner(0)&&Winner(1))
