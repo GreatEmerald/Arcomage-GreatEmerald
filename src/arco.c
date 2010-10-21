@@ -26,7 +26,7 @@ int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
 int /*config*/ TowerLevels=20;
-int /*config*/ WallLevels=40;
+int /*config*/ WallLevels=10;
 int /*config*/ QuarryLevels=1;
 int /*config*/ MagicLevels=1;
 int /*config*/ DungeonLevels=1;
@@ -94,7 +94,7 @@ void ReadConfig()
     soundenabled=ini_getl("Engine", "SoundEnabled", 1, CONFIGFILE);
     
     TowerLevels=ini_getl("StartingConditions", "TowerLevels", 20, CONFIGFILE);
-    WallLevels=ini_getl("StartingConditions", "WallLevels", 40, CONFIGFILE);
+    WallLevels=ini_getl("StartingConditions", "WallLevels", 10, CONFIGFILE);
     QuarryLevels=ini_getl("StartingConditions", "QuarryLevels", 1, CONFIGFILE);
     MagicLevels=ini_getl("StartingConditions", "MagicLevels", 1, CONFIGFILE);
     DungeonLevels=ini_getl("StartingConditions", "DungeonLevels", 1, CONFIGFILE);
