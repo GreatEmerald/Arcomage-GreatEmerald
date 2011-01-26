@@ -200,6 +200,40 @@ void DrawCardAlpha(int c,int x,int y,Uint8 a)
 	SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,255);
 }
 
+void DrawSmallNumber(int Resource, int X, int Y, int Offset)
+{
+    char str[4];
+    int i;
+    sprintf(str, "%d", Resource);
+    for (i=0; str[i]!=0; i++)
+        str[i]=str[i]-'0'+Offset;
+    BFont_PutStringFont(GfxData[SCREEN],numssmall,X,Y,str);
+}
+
+void DrawBigNumber(int Resource, int X, int Y)
+{
+    SDL_Rect recta,rectb;
+    int d1, d2;
+    d1 = Resource/10;
+    d2 = Resource%10;
+    
+    recta.w=22;recta.h=17;
+    recta.x=X;
+    recta.y=Y;
+    
+    rectb.y=0;
+    rectb.w=22;rectb.h=17;
+    
+    if (d1)
+    {
+       rectb.x=22*d1;
+       SDL_BlitSurface(GfxData[NUMSBIG],&rectb,GfxData[SCREEN],&recta);
+       recta.x += 22;
+    }
+    rectb.x=22*d2;
+    SDL_BlitSurface(GfxData[NUMSBIG],&rectb,GfxData[SCREEN],&recta);
+}
+
 void DrawStatus(int turn,struct Stats *Players)
 {
 	SDL_Rect recta,rectb;
@@ -212,24 +246,58 @@ void DrawStatus(int turn,struct Stats *Players)
 	SDL_FillRect(GfxData[SCREEN],&recta,SDL_MapRGB(GfxData[SCREEN]->format,(Uint8)(0xC0*!turn),0,(Uint8)(0xC0*turn)));
 	BFont_PutString(GfxData[SCREEN], 15+32-BFont_TextWidth(Players[0].Name)/2,20,Players[0].Name);
 	BFont_PutString(GfxData[SCREEN],562+32-BFont_TextWidth(Players[1].Name)/2,20,Players[1].Name);
-	for (i=0;i<2;i++)
-		for (j=0;j<3;j++)
-		{
-			recta.w=22;recta.h=17;
+	int Offset[3]={33,43,53};
+    for (i=0;i<2;i++)
+	{
+	    for (j=0;j<3;j++)
+	    {
+            DrawSmallNumber((&Players[i].b)[j], 10+i*547, 115+j*72, Offset[j]);
+            DrawBigNumber((&Players[i].q)[j], 13+547*i, 91+j*72);
+        }
+        
+        
+        /*int d1, d2;
+        d1 = Players[i].q/10;
+        d2 = Players[i].q%10;
+        
+        j=0;
+        recta.w=22;recta.h=17;
+	    recta.x=13+547*i;recta.y=91+j*72;
+        rectb.y=0;
+        rectb.w=22;rectb.h=17;
+        
+        if (d1)
+        {
+           rectb.x=22*d1;
+           SDL_BlitSurface(GfxData[NUMSBIG],&rectb,GfxData[SCREEN],&recta);
+           recta.x += 22;
+        }
+        rectb.x=22*d2;
+        SDL_BlitSurface(GfxData[NUMSBIG],&rectb,GfxData[SCREEN],&recta);*/
+    	
+        //for (j=0;j<3;j++)
+		//{
+            
+            /*recta.w=22;recta.h=17;
 			recta.x=13+547*i;recta.y=91+j*72;
 			if (j==0) rectb.x=22*Players[i].q;
 			if (j==1) rectb.x=22*Players[i].m;
 			if (j==2) rectb.x=22*Players[i].d;
-			rectb.y=0;
+            rectb.y=0;
 			rectb.w=22;rectb.h=17;
 		//	print big (yellow) numbers (quarry,magic,dungeons)
-			SDL_BlitSurface(GfxData[NUMSBIG],&rectb,GfxData[SCREEN],&recta);
-			if (j==0) {sprintf(b,"%d",Players[i].b);b[0]-='0'-'!';if (b[1]) b[1]-='0'-'!';if (b[2]) b[2]-='0'-'!';}
+			SDL_BlitSurface(GfxData[NUMSBIG],&rectb,GfxData[SCREEN],&recta);*/
+			/*if (j==0) {sprintf(b,"%d",Players[i].b);b[0]-='0'-'!';if (b[1]) b[1]-='0'-'!';if (b[2]) b[2]-='0'-'!';}
 			if (j==1) {sprintf(b,"%d",Players[i].g);b[0]-='0'-'+';if (b[1]) b[1]-='0'-'+';if (b[2]) b[2]-='0'-'+';}
-			if (j==2) {sprintf(b,"%d",Players[i].r);b[0]-='0'-'5';if (b[1]) b[1]-='0'-'5';if (b[2]) b[2]-='0'-'5';}
+			if (j==2) {sprintf(b,"%d",Players[i].r);b[0]-='0'-'5';if (b[1]) b[1]-='0'-'5';if (b[2]) b[2]-='0'-'5';}*/
+			//sprintf(b,"%d",Players[i].b);
+			
+            //b[0]='!'+1; b[1]='!'+5; b[2]='!'+15; b[3]=0;
+            //b[0]-='0'-1; b[1]-='0'-1; b[2]-='0'-1; b[3]=0;
 		//	print small numbers (bricks,gems,recruits)
-			BFont_PutStringFont(GfxData[SCREEN],numssmall,10+i*547,115+j*72,b);
-		}
+			//BFont_PutStringFont(GfxData[SCREEN],numssmall,10+i*547,115+j*72,b);
+		//}
+    }
 //	print tower/wall numbers
 	sprintf(b,"%d",Players[0].t);BFont_PutString(GfxData[SCREEN],160-BFont_TextWidth(b)/2,317,b);
 	sprintf(b,"%d",Players[0].w);BFont_PutString(GfxData[SCREEN],242-BFont_TextWidth(b)/2,317,b);
