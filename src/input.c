@@ -1,5 +1,7 @@
 #include <SDL.h>
 #include "common.h"
+//#include "arco.h"
+//extern int turn, aiplayer;
 
 SDL_Event event;
 

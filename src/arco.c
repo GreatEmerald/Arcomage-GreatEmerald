@@ -278,7 +278,9 @@ void DoGame()
 	
 	while (!quit && !Winner(0) && !Winner(1))
 	{
-		if (turn==aiplayer)
+		while(SDL_PollEvent(&event));//GE: Delete all events from the event queue before our turn.
+		
+        if (turn==aiplayer)
 		{
 			AIPlay(&i,&discrd);
 			SDL_Delay(500);
