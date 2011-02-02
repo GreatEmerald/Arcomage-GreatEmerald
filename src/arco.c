@@ -132,6 +132,8 @@ void PlayCard(int c,int discrd)
 	double d,x,y;
 	int bGiveResources=0, i;
 	
+	//GE: You get resources when you use a card and next up is the enemy's turn.
+	
 	for (i=0; i<NumCursed; i++)
 	{
 		if (Player[turn].Hand[c] == CursedIDs[i] && discrd)
@@ -183,17 +185,18 @@ void PlayCard(int c,int discrd)
 	else
 	   DrawCard(Player[turn].Hand[c],272,96);
 	PutCard(Player[turn].Hand[c]);
-	Player[turn].Hand[c]=GetCard();
+	if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
+	{
+		Player[nextturn].b+=Player[nextturn].q; //GE: The enemy gets resources.
+		Player[nextturn].g+=Player[nextturn].m;
+		Player[nextturn].r+=Player[nextturn].d;
+	}
+    Player[turn].Hand[c]=GetCard();
 	lastturn=turn;
 	turn=nextturn;
 		
 	DrawStatus(turn,Player);
-	if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
-	{
-		Player[lastturn].b+=Player[lastturn].q; //GE: The enemy gets resources.
-		Player[lastturn].g+=Player[lastturn].m;
-		Player[lastturn].r+=Player[lastturn].d;
-	}	
+		
 	DrawCards(turn);
 	UpdateScreen();
 }
