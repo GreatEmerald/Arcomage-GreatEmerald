@@ -31,7 +31,8 @@ void DrawCard(int c,int x,int y);
 void DrawCardAlpha(int c,int x,int y,Uint8 a);
 void DrawStatus(int turn,struct Stats *Player);
 char *DialogBox(int type,const char *fmt,...);
-int InRect(SDL_MouseButtonEvent e,int x1,int y1,int x2,int y2);
+int InRect(int x, int y, int x1, int y1, int x2, int y2);
+void DrawRectangle(int x, int y, int w, int h, int Colour);
 void LoadSurface(char *filename,SDL_Surface **surface);
 void DoCredits();
 

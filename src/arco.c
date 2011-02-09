@@ -53,7 +53,8 @@ int Winner(int a)
 void DrawCards(int turn)
 {
 	int i,j;
-	if (turn==aiplayer || turn==netplayer)
+    
+    if (turn==aiplayer || turn==netplayer)
 	{
 		j=aiplayer;if (j==-1) j=netplayer;
 		for (i=0;i<6;i++)
@@ -281,7 +282,8 @@ void DoGame()
 	
 	while (!quit && !Winner(0) && !Winner(1))
 	{
-		while(SDL_PollEvent(&event));//GE: Delete all events from the event queue before our turn.
+		
+        while(SDL_PollEvent(&event));//GE: Delete all events from the event queue before our turn.
 		
         if (turn==aiplayer)
 		{
@@ -306,14 +308,17 @@ void DoGame()
 				quit=(event.type==SDL_KEYUP&&event.key.keysym.sym==SDLK_ESCAPE);
 				if (event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_b) //GE: Keeping as "down" since it's urgent ;)
 				    Boss();
-				if (event.type!=SDL_MOUSEBUTTONUP || event.button.button>3) continue;
+                if ( event.type == SDL_MOUSEMOTION && InRect(event.motion.x, event.motion.y,   8,342,  8+94,468) )
+				    DrawRectangle(7,341,  7+95,469, 0xFF0000);
+                
+                if (event.type!=SDL_MOUSEBUTTONUP || event.button.button>3) continue;
 				discrd=(event.button.button==2)||(event.button.button==3);
-				if (InRect(event.button,  8,342,  8+94,468)&&(discrd||Requisite(&Player[turn],0))) {crd=0;break;}
-				if (InRect(event.button,114,342,114+94,468)&&(discrd||Requisite(&Player[turn],1))) {crd=1;break;}
-				if (InRect(event.button,220,342,220+94,468)&&(discrd||Requisite(&Player[turn],2))) {crd=2;break;}
-				if (InRect(event.button,326,342,326+94,468)&&(discrd||Requisite(&Player[turn],3))) {crd=3;break;}
-				if (InRect(event.button,432,342,432+94,468)&&(discrd||Requisite(&Player[turn],4))) {crd=4;break;}
-				if (InRect(event.button,535,342,532+94,468)&&(discrd||Requisite(&Player[turn],5))) {crd=5;break;}
+				if (InRect(event.button.x,event.button.y,  8,342,  8+94,468)&&(discrd||Requisite(&Player[turn],0))) {crd=0;break;}
+				if (InRect(event.button.x,event.button.y,114,342,114+94,468)&&(discrd||Requisite(&Player[turn],1))) {crd=1;break;}
+				if (InRect(event.button.x,event.button.y,220,342,220+94,468)&&(discrd||Requisite(&Player[turn],2))) {crd=2;break;}
+				if (InRect(event.button.x,event.button.y,326,342,326+94,468)&&(discrd||Requisite(&Player[turn],3))) {crd=3;break;}
+				if (InRect(event.button.x,event.button.y,432,342,432+94,468)&&(discrd||Requisite(&Player[turn],4))) {crd=4;break;}
+				if (InRect(event.button.x,event.button.y,535,342,532+94,468)&&(discrd||Requisite(&Player[turn],5))) {crd=5;break;}
 			}
 			if (!quit)
             {

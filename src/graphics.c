@@ -366,7 +366,7 @@ int Menu()
 			SDL_UpdateRect(GfxData[SCREEN],buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum);
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if ((event.button.button==SDL_BUTTON_LEFT) && InRect(event.button,buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum))
+			if ((event.button.button==SDL_BUTTON_LEFT) && InRect(event.button.x, event.button.y,buttonDistanceX,buttonDistanceY,buttonDistanceX+buttonWidth,buttonDistanceY+buttonHeight*buttonNum))
 			{	// menuitem
 				j=(event.button.y-buttonDistanceY)/buttonHeight;
 				value=j+1;
@@ -498,15 +498,30 @@ char *DialogBox(int type,const char *fmt,...)
 	}
 }
 
-int InRect(SDL_MouseButtonEvent e,int x1,int y1,int x2,int y2)
+int InRect(int x, int y, int x1, int y1, int x2, int y2)
 {
-	return (e.x>=x1)&&(e.x<=x2)&&(e.y>=y1)&&(e.y<=y2);
+	return (x>=x1)&&(x<=x2)&&(y>=y1)&&(y<=y2);
 }
 
 void LoadSurface(char *filename,SDL_Surface **surface)
 {
 	*surface=IMG_Load(filename);
 	if (!*surface) FatalError("File '%s' is missing or corrupt.",filename);
+}
+
+void DrawRectangle(int x, int y, int w, int h, int Colour)
+{
+    SDL_Rect rec;
+    
+    //GE: 4 "fill" rects.
+	rec.x=x; rec.y=y; rec.w=w; rec.h=1;
+	SDL_FillRect(GfxData[SCREEN], &rec, Colour);
+	rec.x=x; rec.y=y; rec.w=1; rec.h=h;
+	SDL_FillRect(GfxData[SCREEN], &rec, Colour);
+	rec.x=x+w-1; rec.y=y; rec.w=1; rec.h=h;
+	SDL_FillRect(GfxData[SCREEN], &rec, Colour);
+	rec.x=x; rec.y=y+h-1; rec.w=w; rec.h=1;
+	SDL_FillRect(GfxData[SCREEN], &rec, Colour);
 }
 
 void DoCredits()
