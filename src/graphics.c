@@ -123,9 +123,21 @@ inline void Blit(int a,int b)
 	SDL_BlitSurface(GfxData[a],NULL,GfxData[b],NULL);
 }
 
+//GE: This function updates the screen. Nothing is being remade. Fast.
 inline void UpdateScreen()
 {
 	SDL_UpdateRect(GfxData[SCREEN],0,0,0,0);
+}
+
+//GE: This function redraws the screen elements. Slow.
+inline void RedrawScreen(int turn, struct Stats* Player)
+{
+    SDL_Flip(GfxData[SCREEN]);
+    //Blit(BUFFER,SCREEN);
+    //Blit(GAMEBG,SCREEN);
+    //DrawStatus(turn,Player);
+	//DrawCards(turn);
+	//UpdateScreen();
 }
 
 inline void UpdateScreenRect(int x1,int y1,int x2,int y2)
