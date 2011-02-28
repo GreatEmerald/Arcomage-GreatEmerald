@@ -24,6 +24,7 @@ int turn=0;
 int nextturn=0;
 int lastturn=0;
 int bSpecialTurn=0; //GE: used for determining whether or not this is a discarding turn.
+int bRefreshNeeded=0; //GE: True if we need to refresh the screen. Used in the input loop.
 int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
@@ -314,7 +315,19 @@ void DoGame()
 				if (event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_b) //GE: Keeping as "down" since it's urgent ;)
 				    Boss();
                 if ( event.type == SDL_MOUSEMOTION && InRect(event.motion.x, event.motion.y,   8,342,  8+94,468) )
-				    DrawRectangle(7,341,  7+95,469, 0xFF0000);
+                {
+				    Blit(SCREEN, BUFFER);
+                    DrawRectangle(8,342,96,128, 0xFF0000);
+				    UpdateScreen();
+				    bRefreshNeeded=1;
+                }
+                else if(bRefreshNeeded)
+                {
+                    RedrawScreen(turn, Player);
+                    //Blit(BUFFER, SCREEN);
+                    bRefreshNeeded=0;
+                }
+                //Blit(SCREEN,BUFFER);
                 
                 if (event.type!=SDL_MOUSEBUTTONUP || event.button.button>3) continue;
 				discrd=(event.button.button==2)||(event.button.button==3);
