@@ -309,8 +309,9 @@ void DoGame()
 		} else {
 			while (!quit)
    			{
-				SDL_Delay(CPUWAIT);
-				SDL_PollEvent(&event);
+				if (!SDL_PollEvent(&event))
+                    continue;
+                SDL_Delay(CPUWAIT);
 				quit=(event.type==SDL_KEYUP&&event.key.keysym.sym==SDLK_ESCAPE);
 				if (event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_b) //GE: Keeping as "down" since it's urgent ;)
 				    Boss();
