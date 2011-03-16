@@ -7,7 +7,7 @@
 //#include <libSDL_Config.a>
 //#include <SDL_config_lib.h>
 //#include "gmCall.h"
-#include <lua.h>
+//#include <lua.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
@@ -114,9 +114,9 @@ void ReadConfig()
 
 void Init()
 {
-	lua_State *L;
-	L = luaL_newstate();
-	lua_close(L);
+	//lua_State *L;
+	//L = luaL_newstate();
+	//lua_close(L);
   ReadConfig();
 
 	CursedIDs[0]=6+(1<<8); //LodeStone
@@ -309,8 +309,9 @@ void DoGame()
 		} else {
 			while (!quit)
    			{
-				SDL_Delay(CPUWAIT);
-				SDL_PollEvent(&event);
+				if (!SDL_PollEvent(&event))
+                    continue;
+                SDL_Delay(CPUWAIT);
 				quit=(event.type==SDL_KEYUP&&event.key.keysym.sym==SDLK_ESCAPE);
 				if (event.type==SDL_KEYDOWN&&event.key.keysym.sym==SDLK_b) //GE: Keeping as "down" since it's urgent ;)
 				    Boss();

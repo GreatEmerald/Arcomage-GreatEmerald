@@ -118,19 +118,19 @@ void Graphics_Quit()
 		SDL_FreeSurface(GfxData[i]);
 }
 
-inline void Blit(int a,int b)
+void Blit(int a,int b)
 {
 	SDL_BlitSurface(GfxData[a],NULL,GfxData[b],NULL);
 }
 
 //GE: This function updates the screen. Nothing is being remade. Fast.
-inline void UpdateScreen()
+void UpdateScreen()
 {
 	SDL_UpdateRect(GfxData[SCREEN],0,0,0,0);
 }
 
 //GE: This function redraws the screen elements. Slow.
-inline void RedrawScreen(int turn, struct Stats* Player)
+void RedrawScreen(int turn, struct Stats* Player)
 {
     SDL_Flip(GfxData[SCREEN]);
     //Blit(BUFFER,SCREEN);
@@ -145,7 +145,7 @@ inline void UpdateScreenRect(int x1,int y1,int x2,int y2)
 	SDL_UpdateRect(GfxData[SCREEN],x1,y1,x2,y2);
 }
 
-inline void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
+void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
 {
 	SDL_Rect rect;
 	rect.x=x;rect.y=y;rect.w=w;rect.h=h;
