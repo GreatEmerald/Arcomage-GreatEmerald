@@ -50,7 +50,9 @@ extern "C"
 	{
 	}
  */
-#define main	SDL_main
+#ifndef __DMC__ //GE: DMC's OPTLINK hates programs without a main.
+    #define main	SDL_main
+#endif
 
 /* The prototype for the application's main() function */
 extern C_LINKAGE int SDL_main(int argc, char *argv[]);

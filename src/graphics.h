@@ -24,6 +24,7 @@ void Graphics_Init(int fullscreen);
 void Graphics_Quit();
 void Blit(int a,int b);
 void UpdateScreen();
+void RedrawScreen();
 void UpdateScreenRect(int x1,int y1,int x2,int y2);
 void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b);
 int Menu();

@@ -7,7 +7,7 @@
 //#include <libSDL_Config.a>
 //#include <SDL_config_lib.h>
 //#include "gmCall.h"
-#include <lua.h>
+//#include <lua.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
@@ -114,9 +114,9 @@ void ReadConfig()
 
 void Init()
 {
-	lua_State *L;
-	L = luaL_newstate();
-	lua_close(L);
+	//lua_State *L;
+	//L = luaL_newstate();
+	//lua_close(L);
   ReadConfig();
 
 	CursedIDs[0]=6+(1<<8); //LodeStone

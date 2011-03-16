@@ -9,6 +9,10 @@
 	#define inline __inline
 #endif
 
+#ifdef __DMC__ //GE: Digital Mars C compiler support.
+    #define snprintf _snprintf
+#endif
+
 	void FatalError(char *fmt,...);
 	void OpenWebLink(char *web);
 

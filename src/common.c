@@ -1,6 +1,6 @@
 #include "common.h"
 
-#if defined(linux) || defined(__APPLE__)	// LINUX AND MACOS CODE BEGIN
+#if defined(linux) || defined(__APPLE__) || defined(__DMC__)	// LINUX AND MACOS CODE BEGIN
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,9 +23,9 @@ void OpenWebLink(char *web)
 	system(cmdline);
 }
 
-#endif	// LINUX CODE END
+//#endif	// LINUX CODE END
 
-#ifdef WIN32	// WINDOWS CODE BEGIN
+#else ifdef WIN32	// WINDOWS CODE BEGIN
 
 #include <stdio.h>
 #include <stdarg.h>
