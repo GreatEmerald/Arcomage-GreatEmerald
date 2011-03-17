@@ -18,8 +18,10 @@
 
 #ifdef linux
 	#define OPERATINGSYSTEM 1
-	#define CONFIGFILE "~/.config/arcomage.cfg"
-	#define ARCODATADIR "/usr/share/arcomage/"
+	#define CONFIGFILE "arcomage.cfg"
+	#define ARCODATADIR "data/"
+	//#define CONFIGFILE "~/.config/arcomage.cfg"
+	//#define ARCODATADIR "/usr/share/arcomage/"
 #endif
 
 #ifdef WIN32
