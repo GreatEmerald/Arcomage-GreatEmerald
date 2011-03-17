@@ -5,6 +5,25 @@ Arcomage Clone is, as the name implies, a clone of Arcomage. The goal of this
 project is to recreate the standalone Arcomage to a feature parity, while
 introducing new features to keep the game fresh and moddable.
 
+=======
+RUNNING
+=======
+
+In order to play the game, the user needs to do one of these things:
+
+1) move the /data directory into the /bin/windows or /bin/linux directories, or
+2) move the contents of the /bin/windows or /bin/linux directories to /, or
+3) create a symbolic link that points from the /bin/* directory to the /data directory.
+
+The last part has already been done for Linux users. Note that this will be
+changed into a configuration option later on.
+
+If you are using Linux, you will have to install libsdl1.2, libsdl-image,
+libsdl-mixer, libsdl-net and liblua5.1 to run the game (or their equivalents in
+your Linux distribution).
+
+After that, simply run /bin/windows/Arcomage.exe or /bin/linux/arcomage and enjoy!
+
 ========
 BUILDING
 ========
@@ -31,9 +50,13 @@ Explanation is given below.
 
 Linux:
   Mandatory:
-    GCC (GNU Compiler Collection)
-    GNU Make
-    SDL 1.2 (Simple DirectMedia Layer, 1.2.8; package name depends on your distribution)
+    GCC (GNU Compiler Collection; gcc)
+    GNU Make (make)
+    SDL 1.2 (Simple DirectMedia Layer, 1.2.14; libsdl1.2-dev on Debian)
+    SDL image (libsdl-image-dev on Debian)
+    SDL mixer (libsdl-mixer-dev on Debian)
+    SDL net (libsdl-net-dev on Debian)
+    Lua 5.1 (liblua5.1-dev on Debian)
   Highly recommended:
     DMD (Digital Mars D compiler): http://www.digitalmars.com/d/download.html
 
@@ -96,12 +119,7 @@ library to the project. More info about it here:
 http://www.digitalmars.com/ctg/coffimplib.html
 
 Now about Linux. If you don't know why you need GNU Make, then, uh, yeah.
-Getting SDL might be a bit of an issue, since you need SDL 1.2.8, while the
-libsdl1.2 and libsdl1.2-devel packages give you SDL 1.2.14, which handles input
-differently, causing problems. That means that you'll either have to put up
-with it, build the old SDL from the source (which didn't work for me when I
-tried) or fix the input handling so it works on SDL 1.2.14. I am working on this
-myself at the moment of writing.
+SDL is the part that is responsible for all the rendering, so i
 
 =========
 STRUCTURE
@@ -113,7 +131,7 @@ projected directory tree:
   +-- bin
   |   +-- windows
   |   +-- linux
-  |-- COPYING
+  |-- COPYING.TXT
   +-- d
   |   +-- src
   |   +-- utils
@@ -121,7 +139,8 @@ projected directory tree:
   +-- include
   +-- lib
   +-- lua
-  |-- README
+  +-- old
+  |-- README.TXT
   +-- src
   +-- utils
 
@@ -130,7 +149,7 @@ the binaries that are needed in order to run the game. That means that the
 windows folder has .dll and .ini files, while the linux directory has .so and
 .cfg files. Note to developers: remember to put new things in both folders.
 
-COPYING is a text file that contains GPL licensing information.
+COPYING.TXT is a text file that contains GPL licensing information.
 
 d is the folder that contains the source code for the D part of the project.
 d/src is where the actual sources are kept, while d/utils is where the utilities
@@ -149,10 +168,15 @@ libary created from the D source code also goes in here.
 lua contains the Lua scripts for the game. They control the card decks and the
 AI of the enemy, and are needed to run the game.
 
-README is this file, in case you haven't noticed :)
+old is a directory for obsolete files that could still be useful as a reference.
+At the moment it includes the Windows Makefile version (obsolete since DMC
+doesn't use those) and COFF format libraries (again obsolete since DMC doesn't
+use those).
+
+README.TXT is this file, in case you haven't noticed :)
 
 src is the C source code. That's the crucial (and the most interesting) part of
-the project.
+the project. So far, at least.
 
 utils, much like d/utils, contains utilities for building the code. The
 utilities will probably interface with the ones from d/utils for easy
