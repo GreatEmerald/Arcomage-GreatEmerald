@@ -10,8 +10,15 @@ struct Stats {
 
 struct CardInfo {
     int ID;
-    int Frequency; //GE: This is the number of cards of this type in the deck.
-    char *Name; 
+    int Frequency; //GE: This is the number of cards of this type in the deck. 1=Rare, 2=Uncommon, 3=Common
+    char *Name;
+    char *Description;
+    int BrickCost; //GE: These three are for rendering purposes, but are used in code as well
+    int GemCost;
+    int RecruitCost;
+    char *Picture; //GE: Rendering purposes. Might also add coordinates.
+    char *Keywords; //GE: Might become an array. These are MArcomage keywords, also used in Lua functions
+    char *LuaFunction; //GE: This is what we call on playing the card.
 };                                  
 //GE: The longest names are with 16 characters right now. ...blasted char arrays :\
 //GE: Also funny that it's an array of structs of arrays.

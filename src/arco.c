@@ -7,7 +7,9 @@
 //#include <libSDL_Config.a>
 //#include <SDL_config_lib.h>
 //#include "gmCall.h"
-//#include <lua.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 #include "common.h"
 #include "graphics.h"
 #include "input.h"
@@ -28,6 +30,7 @@ int bRefreshNeeded=0; //GE: True if we need to refresh the screen. Used in the i
 int aiplayer=-1;
 int netplayer=-1;
 struct Stats Player[2];
+lua_State *L; //GE: Lua support.
 int /*config*/ TowerLevels=20;
 int /*config*/ WallLevels=10;
 int /*config*/ QuarryLevels=1;
@@ -114,9 +117,12 @@ void ReadConfig()
 
 void Init()
 {
-	//lua_State *L;
-	//L = luaL_newstate();
-	//lua_close(L);
+	L = lua_open();
+	luaL_openlibs(L);
+	luaL_dofile(L,"lua/CardPools.lua");
+  
+	
+	
   ReadConfig();
 
 	CursedIDs[0]=6+(1<<8); //LodeStone
@@ -130,6 +136,7 @@ void Quit()
 {
 	Graphics_Quit();
 	Sound_Quit();
+	lua_close(L);
 }
 
 void PlayCard(int c,int discrd)
