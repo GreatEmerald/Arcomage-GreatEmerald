@@ -33,4 +33,11 @@ int Requisite(struct Stats *s,int card);
 int Turn(struct Stats *s1,struct Stats *s2,int card,int turn);
 char* CardName(int card);
 
+//GE: Functions called in D code.
+void D_addID(int Pool, int Card, int ID);
+void D_addFrequency(int Pool, int Card, int Frequency);
+void D_addName(int Pool, int Card, const char* Name);
+void D_addDescription(int Pool, int Card, const char* Description);
+void D_printCardDB();
+
 #endif

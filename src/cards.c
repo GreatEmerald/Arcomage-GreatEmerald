@@ -82,6 +82,7 @@ void InitCardDB()
     //GE: NEW - use Lua
     
     printf("FIRST: ");
+    D_printCardDB();
     StackDump(L);
     lua_getglobal(L, "ArcomageInit"); //GE: Ask Lua to put the ArcomageInit function into the stack.
     //GE: Added a function. STACK: -1: function
@@ -112,6 +113,7 @@ void InitCardDB()
     StackDump(L);
     if (!lua_isnumber(L, -1)) //GE: Sanity check
         error(L, "This is not a number.");
+    D_addID(0,0,(int)lua_tonumber(L, -1));
     CardDB[0].ID = (int)lua_tonumber(L, -1); //GE: Assign the number.
     printf("Snagged ID: %d", CardDB[0].ID);
     lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
@@ -138,8 +140,10 @@ void InitCardDB()
     if (!lua_isstring(L, -1)) //GE: Sanity check
         error(L, "This is not a string.");
     printf("Received string: %s\n", lua_tostring(L, -1));
-    strcpy(CardDB[0].Name, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
-    printf("Snagged Name: %s", CardDB[0].Name);
+    D_addName(0, 0, lua_tostring(L, -1));
+    D_printCardDB();
+    //strcpy(CardDB[0].Name, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
+    //printf("Snagged Name: %s", CardDB[0].Name);
     lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
     //GE: Removed an element. STACK: -1: table, -2: table
     StackDump(L);
@@ -150,7 +154,9 @@ void InitCardDB()
     //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
     if (!lua_isstring(L, -1)) //GE: Sanity check
         error(L, "This is not a string.");
-    strcpy(CardDB[0].Description, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
+    D_addDescription(0, 0, lua_tostring(L, -1));
+    D_printCardDB();
+    //strcpy(CardDB[0].Description, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
     lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
     //GE: Removed an element. STACK: -1: table, -2: table
     
