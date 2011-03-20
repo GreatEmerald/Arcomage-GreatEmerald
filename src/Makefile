@@ -14,4 +14,4 @@ $(BINSERVER): minIni.o arcosrv.o network.o common.o cards.o
 	$(CC) minIni.o arcosrv.o common.o cards.o network.o `pkg-config --libs sdl` -lSDL_net -o $(BINSERVER)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ `pkg-config --cflags sdl`
+	$(CC) $(CFLAGS) -c $< -o $@ `pkg-config --cflags sdl` `pkg-config --cflags lua5.1`

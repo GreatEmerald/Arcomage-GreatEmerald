@@ -3,4 +3,4 @@
 -- GreatEmerald, 2011
 
 -- GE: Mods will have more folders. To activate them, add a like like these pointing to their CardPools.
-require('Arcomage/CardPool');
+dofile('lua/Arcomage/CardPool.lua');
