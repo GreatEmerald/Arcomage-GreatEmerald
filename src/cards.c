@@ -1,5 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
 #include "cards.h"
 #include "sound.h"
 
@@ -10,13 +13,14 @@ int req[3][35] = {
 };
 
 #define CARDS 102
-struct CardInfo CardDB[CARDS];
+struct CardInfo CardDB[CARDS]; //GE: Scheduled deprecation. Use D functions to access this instead!
 int TidyQ[CARDS];
 int *Q;//GE: Queue?
 int Qs=0,Qe=0;
 int DeckTotal; //GE: The total card number in the deck.
 int bInitComplete=0;
 
+lua_State *L;
 void ShuffleQ();
 
 int GetCard()//GE: Returns next card in the Q array.
@@ -74,13 +78,94 @@ void InitCardDB()
 {
     int i;
     
-    for (i=0; i<CARDS; i++)
+    
+    //GE: NEW - use Lua
+    
+    printf("FIRST: ");
+    StackDump(L);
+    lua_getglobal(L, "ArcomageInit"); //GE: Ask Lua to put the ArcomageInit function into the stack.
+    //GE: Added a function. STACK: -1: function
+    if (!lua_isfunction(L, -1)) //GE: Sanity check
+        error(L, "This is not a function.");
+    lua_pcall(L, 0, 1, 0); //GE: Call ArcomageInit(). Expect to get one return value, passing no parameters.
+    //GE: Got results. STACK: -1: table
+    printf("SECOND: ");
+    StackDump(L);
+    lua_pushnumber(L, 1); //GE: Read the first element from the CardDB table.
+    //GE: Added a number. STACK: -1: number, -2: table
+    printf("THIRD: ");
+    StackDump(L);
+    if (!lua_istable(L, -2)) //GE: Sanity check
+        error(L, "This is not a table.");
+    lua_gettable(L, -2); //GE: Put CardDB[1] onto the stack. It's CardInfo{}. Note that lua_gettable means "get from table", not "get a table" - the fact that we got a table is coincidence.
+    //GE: Replaced the key with a table. STACK: -1: table, -2: table
+    printf("FOURTH --");
+    StackDump(L);
+    
+    
+    
+    
+    if (!lua_istable(L, -1)) //GE: Sanity check
+        error(L, "This is not a table.");
+    lua_getfield(L, -1, "ID"); //GE: Put CardInfo.ID onto the stack. It's a number.
+    //GE: Received an element. STACK: -1: number, -2: table, -3: table
+    StackDump(L);
+    if (!lua_isnumber(L, -1)) //GE: Sanity check
+        error(L, "This is not a number.");
+    CardDB[0].ID = (int)lua_tonumber(L, -1); //GE: Assign the number.
+    printf("Snagged ID: %d", CardDB[0].ID);
+    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+    //GE: Removed an element. STACK: -1: table, -2: table
+    StackDump(L);
+    
+    if (!lua_istable(L, -1)) //GE: Sanity check
+        error(L, "This is not a table.");
+    lua_getfield(L, -1, "Frequency"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
+    //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
+    if (!lua_isnumber(L, -1)) //GE: Sanity check
+        error(L, "This is not a number.");
+    CardDB[0].Frequency = (int)lua_tonumber(L, -1); //GE: Assign the number.
+    printf("Snagged Frequency: %d", CardDB[0].Frequency);
+    getchar();
+    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+    //GE: Removed an element. STACK: -1: table, -2: table
+    
+    if (!lua_istable(L, -1)) //GE: Sanity check
+        error(L, "This is not a table.");
+    lua_getfield(L, -1, "Name"); //GE: Put CardInfo.Name onto the stack. It's a string.
+    //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
+    StackDump(L);
+    if (!lua_isstring(L, -1)) //GE: Sanity check
+        error(L, "This is not a string.");
+    printf("Received string: %s\n", lua_tostring(L, -1));
+    strcpy(CardDB[0].Name, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
+    printf("Snagged Name: %s", CardDB[0].Name);
+    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+    //GE: Removed an element. STACK: -1: table, -2: table
+    StackDump(L);
+    
+    if (!lua_istable(L, -1)) //GE: Sanity check
+        error(L, "This is not a table.");
+    lua_getfield(L, -1, "Description"); //GE: Put CardInfo.Name onto the stack. It's a string.
+    //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
+    if (!lua_isstring(L, -1)) //GE: Sanity check
+        error(L, "This is not a string.");
+    strcpy(CardDB[0].Description, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
+    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+    //GE: Removed an element. STACK: -1: table, -2: table
+    
+    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+    //GE: Removed an element. STACK: -1: table
+    
+    DeckTotal++;
+    for (i=1; i<CARDS; i++)
     {
         CardDB[i].ID = TidyQ[i]; //GE: [At this time?], TidyQ is neatly made. Let's use this to our advantage.
-        CardDB[i].Name = CardName(CardDB[i].ID);
+        strcpy(CardDB[i].Name, CardName(CardDB[i].ID));
         CardDB[i].Frequency = CardFrequencies(i);
         DeckTotal += CardDB[i].Frequency;
-    }
+    } 
+    
 }
 
 void ShuffleQ()

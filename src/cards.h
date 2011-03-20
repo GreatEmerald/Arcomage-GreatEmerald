@@ -11,11 +11,12 @@ struct Stats {
 struct CardInfo {
     int ID;
     int Frequency; //GE: This is the number of cards of this type in the deck. 1=Rare, 2=Uncommon, 3=Common
-    char *Name;
-    char *Description;
+    char Name[128];
+    char Description[128];
     int BrickCost; //GE: These three are for rendering purposes, but are used in code as well
     int GemCost;
     int RecruitCost;
+    char *Colour; //GE: Red, Geen, Blue, Gray/Grey/Black, Brown/White. Rendering purposes, mostly for 0 cost coloured cards
     char *Picture; //GE: Rendering purposes. Might also add coordinates.
     char *Keywords; //GE: Might become an array. These are MArcomage keywords, also used in Lua functions
     char *LuaFunction; //GE: This is what we call on playing the card.

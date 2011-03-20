@@ -3,10 +3,6 @@
 #include <string.h>
 #include <time.h>
 #include <SDL.h>
-//#include <SDL_Config.lib>
-//#include <libSDL_Config.a>
-//#include <SDL_config_lib.h>
-//#include "gmCall.h"
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
@@ -115,11 +111,59 @@ void ReadConfig()
     CardTranslucency=ini_getl("Graphics", "CardTranslucency", 64, CONFIGFILE);
 }
 
+void StackDump (lua_State *L)
+{
+    int a;
+    int top = lua_gettop(L);
+    for (a = 1; a <= top; a++)  /* repeat for each level */
+    { 
+        int t = lua_type(L, -a);
+        printf("%d: ", -a);
+        switch (t) {
+    
+          case LUA_TSTRING:  /* strings */
+            printf("`%s'", lua_tostring(L, -a));
+            break;
+    
+          case LUA_TBOOLEAN:  /* booleans */
+            printf(lua_toboolean(L, -a) ? "true" : "false");
+            break;
+    
+          case LUA_TNUMBER:  /* numbers */
+            printf("%g", lua_tonumber(L, -a));
+            break;
+    
+          default:  /* other values */
+            printf("%s", lua_typename(L, t));
+            break;
+    
+        }
+        printf(", ");
+    }
+    getchar();
+    printf("\n");
+}
+
+void error (lua_State *L, const char *fmt, ...)
+{
+  StackDump(L); //GE: Dump the stack so we'd know what the hell is going on
+  va_list argp;
+  va_start(argp, fmt);
+  vfprintf(stderr, fmt, argp);
+  va_end(argp);
+  lua_close(L);
+  getchar();
+  exit(EXIT_FAILURE);
+}
+
 void Init()
 {
 	L = lua_open();
 	luaL_openlibs(L);
-	luaL_dofile(L,"lua/CardPools.lua");
+	if (luaL_loadfile(L,"lua/CardPools.lua"))
+	  error(L, "Could not access card pool!");
+	if (lua_pcall(L, 0, 0, 0))
+    error(L, "Protected call failed!");
   
 	
 	
