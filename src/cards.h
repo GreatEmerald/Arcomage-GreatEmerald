@@ -34,7 +34,11 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn);
 char* CardName(int card);
 
 //GE: Functions called in D code.
-void D_addID(int Pool, int Card, int ID);
+void D_LinuxInit(); //GE: Special initialisation needed to link the D lib in Linux
+int rt_init(); //GE: Initialisation and termination of the D runtime.
+int rt_term();
+
+void D_addID(int Pool, int Card, int ID); //GE: These all are responsible for maintaining the Card pools.
 void D_addFrequency(int Pool, int Card, int Frequency);
 void D_addName(int Pool, int Card, const char* Name);
 void D_addDescription(int Pool, int Card, const char* Description);

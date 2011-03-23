@@ -34,7 +34,7 @@ function ArcomageInit()
   print("Test[1].x is:")
   print(Test[1].x) ]]
   
-  for CardID = 0,5 do--101 do --GE: We have 102 cards, IDs from 0-101. NOTE: Tables start at 1, not 0, so add one before adding to CardDB!
+  for CardID = 0,33 do--101 do --GE: We have 102 cards, IDs from 0-101. NOTE: Tables start at 1, not 0, so add one before adding to CardDB!
      Iteration = Iteration + 1
      --CardDB[Iteration] = CardInfo
      CardDB[Iteration] = {}
@@ -55,25 +55,169 @@ function ArcomageInit()
      if CardID == 0 then
         CardInfo.Name = "Brick Shortage"
         CardInfo.Description = "All players\nlose 8 bricks"
+        CardInfo.Colour = "Red"
      elseif CardID == 1 then
         CardInfo.Name = "Lucky Cache"
         CardInfo.Description = "+2 Bricks\n+2 Gems\nPlay again"
+        CardInfo.Colour = "Red"
      elseif CardID == 2 then
         CardInfo.Name = "Friendly Terrain"
         CardInfo.Description = "+1 Wall\nPlay again"
         CardInfo.BrickCost = 1
+        CardInfo.Colour = "Red"
      elseif CardID == 3 then
         CardInfo.Name = "Miners"
         CardInfo.Description = "+1 Quarry"
         CardInfo.BrickCost = 3
+        CardInfo.Colour = "Red"
      elseif CardID == 4 then
         CardInfo.Name = "Mother Lode"
         CardInfo.Description = "If quarry<enemy\nquarry, +2 quarry\nElse, +1\nquarry"
         CardInfo.BrickCost = 4
+        CardInfo.Colour = "Red"
      elseif CardID == 5 then
         CardInfo.Name = "Dwarven Miners"
         CardInfo.Description = "+4 Wall\n+1 Quarry"
         CardInfo.BrickCost = 7
+        CardInfo.Colour = "Red"
+     elseif CardID == 6 then
+        CardInfo.Name = "Work Overtime"
+        CardInfo.Description = "+5 Wall\nYou lose 6 gems"
+        CardInfo.BrickCost = 2
+        CardInfo.Colour = "Red"
+     elseif CardID == 7 then
+        CardInfo.Name = "Copping the Tech"
+        CardInfo.Description = "If quarry<enemy\nquarry, quarry =\nenemy quarry"
+        CardInfo.BrickCost = 5
+        CardInfo.Colour = "Red"
+     elseif CardID == 8 then
+        CardInfo.Name = "Basic Wall"
+        CardInfo.Description = "+3 Wall"
+        CardInfo.BrickCost = 2
+        CardInfo.Colour = "Red"
+     elseif CardID == 9 then
+        CardInfo.Name = "Sturdy Wall"
+        CardInfo.Description = "+4 Wall"
+        CardInfo.BrickCost = 3
+        CardInfo.Colour = "Red"
+     elseif CardID == 10 then
+        CardInfo.Name = "Innovations"
+        CardInfo.Description = "+1 to all players\nquarrys, you gain\n+4 gems"
+        CardInfo.BrickCost = 2
+        CardInfo.Colour = "Red"
+     elseif CardID == 11 then
+        CardInfo.Name = "Foundations"
+        CardInfo.Description = "If wall = 0, +6\nwall, else\n+3 wall"
+        CardInfo.BrickCost = 3
+        CardInfo.Colour = "Red"
+     elseif CardID == 12 then
+        CardInfo.Name = "Tremors"
+        CardInfo.Description = "All walls take\n5 damage\nPlay again"
+        CardInfo.BrickCost = 7
+        CardInfo.Colour = "Red"
+     elseif CardID == 13 then
+        CardInfo.Name = "Secret Room"
+        CardInfo.Description = "+1 Magicl\nPlay again"
+        CardInfo.BrickCost = 8
+        CardInfo.Colour = "Red"
+     elseif CardID == 14 then
+        CardInfo.Name = "Earthquake"
+        CardInfo.Description = "-1 To all players\nquarrys"
+        CardInfo.Colour = "Red"
+     elseif CardID == 15 then
+        CardInfo.Name = "Big Wall"
+        CardInfo.Description = "+6 Wall"
+        CardInfo.BrickCost = 5
+        CardInfo.Colour = "Red"
+     elseif CardID == 16 then
+        CardInfo.Name = "Collapse!"
+        CardInfo.Description = "-1 Enemy quarry"
+        CardInfo.BrickCost = 4
+        CardInfo.Colour = "Red"
+     elseif CardID == 17 then
+        CardInfo.Name = "New Equipment"
+        CardInfo.Description = "+2 quarry"
+        CardInfo.BrickCost = 6
+        CardInfo.Colour = "Red"
+     elseif CardID == 18 then
+        CardInfo.Name = "Strip Mine"
+        CardInfo.Description = "+1 Quarry, +10\nwall. You gain\n5 gems"
+        CardInfo.Colour = "Red"
+     elseif CardID == 19 then
+        CardInfo.Name = "Reinforced wall"
+        CardInfo.Description = "+8 Wall"
+        CardInfo.BrickCost = 8
+        CardInfo.Colour = "Red"
+     elseif CardID == 20 then
+        CardInfo.Name = "Porticulus"
+        CardInfo.Description = "+6 Wall\n+1 Dungeon"
+        CardInfo.BrickCost = 9
+        CardInfo.Colour = "Red"
+     elseif CardID == 21 then
+        CardInfo.Name = "Crystal Rocks"
+        CardInfo.Description = "+7 Wall\ngain 7 gems"
+        CardInfo.BrickCost = 9
+        CardInfo.Colour = "Red"
+     elseif CardID == 22 then
+        CardInfo.Name = "Harmonic Ore"
+        CardInfo.Description = "+6 Wall\n+3 Tower"
+        CardInfo.BrickCost = 11
+        CardInfo.Colour = "Red"
+     elseif CardID == 23 then
+        CardInfo.Name = "Mondo Wall"
+        CardInfo.Description = "+12 Wall"
+        CardInfo.BrickCost = 13
+        CardInfo.Colour = "Red"
+     elseif CardID == 24 then
+        CardInfo.Name = "Focused Designs"
+        CardInfo.Description = "+8 Wall\n+5 Tower"
+        CardInfo.BrickCost = 15
+        CardInfo.Colour = "Red"
+     elseif CardID == 25 then
+        CardInfo.Name = "Great Wall"
+        CardInfo.Description = "+15 Wall"
+        CardInfo.BrickCost = 16
+        CardInfo.Colour = "Red"
+     elseif CardID == 26 then
+        CardInfo.Name = "Rock Launcher"
+        CardInfo.Description = "+6 Wall\n10 Damage\n to enemy"
+        CardInfo.BrickCost = 18
+        CardInfo.Colour = "Red"
+     elseif CardID == 27 then
+        CardInfo.Name = "Dragon's Heart"
+        CardInfo.Description = "+20 Wall\n+8 Tower"
+        CardInfo.BrickCost = 24
+        CardInfo.Colour = "Red"
+     elseif CardID == 28 then
+        CardInfo.Name = "Forced Labor"
+        CardInfo.Description = "+9 Wall\nLose 5 recruits"
+        CardInfo.BrickCost = 7
+        CardInfo.Colour = "Red"
+     elseif CardID == 29 then --GE: Start MM8 BP cards
+        CardInfo.Name = "Rock Garden"
+        CardInfo.Description = "+1 Wall\n+1 Tower\n+2 recruits"
+        CardInfo.BrickCost = 1
+        CardInfo.Colour = "Red"
+     elseif CardID == 30 then
+        CardInfo.Name = "Flood Water"
+        CardInfo.Description = "Player(s) w/ lowest\nWall are -1 Dung-\neon and 2 dam-\nage to Tower" --GE: YES, Dung Neon and Damnage! >:3
+        CardInfo.BrickCost = 6
+        CardInfo.Colour = "Red"
+     elseif CardID == 31 then
+        CardInfo.Name = "Barracks"
+        CardInfo.Description = "+6 recruits, +6 Wall\nif dungeon <\nenemy dungeon,\n+1 dungeon"
+        CardInfo.BrickCost = 10
+        CardInfo.Colour = "Red"
+     elseif CardID == 32 then
+        CardInfo.Name = "Battlements"
+        CardInfo.Description = "+7 Wall\n6 damage to\nenemy"
+        CardInfo.BrickCost = 14
+        CardInfo.Colour = "Red"
+     elseif CardID == 33 then
+        CardInfo.Name = "Shift"
+        CardInfo.Description = "Switch your Wall\nwith enemy Wall"
+        CardInfo.BrickCost = 17
+        CardInfo.Colour = "Red"
      end
      
      CardDB[Iteration].ID = CardInfo.ID

@@ -156,16 +156,26 @@ void error (lua_State *L, const char *fmt, ...)
   exit(EXIT_FAILURE);
 }
 
-void Init()
+void InitLua()
 {
-	L = lua_open();
+  L = lua_open();
 	luaL_openlibs(L);
 	if (luaL_loadfile(L,"lua/CardPools.lua"))
 	  error(L, "Could not access card pool!");
 	if (lua_pcall(L, 0, 0, 0))
     error(L, "Protected call failed!");
-  
-	
+}
+
+void InitD()
+{
+  rt_init();
+  D_LinuxInit();
+}
+
+void Init()
+{
+	InitLua();
+	InitD();
 	
   ReadConfig();
 
@@ -180,7 +190,8 @@ void Quit()
 {
 	Graphics_Quit();
 	Sound_Quit();
-	lua_close(L);
+	lua_close(L); //GE: Close Lua
+	rt_term(); //GE: Terminate D
 }
 
 void PlayCard(int c,int discrd)

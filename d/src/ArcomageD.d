@@ -29,6 +29,21 @@ version(linux) //GE: Linux needs an entry point.
         return 0;
     }
 }
+
+//GE: Make sure the array we have is big enough to use.
+void setBounds(int Pool, int Card)
+{
+    if (Pool >= CardDB.length)
+        CardDB.length = Pool+1;
+    if (Card >= CardDB[Pool].length)
+        CardDB[Pool].length = Card+1;
+}
+
+
+//GE: Declare initialisation and termination of the D runtime.
+extern (C) bool  rt_init( void delegate( Exception ) dg = null );
+extern (C) bool  rt_term( void delegate( Exception ) dg = null );
+
 /*
  * GE: C code sends us the information it's gathering from Lua. We are here to
  * build a CardDB. C is aware of the pool it's accessing and of which card it's
@@ -36,33 +51,37 @@ version(linux) //GE: Linux needs an entry point.
  * Might need to make a struct which would hold the name of the pool.   
  */
 
-void addID(int Pool, int Card, int ID)
-{
-    printf("CardDB.Length is ");
-}
 extern(C):
+    void D_LinuxInit() //GE: Special Linux initialisation.
+    {
+        version(linux)
+            main();
+    }
+    
     void D_addID(int Pool, int Card, int ID)
     {
-        addID(Pool, Card, ID);
-        //CardDB[Pool][Card].ID = ID;
-        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].ID = ID;
+        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_addFrequency(int Pool, int Card, int Frequency)
     {
+        setBounds(Pool, Card);
         CardDB[Pool][Card].Frequency = Frequency;
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_addName(int Pool, int Card, const char* Name)
     {
-        writeln("Ohai--");
+        setBounds(Pool, Card);
         CardDB[Pool][Card].Name = to!string(Name);
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_addDescription(int Pool, int Card, const char* Description)
     {
+        setBounds(Pool, Card);
         CardDB[Pool][Card].Description = to!string(Description);
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
