@@ -1,5 +1,5 @@
 Arcomage Clone v0.3
-Revision 2011.03.11
+Revision 2011.03.25, GreatEmerald
 
 Arcomage Clone is, as the name implies, a clone of Arcomage. The goal of this
 project is to recreate the standalone Arcomage to a feature parity, while
@@ -11,18 +11,20 @@ RUNNING
 
 In order to play the game, the user needs to do one of these things:
 
-1) move the /data directory into the /bin/windows or /bin/linux directories, or
-2) move the contents of the /bin/windows or /bin/linux directories to /, or
-3) create a symbolic link that points from the /bin/* directory to the /data directory.
+1) move the /data directory into the /bin/win32 or /bin/linux-AMD64 directories, or
+2) move the contents of the /bin/win32 or /bin/linux-AMD64 directories to /, or
+3) create a symbolic link that points from the /bin/<...> directory to the /data directory
 
-The last part has already been done for Linux users. Note that this will be
-changed into a configuration option later on.
+and repeat the process for the directory 'lua' as well. I have included the
+symlinks for Linux users, so they don't have to worry about that. Windows users
+will have to create a junction or w/e to achieve the same effect. Note that this
+behaviour will be changed into a configuration option later on.
 
 If you are using Linux, you will have to install libsdl1.2, libsdl-image,
-libsdl-mixer, libsdl-net and liblua5.1 to run the game (or their equivalents in
-your Linux distribution).
+libsdl1.2-mixer, libsdl1.2-net and liblua5.1 to run the game (or their
+equivalents in your Linux distribution).
 
-After that, simply run /bin/windows/Arcomage.exe or /bin/linux/arcomage and enjoy!
+After that, simply run bin/win32/Arcomage.exe or bin/linux-AMD64/arcomage and enjoy!
 
 ========
 BUILDING
@@ -50,19 +52,19 @@ Explanation is given below.
 
 Linux:
   Mandatory:
-    GCC (GNU Compiler Collection; gcc)
+    GCC 4.4+ (GNU Compiler Collection; gcc, gcc-4.4 or gcc-4.5)
     GNU Make (make)
+    Embedded GNU C Library (libc6)
     SDL 1.2 (Simple DirectMedia Layer, 1.2.14; libsdl1.2-dev on Debian)
     SDL image (libsdl-image-dev on Debian)
     SDL mixer (libsdl-mixer-dev on Debian)
     SDL net (libsdl-net-dev on Debian)
     Lua 5.1 (liblua5.1-dev on Debian)
   Highly recommended:
-    DMD (Digital Mars D compiler): http://www.digitalmars.com/d/download.html
+    DMD 2.052+ (Digital Mars D compiler): http://www.digitalmars.com/d/download.html
 
-NOTE: You cannot use GDC to compile the D part of the project. Explanation is
-given below.
-
+NOTE: GDC was not tested with this project. It seems to be a little outdated,
+but it might work as well.
 
 Firstly I want to explain the system here, and what led to requirements like
 that. You will have to delve a bit to the history of the project, so bear with
@@ -118,8 +120,20 @@ different utility, and it's very useful - it converts COFF .lib files to OMF
 library to the project. More info about it here:
 http://www.digitalmars.com/ctg/coffimplib.html
 
-Now about Linux. If you don't know why you need GNU Make, then, uh, yeah.
-SDL is the part that is responsible for all the rendering, so i
+Now about Linux. If you don't know why you need GCC, GNU Make and libc6, then,
+uh, yeah. SDL is the part that is responsible for all the rendering, so it's
+clearly required. SDL image can import PNGs, SDL mixer is responsible for audio,
+SDL net - for network games (which are probably broken right now). Lua is
+required for mod makers that can't be bothered to recompile the game and break
+net compatibility/create version mismatches. DMD is again required for building
+the D part of the code, if you don't need to change that, you can just use the
+precompiled library instead. Note that for compiling in x86_64 environment, you
+need DMD 2.052, which in turn requires recent versions of GCC and libc6.
+
+Right now I only have the x86_64 (AMD64) libraries and binaries precompiled,
+but if you need to, you should be able to compile in 32-bit environment as well.
+In that case you'll have to change the src/Makefile to include -m32 instead of
+-m64. And make sure you copy the binaries to a new directory and let me know :)
 
 =========
 STRUCTURE
@@ -129,8 +143,8 @@ You probably noticed that the project has several directories. Here's the
 projected directory tree:
 
   +-- bin
-  |   +-- windows
-  |   +-- linux
+  |   +-- win32
+  |   +-- linux-AMD64
   |-- COPYING.TXT
   +-- d
   |   +-- src
@@ -139,6 +153,7 @@ projected directory tree:
   +-- include
   +-- lib
   +-- lua
+  |   +-- Arcomage
   +-- old
   |-- README.TXT
   +-- src
@@ -146,8 +161,9 @@ projected directory tree:
 
 I will go through what each folder contains. First off, the bin folder contains
 the binaries that are needed in order to run the game. That means that the
-windows folder has .dll and .ini files, while the linux directory has .so and
-.cfg files. Note to developers: remember to put new things in both folders.
+win32 folder has 32-bit .dll and .ini files, while the linux-AMD64 directory has
+64-bit .so and .cfg and executable files.
+Note to developers: remember to put new things in both folders.
 
 COPYING.TXT is a text file that contains GPL licensing information.
 
@@ -160,13 +176,17 @@ data is the folder that contains resources for the program. At the moment they
 are standalone, but might become integrated into a resource file later on. The
 folder contains .wav, .ico and .png files for the players.
 
-include contains the include header files for the libraries used by C.
+include contains the include header files for the libraries used by C. It's also
+utterly useless for Linux users, because there includes are provided in the
+library packages themselves.
 
 lib contains the needed static libraries for compiling the project. The static
-libary created from the D source code also goes in here.
+libary created from the D source code also goes in here. Again, Linux users only
+need the D library from here.
 
 lua contains the Lua scripts for the game. They control the card decks and the
-AI of the enemy, and are needed to run the game.
+AI of the enemy, and are needed to run the game. lua/Arcomage contains the
+information about the stock Arcomage deck.
 
 old is a directory for obsolete files that could still be useful as a reference.
 At the moment it includes the Windows Makefile version (obsolete since DMC
