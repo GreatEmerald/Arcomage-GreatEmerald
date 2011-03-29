@@ -179,7 +179,7 @@ void Init()
 	
   ReadConfig();
 
-	CursedIDs[0]=6+(1<<8); //LodeStone
+	CursedIDs[0]=6+(34); //LodeStone
 
 	atexit(SDL_Quit);
 	if (soundenabled) Sound_Init();
@@ -518,6 +518,13 @@ void ParseArgs(int argc,char *argv[])
 int main(int argc,char *argv[])
 {
 	int m;
+	//GE: DEBUG---------------------------------
+	FILE *fp;
+	if((fp=freopen("stdout.txt", "w" ,stdout))==NULL) {
+    printf("Cannot open file.\n");
+    exit(1);
+  }
+  //GE: ---------------------------------GUBED
 	srand((unsigned)time(NULL));
 	
 	ParseArgs(argc,argv);
@@ -555,6 +562,9 @@ int main(int argc,char *argv[])
 	}
 
 	Quit();
+	//GE: DEBUG
+	fclose(fp);
+	//GE: GUBED
 
 	return 0;
 }

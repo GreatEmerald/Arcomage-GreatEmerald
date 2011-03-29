@@ -20,9 +20,11 @@
 -- humongous, but it will only take a single element! Parsing it should only
 -- take a single loop, too, and I can do it in D!
 
+bUseOriginalCards = False
+
 function ArcomageInit()
 
-  local CardInfo = {ID = 0, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = "", Keywords = "", LuaFunction = ""}
+  local CardInfo = {ID = 0, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
   local CardDB = {} --GE: This is the CardDB, thing that we'll send over to C/D
   local Iteration = 0
   
@@ -34,11 +36,12 @@ function ArcomageInit()
   print("Test[1].x is:")
   print(Test[1].x) ]]
   
-  for CardID = 0,33 do--101 do --GE: We have 102 cards, IDs from 0-101. NOTE: Tables start at 1, not 0, so add one before adding to CardDB!
+  for CardID = 0,101 do --GE: We have 102 cards, IDs from 0-101. NOTE: Tables start at 1, not 0, so add one before adding to CardDB!
      Iteration = Iteration + 1
+     print(Iteration)
      --CardDB[Iteration] = CardInfo
-     CardDB[Iteration] = {}
-     CardInfo = {ID = CardID+1, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = "", Keywords = "", LuaFunction = ""}
+     CardDB[Iteration] = {Picture = {}}
+     CardInfo = {ID = CardID+1, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
      --[[CardInfo.ID = CardID --GE: Make sure we reset CardInfo each loop.
      CardInfo.Frequency = 1
      CardInfo.Name = ""
@@ -56,6 +59,7 @@ function ArcomageInit()
         CardInfo.Name = "Brick Shortage"
         CardInfo.Description = "All players\nlose 8 bricks"
         CardInfo.Colour = "Red"
+        CardInfo.Picture = {File = "../moli-arm/Data/SPRITES.bmp", X = 0, Y = 220, W=96, H=128}
      elseif CardID == 1 then
         CardInfo.Name = "Lucky Cache"
         CardInfo.Description = "+2 Bricks\n+2 Gems\nPlay again"
@@ -218,6 +222,343 @@ function ArcomageInit()
         CardInfo.Description = "Switch your Wall\nwith enemy Wall"
         CardInfo.BrickCost = 17
         CardInfo.Colour = "Red"
+     elseif CardID == 34 then --GE: Start blue cards
+        CardInfo.Name = "Quartz"
+        CardInfo.Description = "+1 Tower,\nplay again"
+        CardInfo.GemCost = 1
+        CardInfo.Colour = "Blue"
+     elseif CardID == 35 then
+        CardInfo.Name = "Smoky Quartz"
+        CardInfo.Description = "1 Damage to\nenemy tower\nPlay again"
+        CardInfo.GemCost = 2
+        CardInfo.Colour = "Blue"
+     elseif CardID == 36 then
+        CardInfo.Name = "Amethyst"
+        CardInfo.Description = "+3 Tower"
+        CardInfo.GemCost = 2
+        CardInfo.Colour = "Blue"
+     elseif CardID == 37 then
+        CardInfo.Name = "Spell Weavers"
+        CardInfo.Description = "+1 Magic"
+        CardInfo.GemCost = 3
+        CardInfo.Colour = "Blue"
+     elseif CardID == 38 then
+        CardInfo.Name = "Prism"
+        CardInfo.Description = "Draw 1 card\nDiscard 1 card\nPlay again"
+        CardInfo.GemCost = 2
+        CardInfo.Colour = "Blue"
+     elseif CardID == 39 then
+        CardInfo.Name = "Lodestone"
+        CardInfo.Description = "+3 Tower. This\ncard can't be dis-\ncarded without\nplaying it"
+        CardInfo.GemCost = 5
+        CardInfo.Colour = "Blue"
+     elseif CardID == 40 then
+        CardInfo.Name = "Solar Flare"
+        CardInfo.Description = "+2 Tower\n2 Damage to\nenemy tower"
+        CardInfo.GemCost = 4
+        CardInfo.Colour = "Blue"
+     elseif CardID == 41 then
+        CardInfo.Name = "Crystal Matrix"
+        CardInfo.Description = "+1 Magic\n+3 Tower\n+1 Enemy\ntower"
+        CardInfo.GemCost = 6
+        CardInfo.Colour = "Blue"
+     elseif CardID == 42 then
+        CardInfo.Name = "Gemstone Flaw"
+        CardInfo.Description = "3 Damage to\nenemy tower"
+        CardInfo.GemCost = 2
+        CardInfo.Colour = "Blue"
+     elseif CardID == 43 then
+        CardInfo.Name = "Ruby"
+        CardInfo.Description = "+5 Tower"
+        CardInfo.GemCost = 3
+        CardInfo.Colour = "Blue"
+     elseif CardID == 44 then
+        CardInfo.Name = "Gem Spear"
+        CardInfo.Description = "5 Damage\nto enemy tower"
+        CardInfo.GemCost = 4
+        CardInfo.Colour = "Blue"
+     elseif CardID == 45 then
+        CardInfo.Name = "Power Burn"
+        CardInfo.Description = "5 Damage\nto your tower\n+2 Magic"
+        CardInfo.GemCost = 3
+        CardInfo.Colour = "Blue"
+     elseif CardID == 46 then
+        CardInfo.Name = "Harmonic Vibe"
+        CardInfo.Description = "+1 Magic\n+3 Tower\n+3 Wall"
+        CardInfo.GemCost = 7
+        CardInfo.Colour = "Blue"
+     elseif CardID == 47 then
+        CardInfo.Name = "Parity"
+        CardInfo.Description = "All player's\nmagic equals\nthe highest\nplayer's magic"
+        CardInfo.GemCost = 7
+        CardInfo.Colour = "Blue"
+     elseif CardID == 48 then
+        CardInfo.Name = "Emerald"
+        CardInfo.Description = "+8 Tower"
+        CardInfo.GemCost = 6
+        CardInfo.Colour = "Blue"
+     elseif CardID == 49 then
+        CardInfo.Name = "Pearl of Wisdom"
+        CardInfo.Description = "+5 Tower\n+1 Magic"
+        CardInfo.GemCost = 9
+        CardInfo.Colour = "Blue"
+     elseif CardID == 50 then
+        CardInfo.Name = "Shatterer"
+        CardInfo.Description = "-1 Magic.\n9 Damage to\nenemy tower"
+        CardInfo.GemCost = 8
+        CardInfo.Colour = "Blue"
+     elseif CardID == 51 then
+        CardInfo.Name = "Crumblestone"
+        CardInfo.Description = "+5 Tower\nEnemy loses\n6 bricks"
+        CardInfo.GemCost = 7
+        CardInfo.Colour = "Blue"
+     elseif CardID == 52 then
+        CardInfo.Name = "Sapphire"
+        CardInfo.Description = "+11 Tower"
+        CardInfo.GemCost = 10
+        CardInfo.Colour = "Blue"
+     elseif CardID == 53 then
+        CardInfo.Name = "Discord"
+        CardInfo.Description = "7 Damage to\nall towers, all\nplayer's magic\n-1"
+        CardInfo.GemCost = 5
+        CardInfo.Colour = "Blue"
+     elseif CardID == 54 then
+        CardInfo.Name = "Fire Ruby"
+        CardInfo.Description = "+6 Tower\n4 Damage to\nall enemy\ntowers"
+        CardInfo.GemCost = 13
+        CardInfo.Colour = "Blue"
+     elseif CardID == 55 then
+        CardInfo.Name = "Quarry's Help"
+        CardInfo.Description = "+7 Tower\nLose 10\nbricks"
+        CardInfo.GemCost = 4
+        CardInfo.Colour = "Blue"
+     elseif CardID == 56 then
+        CardInfo.Name = "Crystal Shield"
+        CardInfo.Description = "+8 Tower\n+3 Wall"
+        CardInfo.GemCost = 12
+        CardInfo.Colour = "Blue"
+     elseif CardID == 57 then
+        CardInfo.Name = "Empathy Gem"
+        CardInfo.Description = "+8 Tower\n+1 Dungeon"
+        CardInfo.GemCost = 14
+        CardInfo.Colour = "Blue"
+     elseif CardID == 58 then
+        CardInfo.Name = "Diamond"
+        CardInfo.Description = "+15 Tower"
+        CardInfo.GemCost = 16
+        CardInfo.Colour = "Blue"
+     elseif CardID == 59 then
+        CardInfo.Name = "Sanctuary"
+        CardInfo.Description = "+10 Tower\n+5 Wall\nGain 5\nrecruits"
+        CardInfo.GemCost = 15
+        CardInfo.Colour = "Blue"
+     elseif CardID == 60 then
+        CardInfo.Name = "Lava Jewel"
+        CardInfo.Description = "+12 Tower\n6 damage to\nall enemies"
+        CardInfo.GemCost = 17
+        CardInfo.Colour = "Blue"
+     elseif CardID == 61 then
+        CardInfo.Name = "Dragon's Eye"
+        CardInfo.Description = "+20 Tower"
+        CardInfo.GemCost = 21
+        CardInfo.Colour = "Blue"
+     elseif CardID == 62 then
+        CardInfo.Name = "Crystallize"
+        CardInfo.Description = "+11 Tower\n-6 Wall"
+        CardInfo.GemCost = 8
+        CardInfo.Colour = "Blue"
+     elseif CardID == 63 then --GE: Start MM8 BP cards
+        CardInfo.Name = "Bag of Baubles"
+        CardInfo.Description = "1 Damage to\nenemy tower\nPlay again"
+        CardInfo.GemCost = 2
+        CardInfo.Colour = "Blue"
+     elseif CardID == 64 then
+        CardInfo.Name = "Rainbow"
+        CardInfo.Description = "+1 Tower to all\nplayers.\nYou gain\n3 gems"
+        CardInfo.Colour = "Blue"
+     elseif CardID == 65 then
+        CardInfo.Name = "Apprentice"
+        CardInfo.Description = "+4 Tower, you\nlose 3 recruits\n2 dmage to\nenemy Tower"
+        CardInfo.GemCost = 5
+        CardInfo.Colour = "Blue"
+     elseif CardID == 66 then
+        CardInfo.Name = "Lightning Shard"
+        CardInfo.Description = "If Tower > enemy\nWall, 8 damage\nto enemy tower\nelse 8 damage"
+        CardInfo.GemCost = 11
+        CardInfo.Colour = "Blue"
+     elseif CardID == 67 then
+        CardInfo.Name = "Phase Jewel"
+        CardInfo.Description = "+13 Tower\n+6 recruits\n+6 bricks"
+        CardInfo.GemCost = 18
+        CardInfo.Colour = "Blue"
+     elseif CardID == 68 then --GE: Start green cards
+        CardInfo.Name = "Mad Cow Disease"
+        CardInfo.Description = "All players lose\n6 recruits"
+        CardInfo.Colour = "Green"
+     elseif CardID == 69 then
+        CardInfo.Name = "Faerie"
+        CardInfo.Description = "2 Damage\nPlay again"
+        CardInfo.RecruitCost = 1
+        CardInfo.Colour = "Green"
+     elseif CardID == 70 then
+        CardInfo.Name = "Moody Goblins"
+        CardInfo.Description = "4 Damage\nYou lose\n3 gems"
+        CardInfo.RecruitCost = 1
+        CardInfo.Colour = "Green"
+     elseif CardID == 71 then
+        CardInfo.Name = "Minotaur" --GE: AKA Husbandry
+        CardInfo.Description = "+1 Dungeon"
+        CardInfo.RecruitCost = 3
+        CardInfo.Colour = "Green"
+     elseif CardID == 72 then
+        CardInfo.Name = "Elven Scout"
+        CardInfo.Description = "Draw 1 card\nDiscard 1 card\nPlay again"
+        CardInfo.RecruitCost = 2
+        CardInfo.Colour = "Green"
+     elseif CardID == 73 then
+        CardInfo.Name = "Goblin Mob"
+        CardInfo.Description = "6 Damage\nYou take\n3 damage"
+        CardInfo.RecruitCost = 3
+        CardInfo.Colour = "Green"
+     elseif CardID == 74 then
+        CardInfo.Name = "Goblin Archers"
+        CardInfo.Description = "3 Damage to\nenemy tower\nYou take 1\ndamage"
+        CardInfo.RecruitCost = 4
+        CardInfo.Colour = "Green"
+     elseif CardID == 75 then
+        CardInfo.Name = "Shadow Faerie"
+        CardInfo.Description = "2 Damage to\nenemy tower\nPlay again"
+        CardInfo.RecruitCost = 6
+        CardInfo.Colour = "Green"
+     elseif CardID == 76 then
+        CardInfo.Name = "Orc"
+        CardInfo.Description = "5 Damage"
+        CardInfo.RecruitCost = 3
+        CardInfo.Colour = "Green"
+     elseif CardID == 77 then
+        CardInfo.Name = "Dwarves"
+        CardInfo.Description = "4 Damage\n+3 Wall"
+        CardInfo.RecruitCost = 5
+        CardInfo.Colour = "Green"
+     elseif CardID == 78 then
+        CardInfo.Name = "Little Snakes"
+        CardInfo.Description = "4 Damage to\nenemy tower"
+        CardInfo.RecruitCost = 6
+        CardInfo.Colour = "Green"
+     elseif CardID == 79 then
+        CardInfo.Name = "Troll Trainer"
+        CardInfo.Description = "+2 Dungeon"
+        CardInfo.RecruitCost = 7
+        CardInfo.Colour = "Green"
+     elseif CardID == 80 then
+        CardInfo.Name = "Tower Gremlin"
+        CardInfo.Description = "2 Damage\n+4 Wall\n+2 Tower"
+        CardInfo.RecruitCost = 8
+        CardInfo.Colour = "Green"
+     elseif CardID == 81 then
+        CardInfo.Name = "Full Moon"
+        CardInfo.Description = "+1 to all player's\nDungeon\nYou gain 3\nrecruits"
+        CardInfo.Colour = "Green"
+     elseif CardID == 82 then
+        CardInfo.Name = "Slasher"
+        CardInfo.Description = "6 Damage"
+        CardInfo.RecruitCost = 5
+        CardInfo.Colour = "Green"
+     elseif CardID == 83 then
+        CardInfo.Name = "Ogre"
+        CardInfo.Description = "7 Damage"
+        CardInfo.RecruitCost = 6
+        CardInfo.Colour = "Green"
+     elseif CardID == 84 then
+        CardInfo.Name = "Rabid Sheep"
+        CardInfo.Description = "6 Damage\nEnemy loses\n3recruits"
+        CardInfo.RecruitCost = 6
+        CardInfo.Colour = "Green"
+     elseif CardID == 85 then
+        CardInfo.Name = "Imp"
+        CardInfo.Description = "6 Damage. All\nplayers lose 5\nbricks, gems\nand recruits"
+        CardInfo.RecruitCost = 5
+        CardInfo.Colour = "Green"
+     elseif CardID == 86 then
+        CardInfo.Name = "Spizzer"
+        CardInfo.Description = "If enemy wall\n= 0, 10 damage,\nelse 6\ndamage"
+        CardInfo.RecruitCost = 8
+        CardInfo.Colour = "Green"
+     elseif CardID == 87 then
+        CardInfo.Name = "Werewolf"
+        CardInfo.Description = "9 Damage"
+        CardInfo.RecruitCost = 9
+        CardInfo.Colour = "Green"
+     elseif CardID == 88 then
+        CardInfo.Name = "Corrosion Cloud"
+        CardInfo.Description = "If enemy wall>0,\n10 damage, else\n7 damage"
+        CardInfo.RecruitCost = 11
+        CardInfo.Colour = "Green"
+     elseif CardID == 89 then
+        CardInfo.Name = "Unicorn"
+        CardInfo.Description = "If magic>enemy\nmagic, 12 dam-\nage, else\n8 damage"
+        CardInfo.RecruitCost = 9
+        CardInfo.Colour = "Green"
+     elseif CardID == 90 then
+        CardInfo.Name = "Elven Archers"
+        CardInfo.Description = "If wall>enemy\wall, 6 damage\nto enemy tower\nelse 6 damage"
+        CardInfo.RecruitCost = 10
+        CardInfo.Colour = "Green"
+     elseif CardID == 91 then
+        CardInfo.Name = "Succubus"
+        CardInfo.Description = "5 Damage to\nenemy tower,\nenemy loses\n8 recruits"
+        CardInfo.RecruitCost = 14
+        CardInfo.Colour = "Green"
+     elseif CardID == 92 then
+        CardInfo.Name = "Rock Stompers"
+        CardInfo.Description = "8 Damage\n-1 Enemy quarry"
+        CardInfo.RecruitCost = 11
+        CardInfo.Colour = "Green"
+     elseif CardID == 93 then
+        CardInfo.Name = "Thief"
+        CardInfo.Description = "Enemy loses 10\ngems, 5 bricks,\nyou gain 1/2 amt.\nround up"
+        CardInfo.RecruitCost = 12
+        CardInfo.Colour = "Green"
+     elseif CardID == 94 then
+        CardInfo.Name = "Stone Giant"
+        CardInfo.Description = "10 Damage\n+4 Wall"
+        CardInfo.RecruitCost = 15
+        CardInfo.Colour = "Green"
+     elseif CardID == 95 then
+        CardInfo.Name = "Vampire"
+        CardInfo.Description = "10 Damage\nEnemy loses 5\nrecruits, -1 enemy\nDungeon"
+        CardInfo.RecruitCost = 17
+        CardInfo.Colour = "Green"
+     elseif CardID == 96 then
+        CardInfo.Name = "Dragon"
+        CardInfo.Description = "20 Damage\nEnemy loses 10\ngems, -1 enemy\nDungeon"
+        CardInfo.RecruitCost = 25
+        CardInfo.Colour = "Green"
+     elseif CardID == 97 then --GE: Start MM8 BP cards
+        CardInfo.Name = "Spearman"
+        CardInfo.Description = "If Wall>enemy\nWall do 3\nDamage else\ndo 2 Damage"
+        CardInfo.RecruitCost = 2
+        CardInfo.Colour = "Green"
+     elseif CardID == 98 then
+        CardInfo.Name = "Gnome"
+        CardInfo.Description = "3 Damage\n+1 gem"
+        CardInfo.RecruitCost = 2
+        CardInfo.Colour = "Green"
+     elseif CardID == 99 then
+        CardInfo.Name = "Berserker"
+        CardInfo.Description = "8 Damage\n3 Damage to\nyour Tower"
+        CardInfo.RecruitCost = 4
+        CardInfo.Colour = "Green"
+     elseif CardID == 100 then
+        CardInfo.Name = "Warlord"
+        CardInfo.Description = "13 Damage\nYou lose 3 gems"
+        CardInfo.RecruitCost = 13
+        CardInfo.Colour = "Green"
+     elseif CardID == 101 then
+        CardInfo.Name = "Pegasus Lancer"
+        CardInfo.Description = "12 Damage to\nenemy tower"
+        CardInfo.RecruitCost = 18
+        CardInfo.Colour = "Green"
      end
      
      CardDB[Iteration].ID = CardInfo.ID
@@ -228,7 +569,11 @@ function ArcomageInit()
      CardDB[Iteration].GemCost = CardInfo.GemCost
      CardDB[Iteration].RecruitCost = CardInfo.RecruitCost
      CardDB[Iteration].Colour = CardInfo.Colour
-     CardDB[Iteration].Picture = CardInfo.Picture
+     CardDB[Iteration].Picture.File = CardInfo.Picture.File
+     CardDB[Iteration].Picture.X = CardInfo.Picture.X
+     CardDB[Iteration].Picture.Y = CardInfo.Picture.Y
+     CardDB[Iteration].Picture.W = CardInfo.Picture.W
+     CardDB[Iteration].Picture.H = CardInfo.Picture.H
      CardDB[Iteration].Keywords = CardInfo.Keywords
      CardDB[Iteration].LuaFunction = CardInfo.LuaFunction
      print(CardDB[1]["Name"])

@@ -4,6 +4,10 @@
 #define CPUWAIT 10
 #define ARCOVER "0.3.2"
 
+struct Coords {
+    int X, Y, W, H;
+};
+
 #ifdef MSVC
 	#define vsnprintf _vsnprintf
 	#define inline __inline

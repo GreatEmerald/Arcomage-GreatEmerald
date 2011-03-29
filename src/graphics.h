@@ -19,6 +19,12 @@ enum {	SCREEN=0,
 		DLGERROR,
 		DLGMSG,
 		GFX_CNT};
+typedef struct PictureInfo{
+    char* File;
+    SDL_Surface* Surface;
+    struct PictureInfo* Next;
+} Picture; //GE: Pointers EVERYWHERE!
+void PrecacheCard(const char* File, size_t Size);
 
 void Graphics_Init(int fullscreen);
 void Graphics_Quit();

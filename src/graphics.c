@@ -13,6 +13,7 @@
 
 SDL_Event event;
 SDL_Surface *GfxData[GFX_CNT];
+Picture* PictureHead = NULL;//GE: Linked list.
 
 int resX=640;
 int resY=480;
@@ -108,6 +109,35 @@ void Graphics_Init(int fullscreen)
 	}
 }
 
+//GE: Add to the linked list.
+void PrecacheCard(const char* File, size_t Size)
+{
+    Picture* CurrentPicture;
+    int bNew=0;
+    
+    printf(File);
+    if (!PictureHead)//GE: No cards precached, so don't overdo this.
+        bNew = 1;
+    CurrentPicture = malloc(sizeof(Picture));
+    if (CurrentPicture == NULL) //GE: Allocate the memory to store this picture.
+        FatalError("Out of memory to allocate the image linked list! Please use fewer cards."); //GE: Oh noes, out of memory to allocate! ...actually they are but pointers, so I doubt you'd ever run out of it.
+    CurrentPicture->File = malloc(Size);
+    if (CurrentPicture->File == NULL) //GE: Allocate the memory to store this picture and string.
+        FatalError("Out of memory to allocate the image filename! Please use fewer cards."); //GE: Oh noes, out of memory to allocate! This one's quite a bit bigger.
+    strcpy(CurrentPicture->File, File);//GE: Set file and surface.
+    LoadSurface(CurrentPicture->File, &CurrentPicture->Surface);
+    if (bNew)
+    {
+        CurrentPicture->Next = NULL; //GE: This is added to the end of the list, so next is NULL.
+        PictureHead = CurrentPicture;
+    }
+    else
+    {
+        CurrentPicture->Next = PictureHead->Next;
+        PictureHead->Next = CurrentPicture;
+    }
+}
+
 void Graphics_Quit()
 {
 	int i;
@@ -152,6 +182,14 @@ void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
 	SDL_FillRect(GfxData[SCREEN],&rect,SDL_MapRGB(GfxData[SCREEN]->format,r,g,b));
 }
 
+/*
+ * GE: Lua reform: We want the modder in Lua to give the picture and coordinates
+ * and parse those to load the required surfaces in C. Then when sending to D,
+ * we want to send the things already parsed - instead of a string and four
+ * doubles, we want a pointer and four ints/struct of coords. When we attempt
+ * to draw a card, we pass the card number and pool, from where C code asks D
+ * for the pointer and coords, which it then uses to display the thing.     
+ */
 //GE: c - card ID, x,y - position on the screen.
 void DrawCard(int c,int x,int y)
 {

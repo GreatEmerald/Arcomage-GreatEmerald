@@ -8,7 +8,7 @@ struct Stats {
 	int Hand[6];		// player's hand
 };
 
-struct CardInfo {
+struct CardInfo { //GE: OBSOLETE -- Use D instead!
     int ID;
     int Frequency; //GE: This is the number of cards of this type in the deck. 1=Rare, 2=Uncommon, 3=Common
     char Name[128];
@@ -38,10 +38,20 @@ void D_LinuxInit(); //GE: Special initialisation needed to link the D lib in Lin
 int rt_init(); //GE: Initialisation and termination of the D runtime.
 int rt_term();
 
-void D_addID(int Pool, int Card, int ID); //GE: These all are responsible for maintaining the Card pools.
-void D_addFrequency(int Pool, int Card, int Frequency);
-void D_addName(int Pool, int Card, const char* Name);
-void D_addDescription(int Pool, int Card, const char* Description);
+void D_setID(int Pool, int Card, int ID); //GE: These all are responsible for maintaining the Card pools.
+void D_setFrequency(int Pool, int Card, int Frequency);
+void D_setName(int Pool, int Card, const char* Name);
+void D_setDescription(int Pool, int Card, const char* Description);
+void D_setBrickCost(int Pool, int Card, int BrickCost);
+void D_setGemCost(int Pool, int Card, int GemCost);
+void D_setRecruitCost(int Pool, int Card, int RecruitCost);
+void D_setColour(int Pool, int Card, const char* Colour);
+void D_setPictureFile(int Pool, int Card, const char* File);
+void D_setPictureCoords(int Pool, int Card, int X, int Y, int W, int H);
+
+int D_getFrequency(int Pool, int Card);
+char* D_getPictureFile(int Pool, int Card);
+struct Coords D_getPictureCoords(int Pool, int Card);
 void D_printCardDB();
 
 #endif

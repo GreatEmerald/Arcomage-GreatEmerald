@@ -4,5 +4,6 @@
 cd ../src
 dmd -m64 -c -lib ArcomageD.d
 cp ArcomageD.a ../../lib/libArcomageD.a
+rm ArcomageD.a
 echo "Finished rebuilding the D library."
 read

@@ -1,6 +1,20 @@
 module ArcomageD;
 import std.stdio; //GE: Debugging purposes so far.
 import std.conv;
+import std.string;
+
+struct Coords {
+    int X, Y, W, H;
+}
+
+struct PictureInfo {
+    string File;
+    Coords Coordinates;
+    //int X;
+    //int Y;
+    //int H;
+    //int W;
+}
 
 struct CardInfo { //GE: Holds information about a single card.
     int ID;
@@ -11,7 +25,7 @@ struct CardInfo { //GE: Holds information about a single card.
     int GemCost;
     int RecruitCost;
     string Colour; //GE: Red, Geen, Blue, Gray/Grey/Black, Brown/White. Rendering purposes, mostly for 0 cost coloured cards
-    string Picture; //GE: Rendering purposes. Might also add coordinates.
+    PictureInfo Picture; //GE: Rendering purposes.
     string Keywords; //GE: Might become an array. These are MArcomage keywords, also used in Lua functions
     string LuaFunction; //GE: This is what we call on playing the card.
 };
@@ -21,6 +35,8 @@ struct CardInfo { //GE: Holds information about a single card.
     string Name;
 } */
 CardInfo[][] CardDB; //GE: Holds information about all the different loaded Card Pools.
+string[] PrecachePictures;
+//int[] Queue; //GE: This is the list of card IDs in the bank.
 
 version(linux) //GE: Linux needs an entry point.
 {
@@ -39,7 +55,6 @@ void setBounds(int Pool, int Card)
         CardDB[Pool].length = Card+1;
 }
 
-
 //GE: Declare initialisation and termination of the D runtime.
 extern (C) bool  rt_init( void delegate( Exception ) dg = null );
 extern (C) bool  rt_term( void delegate( Exception ) dg = null );
@@ -52,39 +67,123 @@ extern (C) bool  rt_term( void delegate( Exception ) dg = null );
  */
 
 extern(C):
+
     void D_LinuxInit() //GE: Special Linux initialisation.
     {
         version(linux)
             main();
     }
     
-    void D_addID(int Pool, int Card, int ID)
+    void D_setID(int Pool, int Card, int ID)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].ID = ID;
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
-    void D_addFrequency(int Pool, int Card, int Frequency)
+    void D_setFrequency(int Pool, int Card, int Frequency)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Frequency = Frequency;
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
-    void D_addName(int Pool, int Card, const char* Name)
+    void D_setName(int Pool, int Card, const char* Name)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Name = to!string(Name);
+        writeln("Named card: ", CardDB[Pool][Card].Name);
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
-    void D_addDescription(int Pool, int Card, const char* Description)
+    void D_setDescription(int Pool, int Card, const char* Description)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Description = to!string(Description);
         writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
+
+    void D_setBrickCost(int Pool, int Card, int BrickCost)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].BrickCost = BrickCost;
+        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+    }
+
+    void D_setGemCost(int Pool, int Card, int GemCost)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].GemCost = GemCost;
+        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+    }
+
+    void D_setRecruitCost(int Pool, int Card, int RecruitCost)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].RecruitCost = RecruitCost;
+        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+    }
+
+    void D_setColour(int Pool, int Card, const char* Colour)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].Colour = to!string(Colour);
+        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+    }
+
+    void D_setPictureFile(int Pool, int Card, const char* File)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].Picture.File = to!string(File);
+    }
+
+    void D_setPictureCoords(int Pool, int Card, int X, int Y, int W, int H)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].Picture.Coordinates.X = X;
+        CardDB[Pool][Card].Picture.Coordinates.Y = Y;
+        CardDB[Pool][Card].Picture.Coordinates.W = W;
+        CardDB[Pool][Card].Picture.Coordinates.H = H;
+    }
+
+    int D_getFrequency(int Pool, int Card)
+    {
+        return CardDB[Pool][Card].Frequency;
+    }
+
+    immutable(char)* D_getPictureFile(int Pool, int Card)
+    {
+        return toStringz(CardDB[Pool][Card].Picture.File);
+    }
+
+    Coords D_getPictureCoords(int Pool, int Card)
+    {
+        return CardDB[Pool][Card].Picture.Coordinates;
+    }
+
+    /*void D_getPrecachePictures()
+    {
+        bool bAlreadyListed;
+        
+        for (int Pool=0; Pool < CardDB.length; Pool++)
+        {
+            for (int Card=0; Card < CardDB[Pool].length; Card++)
+            {
+                //GE: See if we have it listed already and filter out empty entries (it shouldn't happen!).
+                for (int i=0; i < PrecachePictures.length; i++)
+                {
+                    if (PrecachePictures[i] == CardDB[Pool][Card].Picture.File || CardDB[Pool][Card].Picture.File == "")
+                        bAlreadyListed = True;
+                }
+                if (!bAlreadyListed)
+                {
+                    PrecachePictures.length += 1;
+                    PrecachePictures[PrecachePictures.length] = CardDB[Pool][Card].Picture.File;
+                }
+                bAlreadyListed = False;
+            }
+        }
+    } */
 
     void D_printCardDB()
     {
