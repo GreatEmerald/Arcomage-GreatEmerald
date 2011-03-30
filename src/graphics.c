@@ -182,6 +182,17 @@ void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
 	SDL_FillRect(GfxData[SCREEN],&rect,SDL_MapRGB(GfxData[SCREEN]->format,r,g,b));
 }
 
+void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface)//GE: SOURFACE! :(
+{
+    SDL_Rect ScreenPosition, DeckPosition = D_getPictureCoords(0,C);
+    ScreenPosition.x = X;
+    ScreenPosition.y = Y;
+    ScreenPosition.w = DeckPosition.w;
+    ScreenPosition.h = DeckPosition.h;
+    
+    SDL_BlitSurface(Sourface,&DeckPosition,GfxData[SCREEN],&ScreenPosition);
+}
+
 /*
  * GE: Lua reform: We want the modder in Lua to give the picture and coordinates
  * and parse those to load the required surfaces in C. Then when sending to D,
@@ -195,6 +206,30 @@ void DrawCard(int c,int x,int y)
 {
 	SDL_Rect recta,rectb;
 	int RawX, RawY;
+	
+	char* File;
+	Picture* CurrentPicture = PictureHead;
+	
+	if (D_getPictureFileSize(0,c) == 1)
+	   return;
+	
+  File = malloc(D_getPictureFileSize(0,c));
+  getchar();
+  printf("%d", D_getPictureFileSize(0,c));
+  getchar();
+  strcpy(File, D_getPictureFile(0,c));
+  getchar();
+	
+	while (CurrentPicture)
+	{
+	   if (CurrentPicture->File == File)
+	   {
+	       NewDrawCard(c,x,y,CurrentPicture->Surface);
+         free(File);
+         return;
+     }
+     CurrentPicture = CurrentPicture->Next;
+  }
 	
 	if (!bUseOriginalCards)
 	{

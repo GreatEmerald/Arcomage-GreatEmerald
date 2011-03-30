@@ -59,7 +59,11 @@ function ArcomageInit()
         CardInfo.Name = "Brick Shortage"
         CardInfo.Description = "All players\nlose 8 bricks"
         CardInfo.Colour = "Red"
-        CardInfo.Picture = {File = "../moli-arm/Data/SPRITES.bmp", X = 0, Y = 220, W=96, H=128}
+        if bUseOriginalCards then
+         CardInfo.Picture = {File = "../moli-arm/Data/SPRITES.bmp", X = 0, Y = 220, W=96, H=128}
+      else
+         CardInfo.Picture = {File = "data/deck.png", X = 96, Y = 0, W=96, H=128}
+      end
      elseif CardID == 1 then
         CardInfo.Name = "Lucky Cache"
         CardInfo.Description = "+2 Bricks\n+2 Gems\nPlay again"
@@ -569,11 +573,16 @@ function ArcomageInit()
      CardDB[Iteration].GemCost = CardInfo.GemCost
      CardDB[Iteration].RecruitCost = CardInfo.RecruitCost
      CardDB[Iteration].Colour = CardInfo.Colour
-     CardDB[Iteration].Picture.File = CardInfo.Picture.File
-     CardDB[Iteration].Picture.X = CardInfo.Picture.X
-     CardDB[Iteration].Picture.Y = CardInfo.Picture.Y
-     CardDB[Iteration].Picture.W = CardInfo.Picture.W
-     CardDB[Iteration].Picture.H = CardInfo.Picture.H
+     --CardDB[Iteration].Picture.File = CardInfo.Picture.File
+     CardDB[Iteration].Picture.File = "data/deck.png"
+     --CardDB[Iteration].Picture.X = CardInfo.Picture.X
+     CardDB[Iteration].Picture.X = CardID%34*96
+     --CardDB[Iteration].Picture.Y = CardInfo.Picture.Y
+     CardDB[Iteration].Picture.Y = CardID/34*128
+     CardDB[Iteration].Picture.W = 96
+     CardDB[Iteration].Picture.H = 128
+     --CardDB[Iteration].Picture.W = CardInfo.Picture.W
+     --CardDB[Iteration].Picture.H = CardInfo.Picture.H
      CardDB[Iteration].Keywords = CardInfo.Keywords
      CardDB[Iteration].LuaFunction = CardInfo.LuaFunction
      print(CardDB[1]["Name"])

@@ -519,11 +519,11 @@ int main(int argc,char *argv[])
 {
 	int m;
 	//GE: DEBUG---------------------------------
-	FILE *fp;
+	/*FILE *fp;
 	if((fp=freopen("stdout.txt", "w" ,stdout))==NULL) {
     printf("Cannot open file.\n");
     exit(1);
-  }
+  } */
   //GE: ---------------------------------GUBED
 	srand((unsigned)time(NULL));
 	
@@ -563,7 +563,7 @@ int main(int argc,char *argv[])
 
 	Quit();
 	//GE: DEBUG
-	fclose(fp);
+	//fclose(fp);
 	//GE: GUBED
 
 	return 0;

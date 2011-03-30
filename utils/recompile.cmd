@@ -6,5 +6,5 @@ dmc minIni.c arco.c common.c cards.c graphics.c input.c network.c sound.c BFont.
 pause
 del *.obj
 del *.map
-echo Rebuild is complete. The new binaries are stored in /bin/windows.
+echo Rebuild is complete. The new binaries are stored in /bin/win32.
 pause

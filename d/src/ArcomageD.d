@@ -3,13 +3,17 @@ import std.stdio; //GE: Debugging purposes so far.
 import std.conv;
 import std.string;
 
-struct Coords {
+/*struct Coords {
     int X, Y, W, H;
-}
+} */
+struct SDL_Rect {
+	short x, y;
+	ushort w, h;
+};
 
 struct PictureInfo {
     string File;
-    Coords Coordinates;
+    SDL_Rect Coordinates;
     //int X;
     //int Y;
     //int H;
@@ -140,10 +144,10 @@ extern(C):
     void D_setPictureCoords(int Pool, int Card, int X, int Y, int W, int H)
     {
         setBounds(Pool, Card);
-        CardDB[Pool][Card].Picture.Coordinates.X = X;
-        CardDB[Pool][Card].Picture.Coordinates.Y = Y;
-        CardDB[Pool][Card].Picture.Coordinates.W = W;
-        CardDB[Pool][Card].Picture.Coordinates.H = H;
+        CardDB[Pool][Card].Picture.Coordinates.x = to!short(X);
+        CardDB[Pool][Card].Picture.Coordinates.y = to!short(Y);
+        CardDB[Pool][Card].Picture.Coordinates.w = to!ushort(W);
+        CardDB[Pool][Card].Picture.Coordinates.h = to!ushort(H);
     }
 
     int D_getFrequency(int Pool, int Card)
@@ -156,7 +160,12 @@ extern(C):
         return toStringz(CardDB[Pool][Card].Picture.File);
     }
 
-    Coords D_getPictureCoords(int Pool, int Card)
+    size_t D_getPictureFileSize(int Pool, int Card)
+    {
+        return CardDB[Pool][Card].Picture.File.length+1;
+    }
+
+    SDL_Rect D_getPictureCoords(int Pool, int Card)
     {
         return CardDB[Pool][Card].Picture.Coordinates;
     }
