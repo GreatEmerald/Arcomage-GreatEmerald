@@ -219,7 +219,7 @@ void InitCardDB()
             //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table, -4: table
             if (!lua_isstring(L, -1)) //GE: Sanity check
                 error(L, "This is not a string.");
-            printf(lua_tostring(L, -1));
+            printf("Currently held string is: %s\n", lua_tostring(L, -1));
             if (lua_objlen(L, -1) != 0) //GE: Don't load this in memory if it's empty.
                 PrecacheCard(lua_tostring(L, -1), lua_objlen(L, -1)); //GE: Put this into the linked list and load the image in memory.
             D_setPictureFile(0, card, lua_tostring(L, -1));

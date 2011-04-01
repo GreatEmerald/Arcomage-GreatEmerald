@@ -59,9 +59,10 @@ void DrawCards(int turn)
     if (turn==aiplayer || turn==netplayer)
 	{
 		j=aiplayer;if (j==-1) j=netplayer;
+		printf("The turn is now: %d\n", j);
 		for (i=0;i<6;i++)
 		//GE: This is info on where to put in on the screen.
-			DrawCard(0x100*j,8+106*i,342);
+			DrawFolded(j,8+106*i,342);
 	}
 	else 
 		for (i=0;i<6;i++)
@@ -220,8 +221,8 @@ void PlayCard(int c,int discrd)
 		y=342.0+d*(96.0-342.0);
 		Blit(BUFFER,SCREEN);
 		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,CardTranslucency);
-		if (discrd)
-			DrawCard(0x200,(int)x,(int)y);
+		//if (discrd)
+			//DrawCard(0x200,(int)x,(int)y);//FIXME
 		UpdateScreen();
 		SDL_Delay(20);
 	}
@@ -249,7 +250,7 @@ void PlayCard(int c,int discrd)
 	if (discrd)
   {
      DrawCardAlpha(Player[turn].Hand[c],272,96,CardTranslucency);
-	   DrawCard(0x200,272,96);
+	   //DrawCard(0x200,272,96);//FIXME
 	}
 	else
 	   DrawCard(Player[turn].Hand[c],272,96);

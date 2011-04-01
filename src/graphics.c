@@ -113,11 +113,24 @@ void Graphics_Init(int fullscreen)
 void PrecacheCard(const char* File, size_t Size)
 {
     Picture* CurrentPicture;
+    Picture* CheckedPicture = PictureHead;
     int bNew=0;
     
-    printf(File);
+    //printf(File);
     if (!PictureHead)//GE: No cards precached, so don't overdo this.
         bNew = 1;
+    else //GE: Let's find out if we already have this somewhere.
+    {
+        while (CheckedPicture)
+        {
+            //printf("PrecacheCard: Is %s = %s?\n", File, CheckedPicture->File);
+            if (!strcmp(File, CheckedPicture->File)) //GE: I thought strcpy() was counterintuitive. This takes the cake!
+                return; //GE: It's already been precached. Nothing to do.
+            //printf("No it's not.");
+            CheckedPicture = CheckedPicture->Next;
+        }
+    }
+    
     CurrentPicture = malloc(sizeof(Picture));
     if (CurrentPicture == NULL) //GE: Allocate the memory to store this picture.
         FatalError("Out of memory to allocate the image linked list! Please use fewer cards."); //GE: Oh noes, out of memory to allocate! ...actually they are but pointers, so I doubt you'd ever run out of it.
@@ -214,23 +227,25 @@ void DrawCard(int c,int x,int y)
 	   return;
 	
   File = malloc(D_getPictureFileSize(0,c));
-  getchar();
-  printf("%d", D_getPictureFileSize(0,c));
-  getchar();
+  //getchar();
+  //printf("Drawing picture with size: %d\n", D_getPictureFileSize(0,c));
+  //getchar();
   strcpy(File, D_getPictureFile(0,c));
-  getchar();
+  //printf("Allocation complete.\n");
+  //getchar();
 	
 	while (CurrentPicture)
 	{
-	   if (CurrentPicture->File == File)
+     if (!strcmp(CurrentPicture->File, File))
 	   {
 	       NewDrawCard(c,x,y,CurrentPicture->Surface);
          free(File);
+         //printf("Freeing complete.\n");
          return;
      }
      CurrentPicture = CurrentPicture->Next;
   }
-	
+	getchar();
 	if (!bUseOriginalCards)
 	{
 	   recta.x=x;recta.y=y;recta.w=96;recta.h=128;
@@ -278,11 +293,33 @@ void DrawCard(int c,int x,int y)
 	SDL_BlitSurface(GfxData[DECK],&rectb,GfxData[SCREEN],&recta);
 }
 
-void DrawCardAlpha(int c,int x,int y,Uint8 a)
+void DrawCardAlpha(int c,int x,int y,Uint8 a) //GE: FIXME!
 {
-	SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,a);
+	//SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,a);
 	DrawCard(c,x,y);
-	SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,255);
+	//SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,255);
+}
+
+void DrawFolded(int Team, int X, int Y)
+{
+    SDL_Rect ScreenPosition, DeckPosition;
+    
+    ScreenPosition.x = X; ScreenPosition.y = Y;
+    ScreenPosition.w = 96; ScreenPosition.h = 128;
+    
+    if (!bUseOriginalCards) //GE: New
+    {
+        DeckPosition.x = 0;
+        if (Team) //GE: Blue
+            DeckPosition.y = 128;
+        else //GE: Red
+            DeckPosition.y = 0;
+    }
+    else //GE: Original
+        DeckPosition.x = 192; DeckPosition.y = 0;
+    DeckPosition.w = ScreenPosition.w; DeckPosition.h = ScreenPosition.h;
+    
+    SDL_BlitSurface(GfxData[DECK],&DeckPosition,GfxData[SCREEN],&ScreenPosition);
 }
 
 void DrawSmallNumber(int Resource, int X, int Y, int Offset)

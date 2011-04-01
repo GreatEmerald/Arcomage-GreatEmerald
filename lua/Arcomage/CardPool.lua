@@ -574,11 +574,15 @@ function ArcomageInit()
      CardDB[Iteration].RecruitCost = CardInfo.RecruitCost
      CardDB[Iteration].Colour = CardInfo.Colour
      --CardDB[Iteration].Picture.File = CardInfo.Picture.File
-     CardDB[Iteration].Picture.File = "data/deck.png"
+     --if bUseOriginalCards then
+     --    CardDB[Iteration].Picture.File = "../moli-arm/Data/SPRITES.bmp"
+     --else
+         CardDB[Iteration].Picture.File = "data/deck.png"
+     --end
      --CardDB[Iteration].Picture.X = CardInfo.Picture.X
      CardDB[Iteration].Picture.X = CardID%34*96
      --CardDB[Iteration].Picture.Y = CardInfo.Picture.Y
-     CardDB[Iteration].Picture.Y = CardID/34*128
+     CardDB[Iteration].Picture.Y =  math.floor(CardID/34)*128
      CardDB[Iteration].Picture.W = 96
      CardDB[Iteration].Picture.H = 128
      --CardDB[Iteration].Picture.W = CardInfo.Picture.W
