@@ -50,6 +50,9 @@ void D_setPictureFile(int Pool, int Card, const char* File);
 void D_setPictureCoords(int Pool, int Card, int X, int Y, int W, int H);
 
 int D_getFrequency(int Pool, int Card);
+int G_getBrickCost(int Pool, int Card);
+int G_getGemCost(int Pool, int Card);
+int G_getRecruitCost(int Pool, int Card);
 char* D_getPictureFile(int Pool, int Card);
 size_t D_getPictureFileSize(int Pool, int Card);
 struct SDL_Rect D_getPictureCoords(int Pool, int Card);

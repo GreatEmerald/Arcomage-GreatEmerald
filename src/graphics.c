@@ -195,7 +195,7 @@ void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
 	SDL_FillRect(GfxData[SCREEN],&rect,SDL_MapRGB(GfxData[SCREEN]->format,r,g,b));
 }
 
-void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface)//GE: SOURFACE! :(
+void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface, Uint8 Alpha)//GE: SOURFACE! :(
 {
     SDL_Rect ScreenPosition, DeckPosition = D_getPictureCoords(0,C);
     ScreenPosition.x = X;
@@ -203,7 +203,9 @@ void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface)//GE: SOURFACE! :(
     ScreenPosition.w = DeckPosition.w;
     ScreenPosition.h = DeckPosition.h;
     
+    SDL_SetAlpha(Sourface,SDL_SRCALPHA,Alpha);
     SDL_BlitSurface(Sourface,&DeckPosition,GfxData[SCREEN],&ScreenPosition);
+    SDL_SetAlpha(Sourface,SDL_SRCALPHA,255);
 }
 
 /*
@@ -215,7 +217,7 @@ void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface)//GE: SOURFACE! :(
  * for the pointer and coords, which it then uses to display the thing.     
  */
 //GE: c - card ID, x,y - position on the screen.
-void DrawCard(int c,int x,int y)
+void DrawCard(int c,int x,int y, Uint8 a)
 {
 	SDL_Rect recta,rectb;
 	int RawX, RawY;
@@ -238,7 +240,7 @@ void DrawCard(int c,int x,int y)
 	{
      if (!strcmp(CurrentPicture->File, File))
 	   {
-	       NewDrawCard(c,x,y,CurrentPicture->Surface);
+	       NewDrawCard(c,x,y,CurrentPicture->Surface, a);
          free(File);
          //printf("Freeing complete.\n");
          return;
@@ -291,13 +293,6 @@ void DrawCard(int c,int x,int y)
       }
   }
 	SDL_BlitSurface(GfxData[DECK],&rectb,GfxData[SCREEN],&recta);
-}
-
-void DrawCardAlpha(int c,int x,int y,Uint8 a) //GE: FIXME!
-{
-	//SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,a);
-	DrawCard(c,x,y);
-	//SDL_SetAlpha(GfxData[DECK],SDL_SRCALPHA,255);
 }
 
 void DrawFolded(int Team, int X, int Y)

@@ -82,14 +82,14 @@ extern(C):
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].ID = ID;
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setFrequency(int Pool, int Card, int Frequency)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Frequency = Frequency;
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setName(int Pool, int Card, const char* Name)
@@ -97,42 +97,42 @@ extern(C):
         setBounds(Pool, Card);
         CardDB[Pool][Card].Name = to!string(Name);
         writeln("Named card: ", CardDB[Pool][Card].Name);
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setDescription(int Pool, int Card, const char* Description)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Description = to!string(Description);
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setBrickCost(int Pool, int Card, int BrickCost)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].BrickCost = BrickCost;
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setGemCost(int Pool, int Card, int GemCost)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].GemCost = GemCost;
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setRecruitCost(int Pool, int Card, int RecruitCost)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].RecruitCost = RecruitCost;
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setColour(int Pool, int Card, const char* Colour)
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Colour = to!string(Colour);
-        writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
     void D_setPictureFile(int Pool, int Card, const char* File)
@@ -153,6 +153,21 @@ extern(C):
     int D_getFrequency(int Pool, int Card)
     {
         return CardDB[Pool][Card].Frequency;
+    }
+
+    int D_getBrickCost(int Pool, int Card)
+    {
+        return CardDB[Pool][Card].BrickCost;
+    }
+
+    int D_getGemCost(int Pool, int Card)
+    {
+        return CardDB[Pool][Card].GemCost;
+    }
+
+    int D_getRecruitCost(int Pool, int Card)
+    {
+        return CardDB[Pool][Card].RecruitCost;
     }
 
     immutable(char)* D_getPictureFile(int Pool, int Card)

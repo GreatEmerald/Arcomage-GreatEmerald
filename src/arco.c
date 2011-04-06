@@ -67,9 +67,9 @@ void DrawCards(int turn)
 	else 
 		for (i=0;i<6;i++)
 			if (Requisite(&Player[turn],i))
-				DrawCard(Player[turn].Hand[i],8+106*i,342);
+				DrawCard(Player[turn].Hand[i],8+106*i,342,255);
 			else
-				DrawCardAlpha(Player[turn].Hand[i],8+106*i,342,CardTranslucency);
+				DrawCard(Player[turn].Hand[i],8+106*i,342,CardTranslucency);
 }
 
 void Boss()
@@ -220,7 +220,7 @@ void PlayCard(int c,int discrd)
 		x=(8.0+106.0*c)+d*(272.0-(8.0+106.0*c));
 		y=342.0+d*(96.0-342.0);
 		Blit(BUFFER,SCREEN);
-		DrawCardAlpha(Player[turn].Hand[c],(int)x,(int)y,CardTranslucency);
+		DrawCard(Player[turn].Hand[c],(int)x,(int)y,CardTranslucency);
 		//if (discrd)
 			//DrawCard(0x200,(int)x,(int)y);//FIXME
 		UpdateScreen();
@@ -249,11 +249,11 @@ void PlayCard(int c,int discrd)
 	Blit(GAMEBG,SCREEN);
 	if (discrd)
   {
-     DrawCardAlpha(Player[turn].Hand[c],272,96,CardTranslucency);
+     DrawCard(Player[turn].Hand[c],272,96,CardTranslucency);
 	   //DrawCard(0x200,272,96);//FIXME
 	}
 	else
-	   DrawCard(Player[turn].Hand[c],272,96);
+	   DrawCard(Player[turn].Hand[c],272,96,255);
 	PutCard(Player[turn].Hand[c]);
 	if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
 	{

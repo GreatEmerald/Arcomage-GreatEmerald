@@ -278,7 +278,7 @@ void InitCardDB()
     printf("Finished setting up the CardDB!");
     
     DeckTotal++;
-    for (i=1; i<CARDS; i++)
+    for (i=0; i<CARDS; i++)
     {
         //CardDB[i].ID = TidyQ[i]; //GE: [At this time?], TidyQ is neatly made. Let's use this to our advantage.
         //strcpy(CardDB[i].Name, CardName(CardDB[i].ID));
@@ -389,12 +389,10 @@ void damage(struct Stats *s,int how)
 
 int Requisite(struct Stats *s,int card)
 {
-	switch (s->Hand[card]>>8)
-	{
-		case 0:	if (req[0][(s->Hand[card])&0xFF]>s->b) return 0;break;
-		case 1:	if (req[1][(s->Hand[card])&0xFF]>s->g) return 0;break;
-		case 2:	if (req[2][(s->Hand[card])&0xFF]>s->r) return 0;
-	}
+	printf("Requisition: Card %d, we have %d bricks, %d gems, %d recruits\n", card, s->b, s->g, s->r);
+  if ( D_getBrickCost(0,s->Hand[card]) > s->b ) return 0;
+	if ( D_getGemCost(0,s->Hand[card]) > s->g ) return 0;
+	if ( D_getRecruitCost(0,s->Hand[card]) > s->r ) return 0;
 	return 1;
 }
 
@@ -425,49 +423,49 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	
   switch (card)
 	{
-		case 1:		// Brick Shortage
+		case 0:		// Brick Shortage
 			s1->b-=8;
 			s2->b-=8;
 			Sound_Play(RESS_DOWN);
 			break;
-		case 2:		// Lucky Cache
+		case 1:		// Lucky Cache
 			s1->b+=2;
 			s1->g+=2;
 			Sound_Play(RESS_UP);
 			next=turn;
 			break;
-		case 3:		// Friendly Terrain
+		case 2:		// Friendly Terrain
 			Require(s1, 1, 0, 0);
 			s1->w++;
 			Sound_Play(WALL_UP);
 			next=turn;
 			break;
-		case 4:		// Miners
+		case 3:		// Miners
 			Require(s1, 3, 0, 0);
 			s1->q++;
 			Sound_Play(RESB_UP);
 			break;
-		case 5:		// Mother Lode
+		case 4:		// Mother Lode
 			Require(s1, 4, 0, 0);
 			if (s1->q<s2->q) s1->q++;
 			s1->q++;
 			Sound_Play(RESB_UP);
 			break;
-		case 6:		// Dwarven Miners
+		case 5:		// Dwarven Miners
 			Require(s1, 7, 0, 0);
 			s1->w+=4;
 			s1->q++;
 			Sound_Play(WALL_UP);
 			Sound_Play(RESB_UP);
 			break;
-		case 7:		// Work Overtime
+		case 6:		// Work Overtime
 			Require(s1, 2, 0, 0);
 			s1->w+=5;
 			s1->g-=6;
 			Sound_Play(WALL_UP);
 			Sound_Play(RESS_DOWN);
 			break;
-		case 8:		// Copping the Tech
+		case 7:		// Copping the Tech
 			Require(s1, 5, 0, 0);
 			if (s1->q<s2->q)
 			{
@@ -475,17 +473,17 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 				Sound_Play(RESB_UP);
 			}
 			break;
-		case 9:		// Basic Wall
+		case 8:		// Basic Wall
 			Require(s1, 2, 0, 0);
 			s1->w+=3;
 			Sound_Play(WALL_UP);
 			break;
-		case 10:		// Sturdy Wall
+		case 9:		// Sturdy Wall
 			Require(s1, 3, 0, 0);
 			s1->w+=4;
 			Sound_Play(WALL_UP);
 			break;
-		case 11:		// Innovations
+		case 10:		// Innovations
 			Require(s1, 2, 0, 0);
 			s1->q++;
 			s2->q++;
@@ -493,7 +491,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(RESB_UP);
 			Sound_Play(RESS_UP);
 			break;
-		case 12:		// Foundations
+		case 11:		// Foundations
 			Require(s1, 3, 0, 0);
 			if (!s1->w)
 				s1->w+=6;
@@ -501,40 +499,40 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 				s1->w+=3;
 			Sound_Play(WALL_UP);
 			break;
-		case 13:		// Tremors
+		case 12:		// Tremors
 			Require(s1, 7, 0, 0);
 			s1->w-=5;
 			s2->w-=5;
 			Sound_Play(DAMAGE);
 			next=turn;
 			break;
-		case 14:		// Secret Room
+		case 13:		// Secret Room
 			Require(s1, 8, 0, 0);
 			s1->m++;
 			Sound_Play(RESB_UP);
 			next=turn;
 			break;
-		case 15:		// Earthquake
+		case 14:		// Earthquake
 			s1->q--;
 			s2->q--;
 			Sound_Play(RESB_DOWN);
 			break;
-		case 16:		// Big Wall
+		case 15:		// Big Wall
 			Require(s1, 5, 0, 0);
 			s1->w+=6;
 			Sound_Play(WALL_UP);
 			break;
-		case 17:		// Collapse
+		case 16:		// Collapse
 			Require(s1, 4, 0, 0);
 			s2->q--;
 			Sound_Play(RESB_DOWN);
 			break;
-		case 18:		// New Equipment
+		case 17:		// New Equipment
 			Require(s1, 6, 0, 0);
 			s1->q+=2;
 			Sound_Play(RESB_UP);
 			break;
-		case 19:		// Strip Mine
+		case 18:		// Strip Mine
 			s1->q--;
 			s1->w+=10;
 			s1->g+=5;
@@ -542,71 +540,71 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(RESB_DOWN);
 			Sound_Play(RESS_UP);
 			break;
-		case 20:		// Reinforced Wall
+		case 19:		// Reinforced Wall
 			Require(s1, 8, 0, 0);
 			s1->w+=8;
 			Sound_Play(WALL_UP);
 			break;
-		case 21:		// Porticulus
+		case 20:		// Porticulus
 			Require(s1, 9, 0, 0);
 			s1->w+=5;
 			s1->d++;
 			Sound_Play(WALL_UP);
 			Sound_Play(RESB_UP);
 			break;
-		case 22:		// Crystal Rocks
+		case 21:		// Crystal Rocks
 			Require(s1, 9, 0, 0);
 			s1->w+=7;
 			s1->g+=7;
 			Sound_Play(WALL_UP);
 			Sound_Play(RESS_UP);
 			break;
-		case 23:		// Harmonic Ore
+		case 22:		// Harmonic Ore
 			Require(s1, 11, 0, 0);
 			s1->w+=6;
 			s1->t+=3;
 			Sound_Play(TOWER_UP);
 			Sound_Play(WALL_UP);
 			break;
-		case 24:		// MondoWall
+		case 23:		// MondoWall
 			Require(s1, 13, 0, 0);
 			s1->w+=12;
 			Sound_Play(WALL_UP);
 			break;
-		case 25:		// Focused Designs
+		case 24:		// Focused Designs
 			Require(s1, 15, 0, 0);
 			s1->w+=8;
 			s1->t+=5;
 			Sound_Play(TOWER_UP);
 			Sound_Play(WALL_UP);
 			break;
-		case 26:		// Great Wall
+		case 25:		// Great Wall
 			Require(s1, 16, 0, 0);
 			s1->w+=15;
 			Sound_Play(WALL_UP);
 			break;
-		case 27:		// Rock Launcher
+		case 26:		// Rock Launcher
 			Require(s1, 18, 0, 0);
 			s1->w+=6;
 			Sound_Play(DAMAGE);
 			Sound_Play(WALL_UP);
 			damage(s2,10);
 			break;
-		case 28:		// Dragon's Heart
+		case 27:		// Dragon's Heart
 			Require(s1, 1, 24, 0);
 			s1->w+=20;
 			s1->t+=8;
 			Sound_Play(TOWER_UP);
 			Sound_Play(WALL_UP);
 			break;
-		case 29:		// Forced Labor
+		case 28:		// Forced Labor
 			Require(s1, 7, 0, 0);
 			s1->w+=9;
 			s1->r-=5;
 			Sound_Play(WALL_UP);
 			Sound_Play(RESS_DOWN);
 			break;
-		case 30:		// Rock Garden
+		case 29:		// Rock Garden
 			Require(s1, 1, 0, 0);
 			s1->w++;
 			s1->t++;
@@ -615,7 +613,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(WALL_UP);
 			Sound_Play(RESS_UP);
 			break;
-		case 31:		// Flood Water
+		case 30:		// Flood Water
 			Require(s1, 6, 0, 0);
 			if (s1->w<s2->w)
 			{
@@ -628,7 +626,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
 			break;
-		case 32:		// Barracks
+		case 31:		// Barracks
 			Require(s1, 10, 0, 0);
 			s1->r+=6;
 			s1->w+=6;
@@ -640,14 +638,14 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 				Sound_Play(RESB_UP);
 			}
 			break;
-		case 33:		// Battlements
+		case 32:		// Battlements
 			Require(s1, 14, 0, 0);
 			s1->w+=7;
 			Sound_Play(DAMAGE);
 			Sound_Play(WALL_UP);
 			damage(s2,6);
 			break;
-		case 34:		// Shift
+		case 33:		// Shift
 			Require(s1, 17, 0, 0);
 			if (s1->w!=s2->w)
 			{
@@ -658,45 +656,45 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s1->w=s2->w;
 			s2->w=x;
 			break;
-		case (34)+1:	// Quartz
+		case 34:	// Quartz
 			Require(s1, 0, 1, 0);
 			s1->t++;
 			Sound_Play(TOWER_UP);
 			next=turn;
 			break;
-		case (34)+2:	// Smoky Quartz
+		case 35:	// Smoky Quartz
 			Require(s1, 0, 2, 0);
 			Sound_Play(DAMAGE);
 			s2->t--;
 			next=turn;
 			break;
-		case (34)+3:	// Amethyst
+		case 36:	// Amethyst
 			Require(s1, 0, 2, 0);
 			s1->t+=3;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+4:	// Spell Weavers
+		case 37:	// Spell Weavers
 			Require(s1, 0, 3, 0);
 			s1->m++;
 			Sound_Play(RESB_UP);
 			break;
-		case (34)+5:	// Prism
+		case 38:	// Prism
 			Require(s1, 0, 2, 0);
 			next=-1;
 			break;
-		case (34)+6:	// Lodestone
+		case 39:	// Lodestone
 			Require(s1, 0, 5, 0);
 			s1->t+=3;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+7:	// Solar Flare
+		case 40:	// Solar Flare
 			Require(s1, 0, 4, 0);
 			s1->t+=2;
 			s2->t-=2;
 			Sound_Play(TOWER_UP);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+8:	// Crystal Matrix
+		case 41:	// Crystal Matrix
 			Require(s1, 0, 6, 0);
 			s1->m++;
 			s1->t+=3;
@@ -704,29 +702,29 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESB_UP);
 			break;
-		case (34)+9:	// Gemstone Flaw
+		case 42:	// Gemstone Flaw
 			Require(s1, 0, 2, 0);
 			s2->t-=3;
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+10:	// Ruby
+		case 43:	// Ruby
 			Require(s1, 0, 3, 0);
 			s1->t+=5;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+11:	// Gem Spear
+		case 44:	// Gem Spear
 			Require(s1, 0, 4, 0);
 			s2->t-=5;
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+12:	// Power Burn
+		case 45:	// Power Burn
 			Require(s1, 0, 3, 0);
 			s1->t-=5;
 			s1->m+=2;
 			Sound_Play(RESB_UP);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+13:	// Harmonic Vibe
+		case 46:	// Harmonic Vibe
 			Require(s1, 0, 7, 0);
 			s1->m++;
 			s1->t+=3;
@@ -735,7 +733,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(WALL_UP);
 			Sound_Play(RESB_UP);
 			break;
-		case (34)+14:	// Parity
+		case 47:	// Parity
 			Require(s1, 0, 7, 0);
 			if (s2->m>s1->m)
 			{
@@ -748,38 +746,38 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 				Sound_Play(RESB_UP);
 			}
 			break;
-		case (34)+15:	// Emerald
+		case 48:	// Emerald
 			Require(s1, 0, 6, 0);
 			s1->t+=8;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+16:	// Pearl of Wisdom
+		case 49:	// Pearl of Wisdom
 			Require(s1, 0, 9, 0);
 			s1->t+=5;
 			s1->m++;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESB_UP);
 			break;
-		case (34)+17:	// Shatterer
+		case 50:	// Shatterer
 			Require(s1, 0, 8, 0);
 			s1->m--;
 			s2->t-=9;
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
 			break;
-		case (34)+18:	// Crumblestone
+		case 51:	// Crumblestone
 			Require(s1, 0, 7, 0);
 			s1->t+=5;
 			s2->b-=6;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESS_DOWN);
 			break;
-		case (34)+19:	// Sapphire
+		case 52:	// Sapphire
 			Require(s1, 0, 10, 0);
 			s1->t+=11;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+20:	// Discord
+		case 53:	// Discord
 			Require(s1, 0, 5, 0);
 			s1->t-=7;
 			s2->t-=7;
@@ -788,40 +786,40 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
 			break;
-		case (34)+21:	// Fire Ruby
+		case 54:	// Fire Ruby
 			Require(s1, 0, 13, 0);
 			s1->t+=6;
 			s2->t-=4;
 			Sound_Play(TOWER_UP);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+22:	// Quarry's Help
+		case 55:	// Quarry's Help
 			Require(s1, 0, 4, 0);
 			s1->t+=7;
 			s1->b-=10;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESS_DOWN);
 			break;
-		case (34)+23:	// Crystal Shield
+		case 56:	// Crystal Shield
 			Require(s1, 0, 12, 0);
 			s1->t+=8;
 			s1->w+=3;
 			Sound_Play(TOWER_UP);
 			Sound_Play(WALL_UP);
 			break;
-		case (34)+24:	// Empathy Gem
+		case 57:	// Empathy Gem
 			Require(s1, 0, 14, 0);
 			s1->t+=8;
 			s1->d++;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESB_UP);
 			break;
-		case (34)+25:	// Diamond
+		case 58:	// Diamond
 			Require(s1, 0, 16, 0);
 			s1->t+=15;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+26:	// sanctuary
+		case 59:	// sanctuary
 			Require(s1, 0, 15, 0);
 			s1->t+=10;
 			s1->w+=5;
@@ -830,38 +828,38 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(RESS_UP);
 			Sound_Play(WALL_UP);
 			break;
-		case (34)+27:	// Lava Jewel
+		case 60:	// Lava Jewel
 			Require(s1, 0, 17, 0);
 			s1->t+=12;
 			damage(s2,6);
 			Sound_Play(TOWER_UP);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+28:	// Dragon's Eye
+		case 61:	// Dragon's Eye
 			Require(s1, 0, 21, 0);
 			s1->t+=20;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+29:	// Crystallize
+		case 62:	// Crystallize
 			Require(s1, 0, 8, 0);
 			s1->t+=11;
 			s1->w-=6;
 			Sound_Play(TOWER_UP);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+30:	// Bag of Baubles
+		case 63:	// Bag of Baubles
 			if (s1->t<s2->t) s1->t++;
 			s1->t++;
 			Sound_Play(TOWER_UP);
 			break;
-		case (34)+31:	// Rainbow
+		case 64:	// Rainbow
 			s1->t++;
 			s2->t++;
 			s1->g+=3;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESS_UP);
 			break;
-		case (34)+32:	// Apprentice
+		case 65:	// Apprentice
 			Require(s1, 0, 5, 0);
 			s1->t+=4;
 			s1->r-=3;
@@ -870,7 +868,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(RESS_DOWN);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+33:	// Lightning Shard
+		case 66:	// Lightning Shard
 			Require(s1, 0, 11, 0);
 			if (s1->t>s2->w)
 				s2->t-=8;
@@ -878,7 +876,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 				damage(s2,8);
 			Sound_Play(DAMAGE);
 			break;
-		case (34)+34:	// Phase Jewel
+		case 67:	// Phase Jewel
 			Require(s1, 0, 18, 0);
 			s1->t+=13;
 			s1->r+=6;
@@ -886,74 +884,74 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESS_UP);
 			break;
-		case (68)+1:	// Mad Cow Disease
+		case 68:	// Mad Cow Disease
 			s1->r-=6;
 			s2->r-=6;
 			Sound_Play(RESS_DOWN);
 			break;
-		case (68)+2:	// Faerie
+		case 69:	// Faerie
 			Require(s1, 0, 0, 1);
 			Sound_Play(DAMAGE);
 			damage(s2,2);
 			next=turn;
 			break;
-		case (68)+3:	// Moody Goblins
+		case 70:	// Moody Goblins
 			Require(s1, 0, 0, 1);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESS_DOWN);
 			damage(s2,4);
 			s1->g-=3;
 			break;
-		case (68)+4:	// Minotaur
+		case 71:	// Minotaur
 			Require(s1, 0, 0, 3);
 			s1->d++;
 			Sound_Play(RESB_UP);
 			break;
-		case (68)+5:	// Elven Scout
+		case 72:	// Elven Scout
 			Require(s1, 0, 0, 2);
 			next=-1;
 			break;
-		case (68)+6:	// Goblin Mob
+		case 73:	// Goblin Mob
 			Require(s1, 0, 0, 3);
 			Sound_Play(DAMAGE);
 			damage(s2,6);
 			damage(s1,3);
 			break;
-		case (68)+7:	// Goblin Archers
+		case 74:	// Goblin Archers
 			Require(s1, 0, 0, 4);
 			s2->t-=3;
 			Sound_Play(DAMAGE);
 			damage(s1,1);
 			break;
-		case (68)+8:	// Shadow Faerie
+		case 75:	// Shadow Faerie
 			Require(s1, 0, 0, 6);
 			Sound_Play(DAMAGE);
 			s2->t-=2;
 			next=turn;
 			break;
-		case (68)+9:	// Orc
+		case 76:	// Orc
 			Require(s1, 0, 0, 3);
 			Sound_Play(DAMAGE);
 			damage(s2,5);
 			break;
-		case (68)+10:	// Dwarves
+		case 77:	// Dwarves
 			Require(s1, 0, 0, 5);
 			Sound_Play(DAMAGE);
 			Sound_Play(WALL_UP);
 			damage(s2,4);
 			s1->w+=3;
 			break;
-		case (68)+11:	// Little Snakes
+		case 78:	// Little Snakes
 			Require(s1, 0, 0, 6);
 			Sound_Play(DAMAGE);
 			s2->t-=4;
 			break;
-		case (68)+12:	// Troll Trainer
+		case 79:	// Troll Trainer
 			Require(s1, 0, 0, 7);
 			s1->d+=2;
 			Sound_Play(RESB_UP);
 			break;
-		case (68)+13:	// Tower Gremlin
+		case 80:	// Tower Gremlin
 			Require(s1, 0, 0, 8);
 			s1->w+=4;
 			s1->t+=2;
@@ -962,31 +960,31 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(WALL_UP);
 			damage(s2,2);
 			break;
-		case (68)+14:	// Full Moon
+		case 81:	// Full Moon
 			s1->d++;
 			s2->d++;
 			s1->r+=3;
 			Sound_Play(RESB_UP);
 			Sound_Play(RESS_UP);
 			break;
-		case (68)+15:	// Slasher
+		case 82:	// Slasher
 			Require(s1, 0, 0, 5);
 			Sound_Play(DAMAGE);
 			damage(s2,6);
 			break;
-		case (68)+16:	// Ogre
+		case 83:	// Ogre
 			Require(s1, 0, 0, 6);
 			Sound_Play(DAMAGE);
 			damage(s2,7);
 			break;
-		case (68)+17:	// Rabid Sheep
+		case 84:	// Rabid Sheep
 			Require(s1, 0, 0, 6);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESS_DOWN);
 			damage(s2,6);
 			s2->r-=3;
 			break;
-		case (68)+18:	// Imp
+		case 85:	// Imp
 			Require(s1, 0, 0, 5);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESS_DOWN);
@@ -998,7 +996,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s1->r-=5;
 			s2->r-=5;
 			break;
-		case (68)+19:	// Spizzer
+		case 86:	// Spizzer
 			Require(s1, 0, 0, 8);
 			Sound_Play(DAMAGE);
 			if (!s2->w)
@@ -1006,12 +1004,12 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			else
 				damage(s2,6);
 			break;
-		case (68)+20:	// Werewolf
+		case 87:	// Werewolf
 			Require(s1, 0, 0, 9);
 			Sound_Play(DAMAGE);
 			damage(s2,9);
 			break;
-		case (68)+21:	// Corrosion Cloud
+		case 88:	// Corrosion Cloud
 			Require(s1, 0, 0, 11);
 			Sound_Play(DAMAGE);
 			if (s2->w)
@@ -1019,14 +1017,14 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			else
 				damage(s2,7);
 			break;
-		case (68)+22:	// Unicorn
+		case 89:	// Unicorn
 			Require(s1, 0, 0, 9);
 			Sound_Play(DAMAGE);
 			if (s1->m>s2->m)
 				damage(s2,12);
 			else
 				damage(s2,8);
-		case (68)+23:	// Elven Archers
+		case 90:	// Elven Archers
 			Require(s1, 0, 0, 10);
 			Sound_Play(DAMAGE);
 			if (s1->w>s2->w)
@@ -1034,21 +1032,21 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			else
 				damage(s2,6);
 			break;
-		case (68)+24:	// Succubus
+		case 91:	// Succubus
 			Require(s1, 0, 0, 14);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESS_DOWN);
 			s2->t-=5;
 			s2->r-=8;
 			break;
-		case (68)+25:	// Rock Stompers
+		case 92:	// Rock Stompers
 			Require(s1, 0, 0, 11);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
 			damage(s2,8);
 			s2->q--;
 			break;
-		case (68)+26:	// Thief
+		case 93:	// Thief
 			Require(s1, 0, 0, 12);
 			Sound_Play(RESS_UP);
 			Sound_Play(RESS_DOWN);
@@ -1069,14 +1067,14 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 				s2->b=0;
 			}
 			break;
-		case (68)+27:	// Stone Giant
+		case 94:	// Stone Giant
 			Require(s1, 0, 0, 15);
 			Sound_Play(DAMAGE);
 			Sound_Play(WALL_UP);
 			damage(s2,10);
 			s1->w+=4;
 			break;
-		case (68)+28:	// Vampire
+		case 95:	// Vampire
 			Require(s1, 0, 0, 17);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
@@ -1084,7 +1082,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s2->r-=5;
 			s2->d--;
 			break;
-		case (68)+29:	// Dragon
+		case 96:	// Dragon
 			Require(s1, 0, 0, 25);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESB_DOWN);
@@ -1092,7 +1090,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s2->g-=10;
 			s2->d--;
 			break;
-		case (68)+30:	// Spearman
+		case 97:	// Spearman
 			Require(s1, 0, 0, 2);
 			Sound_Play(DAMAGE);
 			if (s1->w>s2->w)
@@ -1100,27 +1098,27 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			else
 				damage(s2,2);
 			break;
-		case (68)+31:	// Gnome
+		case 98:	// Gnome
 			Require(s1, 0, 0, 2);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESS_UP);
 			damage(s2,3);
 			s1->g++;
 			break;
-		case (68)+32:	// Berserker
+		case 99:	// Berserker
 			Require(s1, 0, 0, 4);
 			Sound_Play(DAMAGE);
 			damage(s2,8);
 			s1->t-=3;
 			break;
-		case (68)+33:	// Warlord
+		case 100:	// Warlord
 			Require(s1, 0, 0, 13);
 			Sound_Play(DAMAGE);
 			Sound_Play(RESS_DOWN);
 			damage(s2,13);
 			s1->g-=3;
 			break;
-		case (68)+34:	// Pegasus Lancer
+		case 101:	// Pegasus Lancer
 			Require(s1, 0, 0, 18);
 			Sound_Play(DAMAGE);
 			s2->t-=12;
