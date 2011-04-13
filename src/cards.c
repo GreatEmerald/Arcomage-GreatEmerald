@@ -14,7 +14,7 @@ int req[3][35] = {
 
 #define CARDS 102
 struct CardInfo CardDB[CARDS]; //GE: Scheduled deprecation. Use D functions to access this instead!
-int TidyQ[CARDS];
+//int TidyQ[CARDS];
 int *Q;//GE: Queue?
 int Qs=0,Qe=0;
 int DeckTotal; //GE: The total card number in the deck.
@@ -324,16 +324,16 @@ void InitDeck()
       return;
   }
 	
-  for (i=0;i<CARDS/*/3*/;i++) //GE: Creates a neat array of cards.
-	{
-		TidyQ[i]=i+1;
+  //for (i=0;i<CARDS/*/3*/;i++) //GE: Creates a neat array of cards.
+	//{
+		//TidyQ[i]=i+1;
     /*TidyQ[i          ]=i+1;
 		TidyQ[i+  CARDS/3]=i+1+(1<<8);
 		TidyQ[i+2*CARDS/3]=i+1+(2<<8);*/
 /*		printf("%d\n", Q[i]);
 		printf("%d\n", Q[i+  CARDS/3]);
 		printf("%d\n", Q[i+2*CARDS/3]);*/
-	}
+	//}
 	InitCardDB();
 	Q = (int*) malloc((sizeof (int)) * DeckTotal); //GE: Make Q as big as we want it to be.
 	//printf("DeckTotal: %d\n", DeckTotal);
@@ -389,7 +389,7 @@ void damage(struct Stats *s,int how)
 
 int Requisite(struct Stats *s,int card)
 {
-	printf("Requisition: Card %d, we have %d bricks, %d gems, %d recruits\n", card, s->b, s->g, s->r);
+	printf("Requisition: Card requires %d/%d/%d, we have %d bricks, %d gems, %d recruits\n", D_getBrickCost(0,s->Hand[card]), D_getGemCost(0,s->Hand[card]), D_getRecruitCost(0,s->Hand[card]), s->b, s->g, s->r);
   if ( D_getBrickCost(0,s->Hand[card]) > s->b ) return 0;
 	if ( D_getGemCost(0,s->Hand[card]) > s->g ) return 0;
 	if ( D_getRecruitCost(0,s->Hand[card]) > s->r ) return 0;

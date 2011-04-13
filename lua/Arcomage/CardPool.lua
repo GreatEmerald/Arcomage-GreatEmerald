@@ -41,7 +41,7 @@ function ArcomageInit()
      print(Iteration)
      --CardDB[Iteration] = CardInfo
      CardDB[Iteration] = {Picture = {}}
-     CardInfo = {ID = CardID+1, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
+     CardInfo = {ID = CardID, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
      --[[CardInfo.ID = CardID --GE: Make sure we reset CardInfo each loop.
      CardInfo.Frequency = 1
      CardInfo.Name = ""
@@ -569,7 +569,7 @@ function ArcomageInit()
      CardDB[Iteration].Frequency = CardInfo.Frequency
      CardDB[Iteration].Name = CardInfo.Name
      CardDB[Iteration].Description = CardInfo.Description
-     CardDB[Iteration].BrickCost = CardInfo.GemCost
+     CardDB[Iteration].BrickCost = CardInfo.BrickCost
      CardDB[Iteration].GemCost = CardInfo.GemCost
      CardDB[Iteration].RecruitCost = CardInfo.RecruitCost
      CardDB[Iteration].Colour = CardInfo.Colour

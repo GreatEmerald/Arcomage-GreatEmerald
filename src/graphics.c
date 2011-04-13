@@ -317,6 +317,19 @@ void DrawFolded(int Team, int X, int Y)
     SDL_BlitSurface(GfxData[DECK],&DeckPosition,GfxData[SCREEN],&ScreenPosition);
 }
 
+void DrawDiscard(int X, int Y)
+{
+    SDL_Rect ScreenPosition, DeckPosition;
+    
+    ScreenPosition.x = X; ScreenPosition.y = Y;
+    ScreenPosition.w = 96; ScreenPosition.h = 128;
+    
+    DeckPosition.x = 0; DeckPosition.y = 256;
+    DeckPosition.w = ScreenPosition.w; DeckPosition.h = ScreenPosition.h;
+    
+    SDL_BlitSurface(GfxData[DECK],&DeckPosition,GfxData[SCREEN],&ScreenPosition);
+}
+
 void DrawSmallNumber(int Resource, int X, int Y, int Offset)
 {
     char str[4];

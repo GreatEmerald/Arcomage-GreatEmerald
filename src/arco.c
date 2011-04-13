@@ -59,7 +59,7 @@ void DrawCards(int turn)
     if (turn==aiplayer || turn==netplayer)
 	{
 		j=aiplayer;if (j==-1) j=netplayer;
-		printf("The turn is now: %d\n", j);
+		//printf("The turn is now: %d\n", j);
 		for (i=0;i<6;i++)
 		//GE: This is info on where to put in on the screen.
 			DrawFolded(j,8+106*i,342);
@@ -221,8 +221,8 @@ void PlayCard(int c,int discrd)
 		y=342.0+d*(96.0-342.0);
 		Blit(BUFFER,SCREEN);
 		DrawCard(Player[turn].Hand[c],(int)x,(int)y,CardTranslucency);
-		//if (discrd)
-			//DrawCard(0x200,(int)x,(int)y);//FIXME
+		if (discrd)
+			DrawDiscard((int)x,(int)y);
 		UpdateScreen();
 		SDL_Delay(20);
 	}
@@ -250,11 +250,11 @@ void PlayCard(int c,int discrd)
 	if (discrd)
   {
      DrawCard(Player[turn].Hand[c],272,96,CardTranslucency);
-	   //DrawCard(0x200,272,96);//FIXME
+	   DrawDiscard(272,96);
 	}
 	else
 	   DrawCard(Player[turn].Hand[c],272,96,255);
-	PutCard(Player[turn].Hand[c]);
+  PutCard(Player[turn].Hand[c]);
 	if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
 	{
 		Player[nextturn].b+=Player[nextturn].q; //GE: The enemy gets resources.
@@ -262,6 +262,7 @@ void PlayCard(int c,int discrd)
 		Player[nextturn].r+=Player[nextturn].d;
 	}
     Player[turn].Hand[c]=GetCard();
+    printf("We received a card: %d\n", Player[turn].Hand[c]);
 	lastturn=turn;
 	turn=nextturn;
 		
