@@ -2,7 +2,7 @@
 #define _COMMON_H_ 1
 
 #define CPUWAIT 10
-#define ARCOVER "0.3.2"
+#define ARCOVER "0.4.0"
 
 #ifdef MSVC
 	#define vsnprintf _vsnprintf

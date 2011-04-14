@@ -10,11 +10,11 @@ clean:
 
 #GE: This line is repeated when linking. This is linking.
 $(BIN): minIni.o arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o
-	$(CC) minIni.o arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o -m64 `pkg-config --libs sdl` -lSDL_image -lSDL_net -lSDL_mixer `pkg-config --libs lua5.1` -lrt ../lib/libArcomageD.a -lphobos2 -lpthread -o $(BIN)
+	$(CC) minIni.o arco.o common.o cards.o graphics.o input.o network.o sound.o BFont.o -m64 `pkg-config --libs sdl` -lSDL_image -lSDL_net -lSDL_mixer `pkg-config --libs lua` -lrt ../lib/libArcomageD.a -lphobos2 -lpthread -o $(BIN)
 
 $(BINSERVER): minIni.o arcosrv.o network.o common.o cards.o
 	$(CC) minIni.o arcosrv.o common.o cards.o network.o `pkg-config --libs sdl` -lSDL_net -o $(BINSERVER)
 
 #GE: This line is repeated for each of the files. This is compilation.
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ `pkg-config --cflags sdl` `pkg-config --cflags lua5.1`
+	$(CC) $(CFLAGS) -c $< -o $@ `pkg-config --cflags sdl` `pkg-config --cflags lua`

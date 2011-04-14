@@ -1,5 +1,5 @@
-Arcomage Clone v0.3
-Revision 2011.03.25, GreatEmerald
+Arcomage Clone v0.4
+Revision 2011.04.14, GreatEmerald
 
 Arcomage Clone is, as the name implies, a clone of Arcomage. The goal of this
 project is to recreate the standalone Arcomage to a feature parity, while
@@ -22,7 +22,7 @@ behaviour will be changed into a configuration option later on.
 
 If you are using Linux, you will have to install libsdl1.2, libsdl-image,
 libsdl1.2-mixer, libsdl1.2-net and liblua5.1 to run the game (or their
-equivalents in your Linux distribution).
+equivalents in your Linux distribution; see the building section for hints).
 
 After that, simply run bin/win32/Arcomage.exe or bin/linux-AMD64/arcomage and enjoy!
 
@@ -55,11 +55,12 @@ Linux:
     GCC 4.4+ (GNU Compiler Collection; gcc, gcc-4.4 or gcc-4.5)
     GNU Make (make)
     Embedded GNU C Library (libc6)
-    SDL 1.2 (Simple DirectMedia Layer, 1.2.14; libsdl1.2-dev on Debian)
-    SDL image (libsdl-image-dev on Debian)
-    SDL mixer (libsdl-mixer-dev on Debian)
-    SDL net (libsdl-net-dev on Debian)
-    Lua 5.1 (liblua5.1-dev on Debian)
+    SDL 1.2 (Simple DirectMedia Layer, 1.2.14; libsdl1.2-dev on Debian and
+      libSDL-devel on openSUSE)
+    SDL image (libsdl-image-dev on Debian and libSDL_image-devel on openSUSE)
+    SDL mixer (libsdl-mixer-dev on Debian and libSDL_mixer-devel on openSUSE)
+    SDL net (libsdl-net-dev on Debian and libSDL_net-devel on openSUSE)
+    Lua 5.1 (liblua5.1-dev on Debian and lua-devel on openSUSE)
   Highly recommended:
     DMD 2.052+ (Digital Mars D compiler): http://www.digitalmars.com/d/download.html
 
@@ -72,7 +73,7 @@ me.
 You might ask why this project was written in C in the first place, instead of
 something more recent such as C++. That was probably because of Linux
 compatibility - the Linux kernel is written purely in C, thus Linux handles it
-really well. And the original creator of this program, STiCK, was in fact a
+really well. And the original creator of this program, STiCK, is in fact a
 developer of openSUSE (incidentally my distribution of choice), so he must have
 had a lot of experience with C. For more information about this you'd have to
 ask STiCK himself.
