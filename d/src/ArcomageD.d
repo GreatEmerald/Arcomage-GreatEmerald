@@ -6,9 +6,13 @@ import std.string;
 /*struct Coords {
     int X, Y, W, H;
 } */
-struct SDL_Rect {
+/*struct SDL_Rect {
 	short x, y;
 	ushort w, h;
+};*/
+
+struct Rect {
+	int x, y, w, h;
 };
 
 struct PictureInfo {
@@ -177,12 +181,43 @@ extern(C):
 
     size_t D_getPictureFileSize(int Pool, int Card)
     {
+        writeln("Getting ur pic size for Pool ", Pool, " Card ", Card);
         return CardDB[Pool][Card].Picture.File.length+1;
     }
 
     SDL_Rect D_getPictureCoords(int Pool, int Card)
     {
+        writeln("Getting ur pic coords for Pool ", Pool, " Card ", Card);
+        writeln("We have CardDB.pool? ", CardDB[Pool].length);
+        writeln("We have Picture? ", CardDB[Pool][Card].Picture.sizeof);
+        writeln("We have Coordinates? ", CardDB[Pool][Card].Picture.Coordinates.sizeof);
+        writeln("Picture: ", CardDB[Pool][Card].Picture);
+        writeln("One coordinate is: ", CardDB[Pool][Card].Picture.Coordinates.x);
+        //writeln("Returning ", CardDB[Pool][Card].Picture.Coordinates.x, ":", CardDB[Pool][Card].Picture.Coordinates.y, "; ", CardDB[Pool][Card].Picture.Coordinates.w, ":", CardDB[Pool][Card].Picture.Coordinates.h);
         return CardDB[Pool][Card].Picture.Coordinates;
+    }
+
+    int D_getPictureCoordX(int Pool, int Card)
+    {
+	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	writeln("On this D platform, int size is ", int.sizeof);
+writeln("On this D platform, short size is ", short.sizeof);
+	return cast(int).CardDB[Pool][Card].Picture.Coordinates.x;
+    }
+int D_getPictureCoordY(int Pool, int Card)
+    {
+	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	return cast(int).CardDB[Pool][Card].Picture.Coordinates.y;
+    }
+int D_getPictureCoordW(int Pool, int Card)
+    {
+	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	return cast(int).CardDB[Pool][Card].Picture.Coordinates.w;
+    }
+int D_getPictureCoordH(int Pool, int Card)
+    {
+	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	return cast(int).CardDB[Pool][Card].Picture.Coordinates.h;
     }
 
     /*void D_getPrecachePictures()

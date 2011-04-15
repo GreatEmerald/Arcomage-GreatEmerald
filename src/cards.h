@@ -56,6 +56,10 @@ int G_getRecruitCost(int Pool, int Card);
 char* D_getPictureFile(int Pool, int Card);
 size_t D_getPictureFileSize(int Pool, int Card);
 struct SDL_Rect D_getPictureCoords(int Pool, int Card);
+int D_getPictureCoordX(int Pool, int Card);
+int D_getPictureCoordY(int Pool, int Card);
+int D_getPictureCoordW(int Pool, int Card);
+int D_getPictureCoordH(int Pool, int Card);
 void D_printCardDB();
 
 #endif

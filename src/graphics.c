@@ -197,7 +197,18 @@ void FillRect(int x,int y,int w,int h,Uint8 r,Uint8 g,Uint8 b)
 
 void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface, Uint8 Alpha)//GE: SOURFACE! :(
 {
-    SDL_Rect ScreenPosition, DeckPosition = D_getPictureCoords(0,C);
+    SDL_Rect ScreenPosition, DeckPosition;
+    //printf("Incoming crash!\n");
+    //printf("We got the coordinates: %d:%d; %d:%d\n", D_getPictureCoords(0,C).x, D_getPictureCoords(0,C).y, D_getPictureCoords(0,C).w, D_getPictureCoords(0,C).h);
+    //DeckPosition = D_getPictureCoords(0,C);
+    printf("On this C platform, ints are sized %d!\n", sizeof(int));
+    printf("On this C platform, shorts are sized %d!", sizeof(int16_t));
+    //GE: HACK!
+    DeckPosition.x = (int16_t) D_getPictureCoordX(0,C);
+    DeckPosition.y = (int16_t) D_getPictureCoordY(0,C);
+    DeckPosition.w = (uint16_t) D_getPictureCoordW(0,C);
+    DeckPosition.h = (uint16_t) D_getPictureCoordH(0,C);
+    //printf("Entered DrawNewCard.\n");
     ScreenPosition.x = X;
     ScreenPosition.y = Y;
     ScreenPosition.w = DeckPosition.w;
@@ -206,6 +217,7 @@ void NewDrawCard(int C, int X, int Y, SDL_Surface* Sourface, Uint8 Alpha)//GE: S
     SDL_SetAlpha(Sourface,SDL_SRCALPHA,Alpha);
     SDL_BlitSurface(Sourface,&DeckPosition,GfxData[SCREEN],&ScreenPosition);
     SDL_SetAlpha(Sourface,SDL_SRCALPHA,255);
+    printf("Finished drawing the card.\n");
 }
 
 /*
@@ -230,19 +242,20 @@ void DrawCard(int c,int x,int y, Uint8 a)
 	
   File = malloc(D_getPictureFileSize(0,c));
   //getchar();
-  //printf("Drawing picture with size: %d\n", D_getPictureFileSize(0,c));
+  printf("Drawing picture with size: %d\n", D_getPictureFileSize(0,c));
   //getchar();
   strcpy(File, D_getPictureFile(0,c));
-  //printf("Allocation complete.\n");
+  printf("Allocation complete.\n");
   //getchar();
 	
 	while (CurrentPicture)
 	{
      if (!strcmp(CurrentPicture->File, File))
 	   {
-	       NewDrawCard(c,x,y,CurrentPicture->Surface, a);
+	     printf("Attempting to draw card.\n");  
+	     NewDrawCard(c,x,y,CurrentPicture->Surface, a);
          free(File);
-         //printf("Freeing complete.\n");
+         printf("Freeing complete.\n");
          return;
      }
      CurrentPicture = CurrentPicture->Next;
