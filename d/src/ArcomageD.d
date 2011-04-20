@@ -137,6 +137,7 @@ extern(C):
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Cursed = cast(bool)Cursed;
+	//writeln("Cursed: ", cast(bool)Cursed);
         //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
@@ -186,7 +187,8 @@ extern(C):
 
     int D_getCursed(int Pool, int Card) //GE: No, I'm not telling you to get cursed!
     {
-        return cast(int).CardDB[Pool][Card].Cursed;
+        //writeln("Cursed: ", cast(int)CardDB[Pool][Card].Cursed);
+	return cast(int)CardDB[Pool][Card].Cursed;
     }
 
     immutable(char)* D_getPictureFile(int Pool, int Card)
