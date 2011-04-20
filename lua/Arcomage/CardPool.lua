@@ -24,7 +24,7 @@ bUseOriginalCards = False
 
 function ArcomageInit()
 
-  local CardInfo = {ID = 0, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
+  local CardInfo = {ID = 0, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Cursed = False, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
   local CardDB = {} --GE: This is the CardDB, thing that we'll send over to C/D
   local Iteration = 0
   
@@ -41,7 +41,7 @@ function ArcomageInit()
      print(Iteration)
      --CardDB[Iteration] = CardInfo
      CardDB[Iteration] = {Picture = {}}
-     CardInfo = {ID = CardID, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
+     CardInfo = {ID = CardID, Frequency = 1, Name = "", Description = "", BrickCost = 0, GemCost = 0, RecruitCost = 0, Cursed = False, Colour = "Black", Picture = {File = "", X = 0, Y = 0, W = 0, H = 0}, Keywords = "", LuaFunction = ""}
      --[[CardInfo.ID = CardID --GE: Make sure we reset CardInfo each loop.
      CardInfo.Frequency = 1
      CardInfo.Name = ""
@@ -255,6 +255,7 @@ function ArcomageInit()
         CardInfo.Name = "Lodestone"
         CardInfo.Description = "+3 Tower. This\ncard can't be dis-\ncarded without\nplaying it"
         CardInfo.GemCost = 5
+        CardInfo.Cursed = True
         CardInfo.Colour = "Blue"
      elseif CardID == 40 then
         CardInfo.Name = "Solar Flare"
@@ -572,6 +573,7 @@ function ArcomageInit()
      CardDB[Iteration].BrickCost = CardInfo.BrickCost
      CardDB[Iteration].GemCost = CardInfo.GemCost
      CardDB[Iteration].RecruitCost = CardInfo.RecruitCost
+     CardDB[Iteration].Cursed = CardInfo.Cursed
      CardDB[Iteration].Colour = CardInfo.Colour
      --CardDB[Iteration].Picture.File = CardInfo.Picture.File
      --if bUseOriginalCards then

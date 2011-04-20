@@ -180,7 +180,7 @@ void Init()
 	
   ReadConfig();
 
-	CursedIDs[0]=6+(34); //LodeStone
+	CursedIDs[0]=39; //LodeStone
 
 	atexit(SDL_Quit);
 	if (soundenabled) Sound_Init();
@@ -204,11 +204,14 @@ void PlayCard(int c,int discrd)
 	
 	//GE: You get resources when you use a card and next up is the enemy's turn.
 	
-	for (i=0; i<NumCursed; i++)
+	/*for (i=0; i<NumCursed; i++)
 	{
 		if (Player[turn].Hand[c] == CursedIDs[i] && discrd)
 			return;		// Cursed cards like LodeStone can't be discarded
-	}
+	}*/
+	
+	if (discrd && D_getCursed(0,c))
+		return;		// Cursed cards like LodeStone can't be discarded
 	
 	if (bSpecialTurn && !discrd) //GE: You're trying to play a card during a discard round. Bad.
 	   return;

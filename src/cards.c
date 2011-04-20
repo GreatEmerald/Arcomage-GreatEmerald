@@ -189,6 +189,16 @@ void InitCardDB()
         
         if (!lua_istable(L, -1)) //GE: Sanity check
             error(L, "This is not a table.");
+        lua_getfield(L, -1, "Cursed"); //GE: Put CardInfo.Name onto the stack. It's a string.
+        //GE: Replaced the key with the table. STACK: -1: boolean, -2: table, -3: table
+        if (!lua_isboolean(L, -1) && !lua_isnil(L, -1)) //GE: Sanity check
+            error(L, "This is neither a boolean nor nil.");
+        D_setCursed(0, card, lua_toboolean(L, -1));
+        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+        //GE: Removed an element. STACK: -1: table, -2: table
+        
+        if (!lua_istable(L, -1)) //GE: Sanity check
+            error(L, "This is not a table.");
         lua_getfield(L, -1, "Colour"); //GE: Put CardInfo.Name onto the stack. It's a string.
         //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
         if (!lua_isstring(L, -1)) //GE: Sanity check

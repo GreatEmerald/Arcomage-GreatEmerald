@@ -6,10 +6,10 @@ import std.string;
 /*struct Coords {
     int X, Y, W, H;
 } */
-/*struct SDL_Rect {
+struct SDL_Rect {
 	short x, y;
 	ushort w, h;
-};*/
+};
 
 struct Rect {
 	int x, y, w, h;
@@ -32,6 +32,7 @@ struct CardInfo { //GE: Holds information about a single card.
     int BrickCost; //GE: These three are for rendering purposes, but are used in code as well
     int GemCost;
     int RecruitCost;
+    bool Cursed;
     string Colour; //GE: Red, Geen, Blue, Gray/Grey/Black, Brown/White. Rendering purposes, mostly for 0 cost coloured cards
     PictureInfo Picture; //GE: Rendering purposes.
     string Keywords; //GE: Might become an array. These are MArcomage keywords, also used in Lua functions
@@ -100,7 +101,7 @@ extern(C):
     {
         setBounds(Pool, Card);
         CardDB[Pool][Card].Name = to!string(Name);
-        writeln("Named card: ", CardDB[Pool][Card].Name);
+        //writeln("Named card: ", CardDB[Pool][Card].Name);
         //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
@@ -132,6 +133,13 @@ extern(C):
         //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
     }
 
+    void D_setCursed(int Pool, int Card, int Cursed)
+    {
+        setBounds(Pool, Card);
+        CardDB[Pool][Card].Cursed = cast(bool)Cursed;
+        //writeln("CardDB.Length is ", CardDB.length, " and that pool has ", CardDB[Pool].length, " cards registered so far.");
+    }
+
     void D_setColour(int Pool, int Card, const char* Colour)
     {
         setBounds(Pool, Card);
@@ -154,6 +162,8 @@ extern(C):
         CardDB[Pool][Card].Picture.Coordinates.h = to!ushort(H);
     }
 
+    // GE: GET CODE BEGIN ---------------------------------------
+
     int D_getFrequency(int Pool, int Card)
     {
         return CardDB[Pool][Card].Frequency;
@@ -174,6 +184,11 @@ extern(C):
         return CardDB[Pool][Card].RecruitCost;
     }
 
+    int D_getCursed(int Pool, int Card) //GE: No, I'm not telling you to get cursed!
+    {
+        return cast(int).CardDB[Pool][Card].Cursed;
+    }
+
     immutable(char)* D_getPictureFile(int Pool, int Card)
     {
         return toStringz(CardDB[Pool][Card].Picture.File);
@@ -181,42 +196,45 @@ extern(C):
 
     size_t D_getPictureFileSize(int Pool, int Card)
     {
-        writeln("Getting ur pic size for Pool ", Pool, " Card ", Card);
+        //writeln("Getting ur pic size for Pool ", Pool, " Card ", Card);
         return CardDB[Pool][Card].Picture.File.length+1;
     }
 
     SDL_Rect D_getPictureCoords(int Pool, int Card)
     {
-        writeln("Getting ur pic coords for Pool ", Pool, " Card ", Card);
-        writeln("We have CardDB.pool? ", CardDB[Pool].length);
-        writeln("We have Picture? ", CardDB[Pool][Card].Picture.sizeof);
-        writeln("We have Coordinates? ", CardDB[Pool][Card].Picture.Coordinates.sizeof);
-        writeln("Picture: ", CardDB[Pool][Card].Picture);
-        writeln("One coordinate is: ", CardDB[Pool][Card].Picture.Coordinates.x);
+        //writeln("Getting ur pic coords for Pool ", Pool, " Card ", Card);
+        //writeln("We have CardDB.pool? ", CardDB[Pool].length);
+        //writeln("We have Picture? ", CardDB[Pool][Card].Picture.sizeof);
+        //writeln("We have Coordinates? ", CardDB[Pool][Card].Picture.Coordinates.sizeof);
+        //writeln("Picture: ", CardDB[Pool][Card].Picture);
+        //writeln("One coordinate is: ", CardDB[Pool][Card].Picture.Coordinates.x);
         //writeln("Returning ", CardDB[Pool][Card].Picture.Coordinates.x, ":", CardDB[Pool][Card].Picture.Coordinates.y, "; ", CardDB[Pool][Card].Picture.Coordinates.w, ":", CardDB[Pool][Card].Picture.Coordinates.h);
         return CardDB[Pool][Card].Picture.Coordinates;
     }
 
     int D_getPictureCoordX(int Pool, int Card)
     {
-	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
-	writeln("On this D platform, int size is ", int.sizeof);
-writeln("On this D platform, short size is ", short.sizeof);
+	writeln("Warning: using a workaround for sharing coordinates for Pool ", Pool, " Card ", Card);
+	//writeln("On this D platform, int size is ", int.sizeof);
+	//writeln("On this D platform, short size is ", short.sizeof);
 	return cast(int).CardDB[Pool][Card].Picture.Coordinates.x;
     }
-int D_getPictureCoordY(int Pool, int Card)
+
+    int D_getPictureCoordY(int Pool, int Card)
     {
-	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	writeln("Warning: using a workaround for sharing coordinates for Pool ", Pool, " Card ", Card);
 	return cast(int).CardDB[Pool][Card].Picture.Coordinates.y;
     }
-int D_getPictureCoordW(int Pool, int Card)
+
+    int D_getPictureCoordW(int Pool, int Card)
     {
-	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	writeln("Warning: using a workaround for sharing coordinates for Pool ", Pool, " Card ", Card);
 	return cast(int).CardDB[Pool][Card].Picture.Coordinates.w;
     }
-int D_getPictureCoordH(int Pool, int Card)
+
+    int D_getPictureCoordH(int Pool, int Card)
     {
-	writeln("Getting ur pic coords (workaround) for Pool ", Pool, " Card ", Card);
+	writeln("Warning: using a workaround for sharing coordinates for Pool ", Pool, " Card ", Card);
 	return cast(int).CardDB[Pool][Card].Picture.Coordinates.h;
     }
 
@@ -246,11 +264,12 @@ int D_getPictureCoordH(int Pool, int Card)
 
     void D_printCardDB()
     {
-        for (int Pool=0; Pool < CardDB.length; Pool++)
+	  writeln("Warning: Debugging is activated.");
+      /*for (int Pool=0; Pool < CardDB.length; Pool++)
         {
             for (int Card=0; Card < CardDB[Pool].length; Card++)
             {
                 writeln("CardDB[", Pool, "][", Card, "] = ", CardDB[Pool][Card]);
             }
-        }
+        }*/
     }
