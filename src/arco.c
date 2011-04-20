@@ -37,8 +37,6 @@ int /*config*/ GemQuantities=15;
 int /*config*/ RecruitQuantities=15;
 int /*config*/ TowerVictory=200;
 int /*config*/ ResourceVictory=500;
-int NumCursed=1;//GE: Number of cards that can not be discarded.
-int CursedIDs[1];//GE: Bump this number up for support of more than 50 cursed cards.
 int /*config*/ bOneResourceVictory=0;//GE: Allow victory for getting only one of the resources to required level
 int /*config*/ CardTranslucency=64;//GE: Controls the level of alpha channel on the inactive cards.
 
@@ -180,8 +178,6 @@ void Init()
 	
   ReadConfig();
 
-	CursedIDs[0]=39; //LodeStone
-
 	atexit(SDL_Quit);
 	if (soundenabled) Sound_Init();
 	Graphics_Init(fullscreen);
@@ -204,11 +200,6 @@ void PlayCard(int c,int discrd)
 	
 	//GE: You get resources when you use a card and next up is the enemy's turn.
 	
-	/*for (i=0; i<NumCursed; i++)
-	{
-		if (Player[turn].Hand[c] == CursedIDs[i] && discrd)
-			return;		// Cursed cards like LodeStone can't be discarded
-	}*/
 	if (discrd && D_getCursed(0,Player[turn].Hand[c]))
 		return;		// Cursed cards like LodeStone can't be discarded
 	

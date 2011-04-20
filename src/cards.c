@@ -13,7 +13,7 @@ int req[3][35] = {
 };
 
 #define CARDS 102
-struct CardInfo CardDB[CARDS]; //GE: Scheduled deprecation. Use D functions to access this instead!
+//struct CardInfo CardDB[CARDS]; //GE: Scheduled deprecation. Use D functions to access this instead!
 //int TidyQ[CARDS];
 int *Q;//GE: Queue?
 int Qs=0,Qe=0;
@@ -45,7 +45,7 @@ void PutCard(int c)
 	Q[Qe]=c;
 }
 
-int CardFrequencies(int i) //GE: Set special frequencies. Some of them are not known, defaulting to 1.
+/*int CardFrequencies(int i) //GE: Set special frequencies. Some of them are not known, defaulting to 1.
 {
     switch(CardDB[i].ID)
     {
@@ -74,7 +74,7 @@ int CardFrequencies(int i) //GE: Set special frequencies. Some of them are not k
         
         default: return 1;
     }
-}
+}*/
 
 void InitCardDB()
 {
@@ -111,8 +111,8 @@ void InitCardDB()
         if (!lua_isnumber(L, -1)) //GE: Sanity check
             error(L, "This is not a number.");
         D_setID(0,card,(int)lua_tonumber(L, -1));
-        CardDB[card].ID = (int)lua_tonumber(L, -1); //GE: Assign the number.
-        printf("Snagged ID: %d", CardDB[0].ID);
+        //CardDB[card].ID = (int)lua_tonumber(L, -1); //GE: Assign the number.
+        //printf("Snagged ID: %d", CardDB[0].ID);
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         //StackDump(L);
@@ -124,7 +124,7 @@ void InitCardDB()
         if (!lua_isnumber(L, -1)) //GE: Sanity check
             error(L, "This is not a number.");
         D_setFrequency(0,card,(int)lua_tonumber(L, -1));
-        CardDB[card].Frequency = (int)lua_tonumber(L, -1); //GE: Assign the number.
+        //CardDB[card].Frequency = (int)lua_tonumber(L, -1); //GE: Assign the number.
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         
@@ -161,7 +161,7 @@ void InitCardDB()
         if (!lua_isnumber(L, -1)) //GE: Sanity check
             error(L, "This is not a number.");
         D_setBrickCost(0,card,(int)lua_tonumber(L, -1));
-        CardDB[card].BrickCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
+        //CardDB[card].BrickCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         
@@ -172,7 +172,7 @@ void InitCardDB()
         if (!lua_isnumber(L, -1)) //GE: Sanity check
             error(L, "This is not a number.");
         D_setGemCost(0,card,(int)lua_tonumber(L, -1));
-        CardDB[card].GemCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
+        //CardDB[card].GemCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         
@@ -183,7 +183,7 @@ void InitCardDB()
         if (!lua_isnumber(L, -1)) //GE: Sanity check
             error(L, "This is not a number.");
         D_setRecruitCost(0,card,(int)lua_tonumber(L, -1));
-        CardDB[card].RecruitCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
+        //CardDB[card].RecruitCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         
@@ -347,11 +347,12 @@ void InitDeck()
 	InitCardDB();
 	Q = (int*) malloc((sizeof (int)) * DeckTotal); //GE: Make Q as big as we want it to be.
 	//printf("DeckTotal: %d\n", DeckTotal);
-	for (i=0; i<CARDS; i++) //GE: Fill up Q with correct frequency.
+	//GE: We need Q set up as a tidy array with card IDs depending on their frequency.
+	for (i=0; i<CARDS; i++) //GE: Go through every card.
 	{
-	   for( i2 = 0; i2 < CardDB[i].Frequency; i2++, i3++)
+	   for( i2 = 0; i2 < D_getFrequency(0,i); i2++, i3++) //GE: Iterate though the frequency settings and set them
 	   {
-        Q[i3] = CardDB[i].ID;
+        Q[i3] = i; //GE: i3 doesn't get reset, unlike i2.
         //printf("Q[%d]: %d\n", i3, CardDB[i].ID);
      }   
   }

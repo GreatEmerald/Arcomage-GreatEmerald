@@ -8,7 +8,7 @@ struct Stats {
 	int Hand[6];		// player's hand
 };
 
-struct CardInfo { //GE: OBSOLETE -- Use D instead!
+/*struct CardInfo { //GE: OBSOLETE -- Use D instead!
     int ID;
     int Frequency; //GE: This is the number of cards of this type in the deck. 1=Rare, 2=Uncommon, 3=Common
     char Name[128];
@@ -20,7 +20,7 @@ struct CardInfo { //GE: OBSOLETE -- Use D instead!
     char *Picture; //GE: Rendering purposes. Might also add coordinates.
     char *Keywords; //GE: Might become an array. These are MArcomage keywords, also used in Lua functions
     char *LuaFunction; //GE: This is what we call on playing the card.
-};                                  
+};*/                                  
 //GE: The longest names are with 16 characters right now. ...blasted char arrays :\
 //GE: Also funny that it's an array of structs of arrays.
 int GetCard();
