@@ -1,0 +1,12 @@
+The list of things that are still to be done in Arcomage Clone goes here.
+
+- Finish the selection highlighter feature.
+- Make the number of cards in hand configurable.
+- Create a card dock so you could see the cards played in the past. Divided in two for MArcomage.
+- Make cards rendered by assembling them instead of rendering a still image.
+- Add GUI support for modifying the configuration.
+- Create a screen showing the game rules.
+- Add randomisation of configuration options.
+- Introduce particles.
+- Finish porting stuff to Lua.
+- Start working on MArcomage support.

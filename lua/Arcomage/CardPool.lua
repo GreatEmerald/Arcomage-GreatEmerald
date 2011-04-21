@@ -76,33 +76,39 @@ function ArcomageInit()
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 1
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "FriendlyTerrain"
      elseif CardID == 3 then
         CardInfo.Name = "Miners"
         CardInfo.Description = "+1 Quarry"
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 3
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Miners"
      elseif CardID == 4 then
         CardInfo.Name = "Mother Lode"
         CardInfo.Description = "If quarry<enemy\nquarry, +2 quarry\nElse, +1\nquarry"
         CardInfo.BrickCost = 4
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "MotherLode"
      elseif CardID == 5 then
         CardInfo.Name = "Dwarven Miners"
         CardInfo.Description = "+4 Wall\n+1 Quarry"
         CardInfo.BrickCost = 7
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "DwarvenMiners"
      elseif CardID == 6 then
         CardInfo.Name = "Work Overtime"
         CardInfo.Description = "+5 Wall\nYou lose 6 gems"
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 2
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "WorkOvertime"
      elseif CardID == 7 then
         CardInfo.Name = "Copping the Tech"
         CardInfo.Description = "If quarry<enemy\nquarry, quarry =\nenemy quarry"
         CardInfo.BrickCost = 5
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "CoppingTheTech"
      elseif CardID == 8 then
         CardInfo.Name = "Basic Wall"
         CardInfo.Description = "+3 Wall"
@@ -687,4 +693,43 @@ function LuckyCache()
     AddBricks(0, 2)
     AddGems(0, 2)
     return 0
+end
+
+function FriendlyTerrain()
+    AddWall(0, 1)
+    return 0
+end
+
+function Miners()
+    AddQuarry(0, 1)
+    return 1
+end
+
+function MotherLode()
+    print("Motherlode: is" .. GetQuarry(0) .. "lower than" .. GetQuarry(1))
+    if GetQuarry(0) < GetQuarry(1) then
+	AddQuarry(0, 2)
+    else
+	AddQuarry(0, 1)
+    end
+    return 1
+end
+
+function DwarvenMiners()
+    AddWall(0, 4)
+    AddQuarry(0, 1)
+    return 1
+end
+
+function WorkOvertime()
+    AddWall(0, 5)
+    RemoveGems(0, 6)
+    return 1
+end
+
+function CoppingTheTech()
+    if GetQuarry(0) < GetQuarry(1) then
+	SetQuarry(0, GetQuarry(1))
+    end
+    return 1
 end

@@ -165,8 +165,13 @@ void InitLua()
     error(L, "Protected call failed!");
     
     lua_register(L, "RemoveBricks", RemoveBricks);
+    lua_register(L, "RemoveGems", RemoveGems);
     lua_register(L, "AddBricks", AddBricks);
     lua_register(L, "AddGems", AddGems);
+    lua_register(L, "AddWall", AddWall);
+    lua_register(L, "AddQuarry", AddQuarry);
+    lua_register(L, "SetQuarry", SetQuarry);
+    lua_register(L, "GetQuarry", GetQuarry);
 }
 
 void InitD()
