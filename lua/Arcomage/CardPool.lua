@@ -69,14 +69,17 @@ function ArcomageInit()
         CardInfo.Name = "Lucky Cache"
         CardInfo.Description = "+2 Bricks\n+2 Gems\nPlay again"
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "LuckyCache"
      elseif CardID == 2 then
         CardInfo.Name = "Friendly Terrain"
         CardInfo.Description = "+1 Wall\nPlay again"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 1
         CardInfo.Colour = "Red"
      elseif CardID == 3 then
         CardInfo.Name = "Miners"
         CardInfo.Description = "+1 Quarry"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 3
         CardInfo.Colour = "Red"
      elseif CardID == 4 then
@@ -92,6 +95,7 @@ function ArcomageInit()
      elseif CardID == 6 then
         CardInfo.Name = "Work Overtime"
         CardInfo.Description = "+5 Wall\nYou lose 6 gems"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 2
         CardInfo.Colour = "Red"
      elseif CardID == 7 then
@@ -102,6 +106,7 @@ function ArcomageInit()
      elseif CardID == 8 then
         CardInfo.Name = "Basic Wall"
         CardInfo.Description = "+3 Wall"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 2
         CardInfo.Colour = "Red"
      elseif CardID == 9 then
@@ -117,6 +122,7 @@ function ArcomageInit()
      elseif CardID == 11 then
         CardInfo.Name = "Foundations"
         CardInfo.Description = "If wall = 0, +6\nwall, else\n+3 wall"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 3
         CardInfo.Colour = "Red"
      elseif CardID == 12 then
@@ -136,6 +142,7 @@ function ArcomageInit()
      elseif CardID == 15 then
         CardInfo.Name = "Big Wall"
         CardInfo.Description = "+6 Wall"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 5
         CardInfo.Colour = "Red"
      elseif CardID == 16 then
@@ -155,6 +162,7 @@ function ArcomageInit()
      elseif CardID == 19 then
         CardInfo.Name = "Reinforced wall"
         CardInfo.Description = "+8 Wall"
+	CardInfo.Frequency = 2
         CardInfo.BrickCost = 8
         CardInfo.Colour = "Red"
      elseif CardID == 20 then
@@ -230,6 +238,7 @@ function ArcomageInit()
      elseif CardID == 34 then --GE: Start blue cards
         CardInfo.Name = "Quartz"
         CardInfo.Description = "+1 Tower,\nplay again"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 1
         CardInfo.Colour = "Blue"
      elseif CardID == 35 then
@@ -240,11 +249,13 @@ function ArcomageInit()
      elseif CardID == 36 then
         CardInfo.Name = "Amethyst"
         CardInfo.Description = "+3 Tower"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
      elseif CardID == 37 then
         CardInfo.Name = "Spell Weavers"
         CardInfo.Description = "+1 Magic"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 3
         CardInfo.Colour = "Blue"
      elseif CardID == 38 then
@@ -271,11 +282,13 @@ function ArcomageInit()
      elseif CardID == 42 then
         CardInfo.Name = "Gemstone Flaw"
         CardInfo.Description = "3 Damage to\nenemy tower"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
      elseif CardID == 43 then
         CardInfo.Name = "Ruby"
         CardInfo.Description = "+5 Tower"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 3
         CardInfo.Colour = "Blue"
      elseif CardID == 44 then
@@ -301,6 +314,7 @@ function ArcomageInit()
      elseif CardID == 48 then
         CardInfo.Name = "Emerald"
         CardInfo.Description = "+8 Tower"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 6
         CardInfo.Colour = "Blue"
      elseif CardID == 49 then
@@ -321,6 +335,7 @@ function ArcomageInit()
      elseif CardID == 52 then
         CardInfo.Name = "Sapphire"
         CardInfo.Description = "+11 Tower"
+	CardInfo.Frequency = 2
         CardInfo.GemCost = 10
         CardInfo.Colour = "Blue"
      elseif CardID == 53 then
@@ -404,11 +419,13 @@ function ArcomageInit()
      elseif CardID == 69 then
         CardInfo.Name = "Faerie"
         CardInfo.Description = "2 Damage\nPlay again"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 1
         CardInfo.Colour = "Green"
      elseif CardID == 70 then
         CardInfo.Name = "Moody Goblins"
         CardInfo.Description = "4 Damage\nYou lose\n3 gems"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 1
         CardInfo.Colour = "Green"
      elseif CardID == 71 then
@@ -424,6 +441,7 @@ function ArcomageInit()
      elseif CardID == 73 then
         CardInfo.Name = "Goblin Mob"
         CardInfo.Description = "6 Damage\nYou take\n3 damage"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 3
         CardInfo.Colour = "Green"
      elseif CardID == 74 then
@@ -439,11 +457,13 @@ function ArcomageInit()
      elseif CardID == 76 then
         CardInfo.Name = "Orc"
         CardInfo.Description = "5 Damage"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 3
         CardInfo.Colour = "Green"
      elseif CardID == 77 then
         CardInfo.Name = "Dwarves"
         CardInfo.Description = "4 Damage\n+3 Wall"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 5
         CardInfo.Colour = "Green"
      elseif CardID == 78 then
@@ -454,6 +474,7 @@ function ArcomageInit()
      elseif CardID == 79 then
         CardInfo.Name = "Troll Trainer"
         CardInfo.Description = "+2 Dungeon"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 7
         CardInfo.Colour = "Green"
      elseif CardID == 80 then
@@ -473,6 +494,7 @@ function ArcomageInit()
      elseif CardID == 83 then
         CardInfo.Name = "Ogre"
         CardInfo.Description = "7 Damage"
+	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 6
         CardInfo.Colour = "Green"
      elseif CardID == 84 then
@@ -654,9 +676,15 @@ function ArcomageInit()
   return CardDB
 end
 
--- GE: Begin card-specific functions. Returning the person who is going next: 0 is same, 1 is enemy.
+-- GE: Begin card-specific functions. Returning the relative person who is going next: 0 is you, 1 is enemy.
 function BrickShortage()
     RemoveBricks(0, 8)
     RemoveBricks(1, 8)
     return 1
+end
+
+function LuckyCache()
+    AddBricks(0, 2)
+    AddGems(0, 2)
+    return 0
 end

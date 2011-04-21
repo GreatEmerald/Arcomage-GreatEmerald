@@ -48,37 +48,6 @@ void PutCard(int c)
 	Q[Qe]=c;
 }
 
-/*int CardFrequencies(int i) //GE: Set special frequencies. Some of them are not known, defaulting to 1.
-{
-    switch(CardDB[i].ID)
-    {
-        case (68)+3: return 2; //Moody Goblins
-        case (68)+2: return 2; // Faerie
-        case (68)+6: return 2;	// Goblin Mob
-        case (68)+9: return 2;	// Orc
-        case (68)+10: return 2;	// Dwarves
-        case (68)+16: return 2;	// Ogre
-        case (68)+12: return 2;	// Troll Trainer
-        case (34)+1: return 2;	// Quartz
-        case (34)+9: return 2;	// Gemstone Flaw
-        case (34)+3: return 2;	// Amethyst
-        case (34)+4: return 2;	// Spell Weavers
-        case (34)+10: return 2;	// Ruby
-        case (34)+15: return 2;	// Emerald
-        case (34)+19: return 2;	// Sapphire
-        case 3: return 2;		// Friendly Terrain
-        case 7: return 2;		// Work Overtime
-        case 9: return 2;		// Basic Wall
-        case 12: return 2;		// Foundations
-        case 4: return 2;		// Miners
-        case 16: return 2;		// Big Wall
-        case 20: return 2;		// Reinforced Wall
-        
-        
-        default: return 1;
-    }
-}*/
-
 void InitCardDB()
 {
     int i, card;
@@ -427,10 +396,12 @@ void Require(struct Stats *s1, int bricks, int gems, int recruits)
 
 int GetAbsolutePlayer(int Relative)
 {
-    if (Relative) //GE: If the player is 1, that means we set it up as the enemy.
+    if (Relative == 1) //GE: If the player is 1, that means we set it up as the enemy.
 	return !turn;
-    else //GE: If not, then player is 0, which means the guy whose turn it is.
+    else if (Relative == 0) //GE: If not, then player is 0, which means the guy whose turn it is.
 	return turn;
+    else //GE: If it's an unknown value, don't do anything. This is useful for discarding round.
+	return Relative;
 }
 
 /*
@@ -477,13 +448,13 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s1->b-=8;
 			s2->b-=8;
 			Sound_Play(RESS_DOWN);
-			break;*/
+			break;
 		case 1:		// Lucky Cache
 			s1->b+=2;
 			s1->g+=2;
 			Sound_Play(RESS_UP);
 			next=turn;
-			break;
+			break;*/
 		case 2:		// Friendly Terrain
 			Require(s1, 1, 0, 0);
 			s1->w++;
@@ -1190,6 +1161,38 @@ int RemoveBricks (lua_State *L)
     
     Player[Who].b -= Amount;
     Sound_Play(RESS_DOWN);
+    
+    return 0;
+}
+
+//void AddBricks(int Who, int Amount);
+int AddBricks (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddBricks: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    Player[Who].b += Amount;
+    Sound_Play(RESS_UP);
+    
+    return 0;
+}
+
+//void AddGems(int Who, int Amount);
+int AddGems (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddBricks: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    Player[Who].g += Amount;
+    Sound_Play(RESS_UP);
     
     return 0;
 }

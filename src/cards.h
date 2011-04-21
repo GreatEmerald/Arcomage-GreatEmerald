@@ -36,6 +36,8 @@ char* CardName(int card);
 
 //GE: Functions called from Lua code.
 int RemoveBricks (lua_State *L);
+int AddBricks (lua_State *L);
+int AddGems (lua_State *L);
 
 //GE: Functions called in D code.
 void D_LinuxInit(); //GE: Special initialisation needed to link the D lib in Linux
