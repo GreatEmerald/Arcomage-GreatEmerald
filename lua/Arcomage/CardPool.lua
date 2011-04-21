@@ -59,11 +59,12 @@ function ArcomageInit()
         CardInfo.Name = "Brick Shortage"
         CardInfo.Description = "All players\nlose 8 bricks"
         CardInfo.Colour = "Red"
-        if bUseOriginalCards then
+	CardInfo.LuaFunction = "BrickShortage"
+        --[[if bUseOriginalCards then
          CardInfo.Picture = {File = "../moli-arm/Data/SPRITES.bmp", X = 0, Y = 220, W=96, H=128}
       else
          CardInfo.Picture = {File = "data/deck.png", X = 96, Y = 0, W=96, H=128}
-      end
+      end]]
      elseif CardID == 1 then
         CardInfo.Name = "Lucky Cache"
         CardInfo.Description = "+2 Bricks\n+2 Gems\nPlay again"
@@ -651,4 +652,11 @@ function ArcomageInit()
   
   --print(CardDB[1].Name)
   return CardDB
+end
+
+-- GE: Begin card-specific functions. Returning the person who is going next: 0 is same, 1 is enemy.
+function BrickShortage()
+    RemoveBricks(0, 8)
+    RemoveBricks(1, 8)
+    return 1
 end

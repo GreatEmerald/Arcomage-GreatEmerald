@@ -23,6 +23,9 @@ int bInitComplete=0;
 int bUseOriginalCards; //GE: From graphics.h
 
 lua_State *L;
+struct Stats Player[2];
+int turn; //GE: This is an absolute value. Player[turn] is always the current player.
+          //Note that Lua returns relative values (0 is current, 1 is next), so use GetAbsolutePlayer() to match those.
 void ShuffleQ();
 
 int GetCard()//GE: Returns next card in the Q array.
@@ -207,12 +210,10 @@ void InitCardDB()
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "Picture"); //GE: Put CardInfo.Name onto the stack. It's a table.
-        //GE: Replaced the key with the table. STACK: -1: table, -2: table, -3: table
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
+	    if (!lua_istable(L, -1)) //GE: Sanity check
+		error(L, "This is not a table.");
+	    lua_getfield(L, -1, "Picture"); //GE: Put CardInfo.Name onto the stack. It's a table.
+	    //GE: Replaced the key with the table. STACK: -1: table, -2: table, -3: table
         
             /*
              * GE: What we do here is as follows: we get the filename as a string
@@ -277,6 +278,16 @@ void InitCardDB()
             //GE: Removed an element. STACK: -1: table, -2: table, -3: table
             D_setPictureCoords(0,card,X,Y,W,H); //GE: Send the coordinates to D.
         
+	    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+	    //GE: Removed an element. STACK: -1: table, -2: table
+	
+	if (!lua_istable(L, -1)) //GE: Sanity check
+            error(L, "This is not a table.");
+        lua_getfield(L, -1, "LuaFunction"); //GE: Put CardInfo.LuaFunction onto the stack. It's a string.
+        //GE: Replaced the key with the string. STACK: -1: string, -2: table, -3: table
+        if (!lua_isstring(L, -1)) //GE: Sanity check
+            error(L, "This is not a string.");
+        D_setLuaFunction(0, card, lua_tostring(L, -1));
         lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
         //GE: Removed an element. STACK: -1: table, -2: table
         
@@ -400,8 +411,8 @@ void damage(struct Stats *s,int how)
 
 int Requisite(struct Stats *s,int card)
 {
-	printf("Requisition: Card requires %d/%d/%d, we have %d bricks, %d gems, %d recruits\n", D_getBrickCost(0,s->Hand[card]), D_getGemCost(0,s->Hand[card]), D_getRecruitCost(0,s->Hand[card]), s->b, s->g, s->r);
-  if ( D_getBrickCost(0,s->Hand[card]) > s->b ) return 0;
+	//printf("Requisition: Card requires %d/%d/%d, we have %d bricks, %d gems, %d recruits\n", D_getBrickCost(0,s->Hand[card]), D_getGemCost(0,s->Hand[card]), D_getRecruitCost(0,s->Hand[card]), s->b, s->g, s->r);
+	if ( D_getBrickCost(0,s->Hand[card]) > s->b ) return 0;
 	if ( D_getGemCost(0,s->Hand[card]) > s->g ) return 0;
 	if ( D_getRecruitCost(0,s->Hand[card]) > s->r ) return 0;
 	return 1;
@@ -414,6 +425,14 @@ void Require(struct Stats *s1, int bricks, int gems, int recruits)
 	s1->r-=recruits;
 }
 
+int GetAbsolutePlayer(int Relative)
+{
+    if (Relative) //GE: If the player is 1, that means we set it up as the enemy.
+	return !turn;
+    else //GE: If not, then player is 0, which means the guy whose turn it is.
+	return turn;
+}
+
 /*
  * GE: Use 'next=-1;' to indicate cards that initiate a "discard turn".
  * Use 'next=turn;' to indicate cards that don't cost a turn.
@@ -424,21 +443,41 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	 * GE: Lua reform: We get the name of the lua function from D, then send all
 	 * the parameters there to Lua, from where we get the updated information,
 	 * which we apply.
+	 * All of the processing is done either here in C or in D, Lua only has control
+	 * over the functions it calls.
+	 *
+	 * Contract: this function here expects the basic statistics of both players,
+	 * the ID of the played card and the number of the player whose turn it is.
+	 * It returns the turn of the new player, that's how you get additional turns.
+	 * After the reform, this should only call Lua, and Lua should then handle
+	 * things on its side, returning the needed turn.
    */
   
-  int next=!turn;
+	int next=!turn;
 	int x;
 
-	//D_getLuaFunction(0, card);
+	//GE: Get the function name from D and call it through the stack.
+	if (D_getLuaFunctionSize(0,card) > 2)//GE: FIXME, this should not be needed under proper Lua coding
+	{
+	    lua_getfield( L, LUA_GLOBALSINDEX, D_getLuaFunction(0, card) ); //GE: Push a function to the stack. STACK: -1: function
+	    if (!lua_isfunction(L, -1)) //GE: Sanity check.
+		error(L, "Failed to get the function from Lua. Returning.");
+	    lua_call(L, 0, 1); //GE: Call the function, sending no arguments, expecting one result. STACK: -1: int
+	    if (!lua_isnumber(L, -1))
+		error(L, "Failed to get a return value from the function. Please review the Lua code.");
+	    next = (int) lua_tonumber(L, -1); //GE: This is temporary - next is relative here.
+	    next = GetAbsolutePlayer(next); //GE: Make the player absolute again.
+	    lua_pop(L, 1); //GE: Clean the stack. STACK: Empty
+	}
 	
 	
   switch (card)
 	{
-		case 0:		// Brick Shortage
+		/*case 0:		// Brick Shortage
 			s1->b-=8;
 			s2->b-=8;
 			Sound_Play(RESS_DOWN);
-			break;
+			break;*/
 		case 1:		// Lucky Cache
 			s1->b+=2;
 			s1->g+=2;
@@ -1137,6 +1176,22 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	}
 
 	return next;
+}
+
+//void RemoveBricks(int Who, int Amount);
+int RemoveBricks (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveBricks: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    Player[Who].b -= Amount;
+    Sound_Play(RESS_DOWN);
+    
+    return 0;
 }
 
 int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)

@@ -163,6 +163,12 @@ extern(C):
         CardDB[Pool][Card].Picture.Coordinates.h = to!ushort(H);
     }
 
+    void D_setLuaFunction(int Pool, int Card, const char* LuaFunction)
+    {
+	setBounds(Pool, Card);
+        CardDB[Pool][Card].LuaFunction = to!string(LuaFunction);
+    }
+
     // GE: GET CODE BEGIN ---------------------------------------
 
     int D_getFrequency(int Pool, int Card)
@@ -238,6 +244,17 @@ extern(C):
     {
 	writeln("Warning: using a workaround for sharing coordinates for Pool ", Pool, " Card ", Card);
 	return cast(int).CardDB[Pool][Card].Picture.Coordinates.h;
+    }
+
+    immutable(char)* D_getLuaFunction(int Pool, int Card)
+    {
+        return toStringz(CardDB[Pool][Card].LuaFunction);
+    }
+
+    size_t D_getLuaFunctionSize(int Pool, int Card)
+    {
+        //writeln("Getting ur pic size for Pool ", Pool, " Card ", Card);
+        return CardDB[Pool][Card].LuaFunction.length+1;
     }
 
     /*void D_getPrecachePictures()

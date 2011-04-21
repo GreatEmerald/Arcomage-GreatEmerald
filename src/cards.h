@@ -1,5 +1,6 @@
 #ifndef _CARDS_H_
 #define _CARDS_H_ 1
+#include "lua.h"
 
 struct Stats {
 	int b,g,r,q,m,d;	// bricks,gems,recruits,quarry,magic,dungeons
@@ -33,6 +34,9 @@ int Requisite(struct Stats *s,int card);
 int Turn(struct Stats *s1,struct Stats *s2,int card,int turn);
 char* CardName(int card);
 
+//GE: Functions called from Lua code.
+int RemoveBricks (lua_State *L);
+
 //GE: Functions called in D code.
 void D_LinuxInit(); //GE: Special initialisation needed to link the D lib in Linux
 int rt_init(); //GE: Initialisation and termination of the D runtime.
@@ -49,6 +53,7 @@ void D_setCursed(int Pool, int Card, int Cursed);
 void D_setColour(int Pool, int Card, const char* Colour);
 void D_setPictureFile(int Pool, int Card, const char* File);
 void D_setPictureCoords(int Pool, int Card, int X, int Y, int W, int H);
+void D_setLuaFunction(int Pool, int Card, const char* LuaFunction);
 
 int D_getFrequency(int Pool, int Card);
 int D_getBrickCost(int Pool, int Card);
@@ -62,6 +67,8 @@ int D_getPictureCoordX(int Pool, int Card);
 int D_getPictureCoordY(int Pool, int Card);
 int D_getPictureCoordW(int Pool, int Card);
 int D_getPictureCoordH(int Pool, int Card);
+char* D_getLuaFunction(int Pool, int Card);
+size_t D_getLuaFunctionSize(int Pool, int Card);
 void D_printCardDB();
 
 #endif

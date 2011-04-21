@@ -26,7 +26,7 @@ void OpenWebLink(char *web)
 
 //#endif	// LINUX CODE END
 
-#else ifdef WIN32	// WINDOWS CODE BEGIN
+#elif defined(WIN32)	// WINDOWS CODE BEGIN
 
 #include <stdio.h>
 #include <stdarg.h>

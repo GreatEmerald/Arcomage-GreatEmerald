@@ -163,6 +163,8 @@ void InitLua()
 	  error(L, "Could not access card pool!");
 	if (lua_pcall(L, 0, 0, 0))
     error(L, "Protected call failed!");
+    
+    lua_register(L, "RemoveBricks", RemoveBricks);
 }
 
 void InitD()
