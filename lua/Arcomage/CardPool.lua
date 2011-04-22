@@ -115,32 +115,38 @@ function ArcomageInit()
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 2
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "BasicWall"
      elseif CardID == 9 then
         CardInfo.Name = "Sturdy Wall"
         CardInfo.Description = "+4 Wall"
         CardInfo.BrickCost = 3
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "SturdyWall"
      elseif CardID == 10 then
         CardInfo.Name = "Innovations"
         CardInfo.Description = "+1 to all players\nquarrys, you gain\n+4 gems"
         CardInfo.BrickCost = 2
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Innovations"
      elseif CardID == 11 then
         CardInfo.Name = "Foundations"
         CardInfo.Description = "If wall = 0, +6\nwall, else\n+3 wall"
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 3
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Foundations"
      elseif CardID == 12 then
         CardInfo.Name = "Tremors"
         CardInfo.Description = "All walls take\n5 damage\nPlay again"
         CardInfo.BrickCost = 7
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Tremors"
      elseif CardID == 13 then
         CardInfo.Name = "Secret Room"
         CardInfo.Description = "+1 Magicl\nPlay again"
         CardInfo.BrickCost = 8
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "SecretRoom"
      elseif CardID == 14 then
         CardInfo.Name = "Earthquake"
         CardInfo.Description = "-1 To all players\nquarrys"
@@ -732,4 +738,41 @@ function CoppingTheTech()
 	SetQuarry(0, GetQuarry(1))
     end
     return 1
+end
+
+function BasicWall()
+    AddWall(0, 3)
+    return 1
+end
+
+function SturdyWall()
+    AddWall(0, 4)
+    return 1
+end
+
+function Innovations()
+    AddQuarry(0, 1)
+    AddQuarry(1, 1)
+    AddGems(0, 4)
+    return 1
+end
+
+function Foundations()
+    if GetWall(0) == 0 then
+	AddWall(0, 6)
+    else
+	AddWall(0, 3)
+    end
+    return 1
+end
+
+function Tremors()
+    RemoveWall(1, 5)
+    RemoveWall(0, 5)
+    return 0
+end
+
+function SecretRoom()
+    AddMagic(0, 1)
+    return 0
 end
