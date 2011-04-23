@@ -151,42 +151,50 @@ function ArcomageInit()
         CardInfo.Name = "Earthquake"
         CardInfo.Description = "-1 To all players\nquarrys"
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Earthquake"
      elseif CardID == 15 then
         CardInfo.Name = "Big Wall"
         CardInfo.Description = "+6 Wall"
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 5
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "BigWall"
      elseif CardID == 16 then
         CardInfo.Name = "Collapse!"
         CardInfo.Description = "-1 Enemy quarry"
         CardInfo.BrickCost = 4
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Collapse"
      elseif CardID == 17 then
         CardInfo.Name = "New Equipment"
         CardInfo.Description = "+2 quarry"
         CardInfo.BrickCost = 6
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "NewEquipment"
      elseif CardID == 18 then
         CardInfo.Name = "Strip Mine"
-        CardInfo.Description = "+1 Quarry, +10\nwall. You gain\n5 gems"
+        CardInfo.Description = "-1 Quarry, +10\nwall. You gain\n5 gems"
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "StripMine"
      elseif CardID == 19 then
         CardInfo.Name = "Reinforced wall"
         CardInfo.Description = "+8 Wall"
 	CardInfo.Frequency = 2
         CardInfo.BrickCost = 8
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "ReinforcedWall"
      elseif CardID == 20 then
         CardInfo.Name = "Porticulus"
         CardInfo.Description = "+6 Wall\n+1 Dungeon"
         CardInfo.BrickCost = 9
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Porticulus"
      elseif CardID == 21 then
         CardInfo.Name = "Crystal Rocks"
         CardInfo.Description = "+7 Wall\ngain 7 gems"
         CardInfo.BrickCost = 9
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "CrystalRocks"
      elseif CardID == 22 then
         CardInfo.Name = "Harmonic Ore"
         CardInfo.Description = "+6 Wall\n+3 Tower"
@@ -775,4 +783,49 @@ end
 function SecretRoom()
     AddMagic(0, 1)
     return 0
+end
+
+function Earthquake()
+    RemoveQuarry(1, 1)
+    RemoveQuarry(0, 1)
+    return 1
+end
+
+function BigWall()
+    AddWall(0, 6)
+    return 1
+end
+
+function Collapse()
+    RemoveQuarry(1, 1)
+    return 1
+end
+
+function NewEquipment()
+    AddQuarry(0, 2)
+    return 1
+end
+
+function StripMine()
+    RemoveQuarry(0, 1)
+    AddWall(0, 10)
+    AddGems(0, 5)
+    return 1
+end
+
+function ReinforcedWall()
+    AddWall(0, 8)
+    return 1
+end
+
+function Porticulus()
+    AddWall(0, 6)
+    AddDungeon(0, 1)
+    return 1
+end
+
+function CrystalRocks()
+    AddWall(0, 7)
+    AddGems(0, 7)
+    return 1
 end

@@ -38,11 +38,13 @@ char* CardName(int card);
 int L_RemoveBricks (lua_State *L);
 int L_RemoveGems (lua_State *L);
 int L_RemoveWall (lua_State *L);
+int L_RemoveQuarry (lua_State *L);
 int L_AddBricks (lua_State *L);
 int L_AddGems (lua_State *L);
 int L_AddWall (lua_State *L);
 int L_AddQuarry (lua_State *L);
 int L_AddMagic (lua_State *L);
+int L_AddDungeon (lua_State *L);
 int L_SetQuarry (lua_State *L);
 
 int L_GetWall (lua_State *L);

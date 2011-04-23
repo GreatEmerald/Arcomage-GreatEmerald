@@ -1210,6 +1210,25 @@ int L_RemoveWall (lua_State *L)
     return 0;
 }
 
+//void RemoveQuarry(int Who, int Amount);
+int L_RemoveQuarry (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveQuarry: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].q > 1)
+    {
+	Player[Who].q -= Amount;
+	Sound_Play(RESB_DOWN);
+    }
+    
+    return 0;
+}
+
 //void AddBricks(int Who, int Amount);
 int L_AddBricks (lua_State *L)
 {
@@ -1299,6 +1318,25 @@ int L_AddMagic (lua_State *L)
     if (Player[Who].m < 99)
     {
 	Player[Who].m += Amount;
+	Sound_Play(RESB_UP);
+    }
+    
+    return 0;
+}
+
+//void AddDungeon(int Who, int Amount);
+int L_AddDungeon (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddDungeon: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].d < 99)
+    {
+	Player[Who].d += Amount;
 	Sound_Play(RESB_UP);
     }
     

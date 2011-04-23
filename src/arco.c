@@ -167,11 +167,13 @@ void InitLua()
     lua_register(L, "RemoveBricks", L_RemoveBricks);
     lua_register(L, "RemoveGems", L_RemoveGems);
     lua_register(L, "RemoveWall", L_RemoveWall);
+    lua_register(L, "RemoveQuarry", L_RemoveQuarry);
     lua_register(L, "AddBricks", L_AddBricks);
     lua_register(L, "AddGems", L_AddGems);
     lua_register(L, "AddWall", L_AddWall);
     lua_register(L, "AddQuarry", L_AddQuarry);
     lua_register(L, "AddMagic", L_AddMagic);
+    lua_register(L, "AddDungeon", L_AddDungeon);
     lua_register(L, "SetQuarry", L_SetQuarry);
     lua_register(L, "GetWall", L_GetWall);
     lua_register(L, "GetQuarry", L_GetQuarry);
