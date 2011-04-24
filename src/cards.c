@@ -536,7 +536,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s1->m++;
 			Sound_Play(RESB_UP);
 			next=turn;
-			break;*/
+			break;
 		case 14:		// Earthquake
 			s1->q--;
 			s2->q--;
@@ -908,7 +908,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s1->b+=6;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESS_UP);
-			break;
+			break;*/
 		case 68:	// Mad Cow Disease
 			s1->r-=6;
 			s2->r-=6;
@@ -1153,135 +1153,24 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	return next;
 }
 
-//void RemoveBricks(int Who, int Amount);
-int L_RemoveBricks (lua_State *L)
+//void Damage(int Who, int Amount);
+int L_Damage (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveBricks: Received a call with faulty parameters.");
+	error("Damage: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
     
-    if (Player[Who].b > 0)
-    {
-	Player[Who].b -= Amount;
-	Sound_Play(RESS_DOWN);
-    }
-    
-    return 0;
-}
-
-//void RemoveGems(int Who, int Amount);
-int L_RemoveGems (lua_State *L)
-{
-    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveGems: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -2);
-    int Amount = lua_tonumber(L, -1);
-    
-    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
-    
-    if (Player[Who].g > 0)
-    {
-	Player[Who].g -= Amount;
-	Sound_Play(RESS_DOWN);
-    }
-    
-    return 0;
-}
-
-//void RemoveWall(int Who, int Amount);
-int L_RemoveWall (lua_State *L)
-{
-    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveWall: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -2);
-    int Amount = lua_tonumber(L, -1);
-    
-    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
-    
-    if (Player[Who].w > 0)
-    {
+    if (Player[Who].w >= Amount)
 	Player[Who].w -= Amount;
-	Sound_Play(DAMAGE);
-    }
-    
-    return 0;
-}
-
-//void RemoveQuarry(int Who, int Amount);
-int L_RemoveQuarry (lua_State *L)
-{
-    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveQuarry: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -2);
-    int Amount = lua_tonumber(L, -1);
-    
-    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
-    
-    if (Player[Who].q > 1)
+    else
     {
-	Player[Who].q -= Amount;
-	Sound_Play(RESB_DOWN);
+	Player[Who].t -= (Amount - Player[Who].w);
+	Player[Who].w = 0;
     }
-    
-    return 0;
-}
-
-//void AddBricks(int Who, int Amount);
-int L_AddBricks (lua_State *L)
-{
-    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddBricks: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -2);
-    int Amount = lua_tonumber(L, -1);
-    
-    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
-    
-    if (Player[Who].b < 999)
-    {
-	Player[Who].b += Amount;
-	Sound_Play(RESS_UP);
-    }
-    
-    return 0;
-}
-
-//void AddGems(int Who, int Amount);
-int L_AddGems (lua_State *L)
-{
-    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddGems: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -2);
-    int Amount = lua_tonumber(L, -1);
-    
-    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
-    
-    if (Player[Who].g < 999)
-    {
-	Player[Who].g += Amount;
-	Sound_Play(RESS_UP);
-    }
-    
-    return 0;
-}
-
-//void AddWall(int Who, int Amount);
-int L_AddWall (lua_State *L)
-{
-    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddWall: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -2);
-    int Amount = lua_tonumber(L, -1);
-    
-    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
-    
-    if (Player[Who].w < 200)
-    {
-	Player[Who].w += Amount;
-	Sound_Play(WALL_UP);
-    }
+    Sound_Play(DAMAGE);
     
     return 0;
 }
@@ -1343,24 +1232,304 @@ int L_AddDungeon (lua_State *L)
     return 0;
 }
 
-//void SetQuarry(int Who, int Amount);
-int L_SetQuarry (lua_State *L)
+//void AddBricks(int Who, int Amount);
+int L_AddBricks (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("SetQuarry: Received a call with faulty parameters.");
+	error("AddBricks: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
     
-    Player[Who].q = Amount;
-    
-    if (Player[Who].q < Amount)
-	Sound_Play(RESB_UP);
-    else if (Player[Who].q > Amount)
-	Sound_Play(RESB_DOWN);
+    if (Player[Who].b < 999)
+    {
+	Player[Who].b += Amount;
+	Sound_Play(RESS_UP);
+    }
     
     return 0;
+}
+
+//void AddGems(int Who, int Amount);
+int L_AddGems (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddGems: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].g < 999)
+    {
+	Player[Who].g += Amount;
+	Sound_Play(RESS_UP);
+    }
+    
+    return 0;
+}
+
+//void AddRecruits(int Who, int Amount);
+int L_AddRecruits (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddRecruits: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].r < 999)
+    {
+	Player[Who].r += Amount;
+	Sound_Play(RESS_UP);
+    }
+    
+    return 0;
+}
+
+//void AddTower(int Who, int Amount);
+int L_AddTower (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddTower: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].t < 200)
+    {
+	Player[Who].t += Amount;
+	Sound_Play(TOWER_UP);
+    }
+    
+    return 0;
+}
+
+//void AddWall(int Who, int Amount);
+int L_AddWall (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("AddWall: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].w < 200)
+    {
+	Player[Who].w += Amount;
+	Sound_Play(WALL_UP);
+    }
+    
+    return 0;
+}
+
+//void RemoveQuarry(int Who, int Amount);
+int L_RemoveQuarry (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveQuarry: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].q > 1)
+    {
+	Player[Who].q -= Amount;
+	Sound_Play(RESB_DOWN);
+    }
+    
+    return 0;
+}
+
+//void RemoveMagic(int Who, int Amount);
+int L_RemoveMagic (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveMagic: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].m > 1)
+    {
+	Player[Who].m -= Amount;
+	Sound_Play(RESB_DOWN);
+    }
+    
+    return 0;
+}
+
+//void RemoveDungeon(int Who, int Amount);
+int L_RemoveDungeon (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveDungeon: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].d > 1)
+    {
+	Player[Who].d -= Amount;
+	Sound_Play(RESB_DOWN);
+    }
+    
+    return 0;
+}
+
+//void RemoveBricks(int Who, int Amount);
+int L_RemoveBricks (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveBricks: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].b > 0)
+    {
+	Player[Who].b -= Amount;
+	Sound_Play(RESS_DOWN);
+    }
+    
+    return 0;
+}
+
+//void RemoveGems(int Who, int Amount);
+int L_RemoveGems (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveGems: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].g > 0)
+    {
+	Player[Who].g -= Amount;
+	Sound_Play(RESS_DOWN);
+    }
+    
+    return 0;
+}
+
+//void RemoveRecruits(int Who, int Amount);
+int L_RemoveRecruits (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveRecruits: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].r > 0)
+    {
+	Player[Who].r -= Amount;
+	Sound_Play(RESS_DOWN);
+    }
+    
+    return 0;
+}
+
+//void RemoveTower(int Who, int Amount);
+int L_RemoveTower (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveTower: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    Player[Who].t -= Amount;
+    Sound_Play(DAMAGE);
+    
+    return 0;
+}
+
+//void RemoveWall(int Who, int Amount);
+int L_RemoveWall (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("RemoveWall: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].w > 0)
+    {
+	Player[Who].w -= Amount;
+	Sound_Play(DAMAGE);
+    }
+    
+    return 0;
+}
+
+//int GetQuarry(int Who);
+int L_GetQuarry (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error("GetQuarry: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    lua_pushnumber(L, Player[Who].q);
+    
+    return 1;
+}
+
+//int GetMagic(int Who);
+int L_GetMagic (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error("GetMagic: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    lua_pushnumber(L, Player[Who].m);
+    
+    return 1;
+}
+
+//int GetDungeon(int Who);
+int L_GetDungeon (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error("GetDungeon: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    lua_pushnumber(L, Player[Who].d);
+    
+    return 1;
+}
+
+//int GetTower(int Who);
+int L_GetTower (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error("GetTower: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    lua_pushnumber(L, Player[Who].t);
+    
+    return 1;
 }
 
 //int GetWall(int Who);
@@ -1377,18 +1546,64 @@ int L_GetWall (lua_State *L)
     return 1;
 }
 
-//int GetQuarry(int Who);
-int L_GetQuarry (lua_State *L)
+//void SetQuarry(int Who, int Amount);
+int L_SetQuarry (lua_State *L)
 {
-    if (!lua_isnumber(L, -1))
-	error("GetQuarry: Received a call with faulty parameters.");
-    int Who = lua_tonumber(L, -1);
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("SetQuarry: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
     
-    lua_pushnumber(L, Player[Who].q);
+    if (Player[Who].q < Amount)
+	Sound_Play(RESB_UP);
+    else if (Player[Who].q > Amount)
+	Sound_Play(RESB_DOWN);
     
-    return 1;
+    Player[Who].q = Amount;
+    
+    return 0;
+}
+
+//void SetMagic(int Who, int Amount);
+int L_SetMagic (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("SetMagic: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].m < Amount)
+	Sound_Play(RESB_UP);
+    else if (Player[Who].m > Amount)
+	Sound_Play(RESB_DOWN);
+    
+    Player[Who].m = Amount;
+    
+    return 0;
+}
+
+//void SetWall(int Who, int Amount);
+int L_SetWall (lua_State *L)
+{
+    if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
+	error("SetWall: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -2);
+    int Amount = lua_tonumber(L, -1);
+    
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+    
+    if (Player[Who].w < Amount)
+	Sound_Play(WALL_UP);
+    else if (Player[Who].w > Amount)
+	Sound_Play(DAMAGE);
+    
+    Player[Who].w = Amount;
+    
+    return 0;
 }
 
 int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)

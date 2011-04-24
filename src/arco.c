@@ -164,19 +164,31 @@ void InitLua()
 	if (lua_pcall(L, 0, 0, 0))
     error(L, "Protected call failed!");
     
+    lua_register(L, "Damage", L_Damage);
     lua_register(L, "RemoveBricks", L_RemoveBricks);
     lua_register(L, "RemoveGems", L_RemoveGems);
+    lua_register(L, "RemoveRecruits", L_RemoveRecruits);
     lua_register(L, "RemoveWall", L_RemoveWall);
+    lua_register(L, "RemoveTower", L_RemoveTower);
     lua_register(L, "RemoveQuarry", L_RemoveQuarry);
+    lua_register(L, "RemoveDungeon", L_RemoveDungeon);
+    lua_register(L, "RemoveMagic", L_RemoveMagic);
     lua_register(L, "AddBricks", L_AddBricks);
     lua_register(L, "AddGems", L_AddGems);
+    lua_register(L, "AddRecruits", L_AddRecruits);
     lua_register(L, "AddWall", L_AddWall);
+    lua_register(L, "AddTower", L_AddTower);
     lua_register(L, "AddQuarry", L_AddQuarry);
     lua_register(L, "AddMagic", L_AddMagic);
     lua_register(L, "AddDungeon", L_AddDungeon);
     lua_register(L, "SetQuarry", L_SetQuarry);
+    lua_register(L, "SetWall", L_SetWall);
+    lua_register(L, "SetMagic", L_SetMagic);
     lua_register(L, "GetWall", L_GetWall);
     lua_register(L, "GetQuarry", L_GetQuarry);
+    lua_register(L, "GetDungeon", L_GetDungeon);
+    lua_register(L, "GetMagic", L_GetMagic);
+    lua_register(L, "GetTower", L_GetTower);
 }
 
 void InitD()

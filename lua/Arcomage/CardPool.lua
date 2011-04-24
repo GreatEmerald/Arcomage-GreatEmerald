@@ -200,238 +200,284 @@ function ArcomageInit()
         CardInfo.Description = "+6 Wall\n+3 Tower"
         CardInfo.BrickCost = 11
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "HarmonicOre"
      elseif CardID == 23 then
         CardInfo.Name = "Mondo Wall"
         CardInfo.Description = "+12 Wall"
         CardInfo.BrickCost = 13
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "MondoWall"
      elseif CardID == 24 then
         CardInfo.Name = "Focused Designs"
         CardInfo.Description = "+8 Wall\n+5 Tower"
         CardInfo.BrickCost = 15
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "FocusedDesigns"
      elseif CardID == 25 then
         CardInfo.Name = "Great Wall"
         CardInfo.Description = "+15 Wall"
         CardInfo.BrickCost = 16
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "GreatWall"
      elseif CardID == 26 then
         CardInfo.Name = "Rock Launcher"
         CardInfo.Description = "+6 Wall\n10 Damage\n to enemy"
         CardInfo.BrickCost = 18
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "RockLauncher"
      elseif CardID == 27 then
         CardInfo.Name = "Dragon's Heart"
         CardInfo.Description = "+20 Wall\n+8 Tower"
         CardInfo.BrickCost = 24
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "DragonsHeart"
      elseif CardID == 28 then
         CardInfo.Name = "Forced Labor"
         CardInfo.Description = "+9 Wall\nLose 5 recruits"
         CardInfo.BrickCost = 7
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "ForcedLabor"
      elseif CardID == 29 then --GE: Start MM8 BP cards
         CardInfo.Name = "Rock Garden"
         CardInfo.Description = "+1 Wall\n+1 Tower\n+2 recruits"
         CardInfo.BrickCost = 1
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "RockGarden"
      elseif CardID == 30 then
         CardInfo.Name = "Flood Water"
         CardInfo.Description = "Player(s) w/ lowest\nWall are -1 Dung-\neon and 2 dam-\nage to Tower" --GE: YES, Dung Neon and Damnage! >:3
         CardInfo.BrickCost = 6
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "FloodWater"
      elseif CardID == 31 then
         CardInfo.Name = "Barracks"
         CardInfo.Description = "+6 recruits, +6 Wall\nif dungeon <\nenemy dungeon,\n+1 dungeon"
         CardInfo.BrickCost = 10
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Barracks"
      elseif CardID == 32 then
         CardInfo.Name = "Battlements"
         CardInfo.Description = "+7 Wall\n6 damage to\nenemy"
         CardInfo.BrickCost = 14
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Battlements"
      elseif CardID == 33 then
         CardInfo.Name = "Shift"
         CardInfo.Description = "Switch your Wall\nwith enemy Wall"
         CardInfo.BrickCost = 17
         CardInfo.Colour = "Red"
+	CardInfo.LuaFunction = "Shift"
      elseif CardID == 34 then --GE: Start blue cards
         CardInfo.Name = "Quartz"
         CardInfo.Description = "+1 Tower,\nplay again"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 1
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Quartz"
      elseif CardID == 35 then
         CardInfo.Name = "Smoky Quartz"
         CardInfo.Description = "1 Damage to\nenemy tower\nPlay again"
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "SmokyQuartz"
      elseif CardID == 36 then
         CardInfo.Name = "Amethyst"
         CardInfo.Description = "+3 Tower"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Amethyst"
      elseif CardID == 37 then
         CardInfo.Name = "Spell Weavers"
         CardInfo.Description = "+1 Magic"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 3
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "SpellWeavers"
      elseif CardID == 38 then
         CardInfo.Name = "Prism"
         CardInfo.Description = "Draw 1 card\nDiscard 1 card\nPlay again"
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Prism"
      elseif CardID == 39 then
         CardInfo.Name = "Lodestone"
         CardInfo.Description = "+3 Tower. This\ncard can't be dis-\ncarded without\nplaying it"
         CardInfo.GemCost = 5
         CardInfo.Cursed = true
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Lodestone"
      elseif CardID == 40 then
         CardInfo.Name = "Solar Flare"
         CardInfo.Description = "+2 Tower\n2 Damage to\nenemy tower"
         CardInfo.GemCost = 4
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "SolarFlare"
      elseif CardID == 41 then
         CardInfo.Name = "Crystal Matrix"
         CardInfo.Description = "+1 Magic\n+3 Tower\n+1 Enemy\ntower"
         CardInfo.GemCost = 6
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "CrystalMatrix"
      elseif CardID == 42 then
         CardInfo.Name = "Gemstone Flaw"
         CardInfo.Description = "3 Damage to\nenemy tower"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "GemstoneFlaw"
      elseif CardID == 43 then
         CardInfo.Name = "Ruby"
         CardInfo.Description = "+5 Tower"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 3
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Ruby"
      elseif CardID == 44 then
         CardInfo.Name = "Gem Spear"
         CardInfo.Description = "5 Damage\nto enemy tower"
         CardInfo.GemCost = 4
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "GemSpear"
      elseif CardID == 45 then
         CardInfo.Name = "Power Burn"
         CardInfo.Description = "5 Damage\nto your tower\n+2 Magic"
         CardInfo.GemCost = 3
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "PowerBurn"
      elseif CardID == 46 then
         CardInfo.Name = "Harmonic Vibe"
         CardInfo.Description = "+1 Magic\n+3 Tower\n+3 Wall"
         CardInfo.GemCost = 7
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "HarmonicVibe"
      elseif CardID == 47 then
         CardInfo.Name = "Parity"
         CardInfo.Description = "All player's\nmagic equals\nthe highest\nplayer's magic"
         CardInfo.GemCost = 7
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Parity"
      elseif CardID == 48 then
         CardInfo.Name = "Emerald"
         CardInfo.Description = "+8 Tower"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 6
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Emerald"
      elseif CardID == 49 then
         CardInfo.Name = "Pearl of Wisdom"
         CardInfo.Description = "+5 Tower\n+1 Magic"
         CardInfo.GemCost = 9
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "PearlOfWisdom"
      elseif CardID == 50 then
         CardInfo.Name = "Shatterer"
         CardInfo.Description = "-1 Magic.\n9 Damage to\nenemy tower"
         CardInfo.GemCost = 8
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Shatterer"
      elseif CardID == 51 then
         CardInfo.Name = "Crumblestone"
         CardInfo.Description = "+5 Tower\nEnemy loses\n6 bricks"
         CardInfo.GemCost = 7
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Crumblestone"
      elseif CardID == 52 then
         CardInfo.Name = "Sapphire"
         CardInfo.Description = "+11 Tower"
 	CardInfo.Frequency = 2
         CardInfo.GemCost = 10
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Sapphire"
      elseif CardID == 53 then
         CardInfo.Name = "Discord"
         CardInfo.Description = "7 Damage to\nall towers, all\nplayer's magic\n-1"
         CardInfo.GemCost = 5
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Discord"
      elseif CardID == 54 then
         CardInfo.Name = "Fire Ruby"
         CardInfo.Description = "+6 Tower\n4 Damage to\nall enemy\ntowers"
         CardInfo.GemCost = 13
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "FireRuby"
      elseif CardID == 55 then
         CardInfo.Name = "Quarry's Help"
         CardInfo.Description = "+7 Tower\nLose 10\nbricks"
         CardInfo.GemCost = 4
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "QuarrysHelp"
      elseif CardID == 56 then
         CardInfo.Name = "Crystal Shield"
         CardInfo.Description = "+8 Tower\n+3 Wall"
         CardInfo.GemCost = 12
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "CrystalShield"
      elseif CardID == 57 then
         CardInfo.Name = "Empathy Gem"
         CardInfo.Description = "+8 Tower\n+1 Dungeon"
         CardInfo.GemCost = 14
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "EmpathyGem"
      elseif CardID == 58 then
         CardInfo.Name = "Diamond"
         CardInfo.Description = "+15 Tower"
         CardInfo.GemCost = 16
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Diamond"
      elseif CardID == 59 then
         CardInfo.Name = "Sanctuary"
         CardInfo.Description = "+10 Tower\n+5 Wall\nGain 5\nrecruits"
         CardInfo.GemCost = 15
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Sanctuary"
      elseif CardID == 60 then
         CardInfo.Name = "Lava Jewel"
         CardInfo.Description = "+12 Tower\n6 damage to\nall enemies"
         CardInfo.GemCost = 17
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "LavaJewel"
      elseif CardID == 61 then
         CardInfo.Name = "Dragon's Eye"
         CardInfo.Description = "+20 Tower"
         CardInfo.GemCost = 21
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "DragonsEye"
      elseif CardID == 62 then
         CardInfo.Name = "Crystallize"
         CardInfo.Description = "+11 Tower\n-6 Wall"
         CardInfo.GemCost = 8
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Crystallize"
      elseif CardID == 63 then --GE: Start MM8 BP cards
         CardInfo.Name = "Bag of Baubles"
-        CardInfo.Description = "1 Damage to\nenemy tower\nPlay again"
+        CardInfo.Description = "If Tower < enemy\nTower\n+2 Tower\nelse\n+1 Tower"
         CardInfo.GemCost = 2
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "BagOfBaubles"
      elseif CardID == 64 then
         CardInfo.Name = "Rainbow"
         CardInfo.Description = "+1 Tower to all\nplayers.\nYou gain\n3 gems"
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Rainbow"
      elseif CardID == 65 then
         CardInfo.Name = "Apprentice"
-        CardInfo.Description = "+4 Tower, you\nlose 3 recruits\n2 dmage to\nenemy Tower"
+        CardInfo.Description = "+4 Tower, you\nlose 3 recruits\n2 damage to\nenemy Tower"
         CardInfo.GemCost = 5
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "Apprentice"
      elseif CardID == 66 then
         CardInfo.Name = "Lightning Shard"
         CardInfo.Description = "If Tower > enemy\nWall, 8 damage\nto enemy tower\nelse 8 damage"
         CardInfo.GemCost = 11
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "LightningShard"
      elseif CardID == 67 then
         CardInfo.Name = "Phase Jewel"
         CardInfo.Description = "+13 Tower\n+6 recruits\n+6 bricks"
         CardInfo.GemCost = 18
         CardInfo.Colour = "Blue"
+	CardInfo.LuaFunction = "PhaseJewel"
      elseif CardID == 68 then --GE: Start green cards
         CardInfo.Name = "Mad Cow Disease"
         CardInfo.Description = "All players lose\n6 recruits"
@@ -827,5 +873,291 @@ end
 function CrystalRocks()
     AddWall(0, 7)
     AddGems(0, 7)
+    return 1
+end
+
+function HarmonicOre()
+    AddWall(0, 6)
+    AddTower(0, 3)
+    return 1
+end
+
+function MondoWall()
+    AddWall(0, 12)
+    return 1
+end
+
+function FocusedDesigns()
+    AddWall(0, 8)
+    AddTower(0, 5)
+    return 1
+end
+
+function GreatWall()
+    AddWall(0, 15)
+    return 1
+end
+
+function RockLauncher()
+    AddWall(0, 6)
+    Damage(1, 10)
+    return 1
+end
+
+function DragonsHeart()
+    AddWall(0, 20)
+    AddTower(0, 8)
+    return 1
+end
+
+function ForcedLabor()
+    AddWall(0, 9)
+    RemoveRecruits(0, 5)
+    return 1
+end
+
+function RockGarden()
+    AddWall(0, 1)
+    AddTower(0, 1)
+    AddRecruits(0, 2)
+    return 1
+end
+
+function FloodWater()
+    if GetWall(0) < GetWall(1) then
+	RemoveDungeon(0, 1)
+	RemoveTower(0, 2)
+    else
+	RemoveDungeon(1, 1)
+	RemoveTower(1, 2)
+    end
+    return 1
+end
+
+function Barracks()
+    AddRecruits(0, 6)
+    AddWall(0, 6)
+    if GetDungeon(0) < GetDungeon(1) then
+	AddDungeon(0, 1)
+    end
+    return 1
+end
+
+function Battlements()
+    AddWall(0, 7)
+    Damage(1, 6)
+    return 1
+end
+
+function Shift()
+    local temp = GetWall(0)
+    SetWall(0, GetWall(1))
+    SetWall(1, temp)
+    return 1
+end
+
+function Quartz()
+    AddTower(0, 1)
+    return 0
+end
+
+function SmokyQuartz()
+    RemoveTower(1, 1)
+    return 0
+end
+
+function Amethyst()
+    AddTower(0, 3)
+    return 1
+end
+
+function SpellWeavers()
+    AddMagic(0, 1)
+    return 1
+end
+
+function Prism()
+    return -1
+end
+
+function Lodestone()
+    AddTower(0, 3)
+    return 1
+end
+
+function SolarFlare()
+    AddTower(0, 2)
+    RemoveTower(1, 2)
+    return 1
+end
+
+function CrystalMatrix()
+    AddMagic(0, 1)
+    AddTower(0, 3)
+    AddTower(1, 1)
+    return 1
+end
+
+function GemstoneFlaw()
+    RemoveTower(1, 3)
+    return 1
+end
+
+function Ruby()
+    AddTower(0, 5)
+    return 1
+end
+
+function GemSpear()
+    RemoveTower(1, 5)
+    return 1
+end
+
+function PowerBurn()
+    RemoveTower(0, 5)
+    AddMagic(0, 2)
+    return 1
+end
+
+function HarmonicVibe()
+    AddMagic(0, 1)
+    AddTower(0, 3)
+    AddWall(0, 3)
+    return 1
+end
+
+function Parity()
+    local HighestMagic = math.max(GetMagic(0), GetMagic(1))
+    SetMagic(0, HighestMagic)
+    SetMagic(1, HighestMagic)
+    return 1
+end
+
+function Emerald()
+    AddTower(0, 8)
+    return 1
+end
+
+function PearlOfWisdom()
+    AddTower(0, 5)
+    AddMagic(0, 1)
+    return 1
+end
+
+function Shatterer()
+    RemoveMagic(0, 1)
+    RemoveTower(1, 9)
+    return 1
+end
+
+function Crumblestone()
+    AddTower(0, 5)
+    RemoveBricks(0, 6)
+    return 1
+end
+
+function Sapphire()
+    AddTower(0, 11)
+    return 1
+ end
+
+function Discord()
+    RemoveTower(0, 7)
+    RemoveTower(1, 7)
+    RemoveMagic(0, 1)
+    RemoveMagic(1, 1)
+    return 1
+end
+
+function FireRuby()
+    AddTower(0, 6)
+    RemoveTower(1, 4)
+    return 1
+end
+
+function QuarrysHelp()
+    AddTower(0, 7)
+    RemoveBricks(0, 10)
+    return 1
+end
+
+function CrystalShield()
+    AddTower(0, 8)
+    AddWall(0, 3)
+    return 1
+end
+
+function EmpathyGem()
+    AddTower(0, 8)
+    AddDungeon(0, 1)
+    return 1
+end
+
+
+function Diamond()
+    AddTower(0, 15)
+    return 1
+end
+
+function Sanctuary()
+    AddTower(0, 10)
+    AddWall(0, 5)
+    AddRecruits(0, 5)
+    return 1
+ end
+
+function LavaJewel()
+    AddTower(0, 12)
+    Damage(1, 6)
+    return 1
+end
+
+function DragonsEye()
+    AddTower(0, 20)
+    return 1
+end
+
+function Crystallize()
+    AddTower(0, 11)
+    RemoveWall(0, 6)
+    return 1
+end
+
+function BagOfBaubles()
+    if GetTower(0) < GetTower(1) then
+	AddTower(0, 2)
+    else
+	AddTower(0, 1)
+    end
+    return 1
+end
+
+function Rainbow()
+    AddTower(0, 1)
+    AddTower(1, 1)
+    AddGems(0, 3)
+    return 1
+end
+
+function Apprentice()
+    AddTower(0, 4)
+    RemoveRecruits(0, 3)
+    RemoveTower(1, 2)
+    return 1
+end
+
+function LightningShard()
+    if GetTower(0) > GetWall(1) then
+	RemoveTower(1, 8)
+    else
+	Damage(1, 8)
+    end
+    return 1
+end
+
+function PhaseJewel()
+    AddTower(0, 13)
+    AddRecruits(0, 6)
+    AddBricks(0, 6)
     return 1
 end

@@ -35,20 +35,35 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn);
 char* CardName(int card);
 
 //GE: Functions called from Lua code.
-int L_RemoveBricks (lua_State *L);
-int L_RemoveGems (lua_State *L);
-int L_RemoveWall (lua_State *L);
-int L_RemoveQuarry (lua_State *L);
-int L_AddBricks (lua_State *L);
-int L_AddGems (lua_State *L);
-int L_AddWall (lua_State *L);
+int L_Damage (lua_State *L);
+
 int L_AddQuarry (lua_State *L);
 int L_AddMagic (lua_State *L);
 int L_AddDungeon (lua_State *L);
-int L_SetQuarry (lua_State *L);
+int L_AddBricks (lua_State *L);
+int L_AddGems (lua_State *L);
+int L_AddRecruits (lua_State *L);
+int L_AddTower (lua_State *L);
+int L_AddWall (lua_State *L);
 
-int L_GetWall (lua_State *L);
+int L_RemoveQuarry (lua_State *L);
+int L_RemoveMagic (lua_State *L);
+int L_RemoveDungeon (lua_State *L);
+int L_RemoveBricks (lua_State *L);
+int L_RemoveGems (lua_State *L);
+int L_RemoveRecruits (lua_State *L);
+int L_RemoveTower (lua_State *L);
+int L_RemoveWall (lua_State *L);
+
 int L_GetQuarry (lua_State *L);
+int L_GetMagic (lua_State *L);
+int L_GetDungeon (lua_State *L);
+int L_GetTower (lua_State *L);
+int L_GetWall (lua_State *L);
+
+int L_SetQuarry (lua_State *L);
+int L_SetMagic (lua_State *L);
+int L_SetWall (lua_State *L);
 
 //GE: Functions called in D code.
 void D_LinuxInit(); //GE: Special initialisation needed to link the D lib in Linux
