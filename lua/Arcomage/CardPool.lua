@@ -482,34 +482,40 @@ function ArcomageInit()
         CardInfo.Name = "Mad Cow Disease"
         CardInfo.Description = "All players lose\n6 recruits"
         CardInfo.Colour = "Green"
+	CardInfo.LuaFunction = "MadCowDisease"
      elseif CardID == 69 then
         CardInfo.Name = "Faerie"
         CardInfo.Description = "2 Damage\nPlay again"
 	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 1
         CardInfo.Colour = "Green"
+	CardInfo.LuaFunction = "Faerie"
      elseif CardID == 70 then
         CardInfo.Name = "Moody Goblins"
         CardInfo.Description = "4 Damage\nYou lose\n3 gems"
 	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 1
         CardInfo.Colour = "Green"
+	CardInfo.LuaFunction = "MoodyGoblins"
      elseif CardID == 71 then
         CardInfo.Name = "Minotaur" --GE: AKA Husbandry
         CardInfo.Description = "+1 Dungeon"
         CardInfo.RecruitCost = 3
+	CardInfo.LuaFunction = "Minotaur"
         CardInfo.Colour = "Green"
      elseif CardID == 72 then
         CardInfo.Name = "Elven Scout"
         CardInfo.Description = "Draw 1 card\nDiscard 1 card\nPlay again"
         CardInfo.RecruitCost = 2
         CardInfo.Colour = "Green"
+	CardInfo.LuaFunction = "Prism"
      elseif CardID == 73 then
         CardInfo.Name = "Goblin Mob"
         CardInfo.Description = "6 Damage\nYou take\n3 damage"
 	CardInfo.Frequency = 2
         CardInfo.RecruitCost = 3
         CardInfo.Colour = "Green"
+	CardInfo.LuaFunction = "GoblinMob"
      elseif CardID == 74 then
         CardInfo.Name = "Goblin Archers"
         CardInfo.Description = "3 Damage to\nenemy tower\nYou take 1\ndamage"
@@ -1159,5 +1165,33 @@ function PhaseJewel()
     AddTower(0, 13)
     AddRecruits(0, 6)
     AddBricks(0, 6)
+    return 1
+end
+
+function MadCowDisease()
+    RemoveRecruits(1, 6)
+    RemoveRecruits(0, 6)
+    return 1
+end
+
+function Faerie()
+    Damage(1, 2)
+    return 0
+end
+
+function MoodyGoblins()
+    Damage(1, 4)
+    RemoveGems(0, 3)
+    return 1
+end
+
+function Minotaur()
+    AddDungeon(0, 1)
+    return 1
+end
+
+function GoblinMob()
+    Damage(1, 6)
+    Damage(0, 3)
     return 1
 end
