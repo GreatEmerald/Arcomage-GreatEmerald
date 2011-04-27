@@ -189,6 +189,9 @@ void InitLua()
     lua_register(L, "GetDungeon", L_GetDungeon);
     lua_register(L, "GetMagic", L_GetMagic);
     lua_register(L, "GetTower", L_GetTower);
+    lua_register(L, "GetGems", L_GetGems);
+    lua_register(L, "GetBricks", L_GetBricks);
+    lua_register(L, "GetRecruits", L_GetRecruits);
 }
 
 void InitD()

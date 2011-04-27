@@ -58,6 +58,9 @@ int L_RemoveWall (lua_State *L);
 int L_GetQuarry (lua_State *L);
 int L_GetMagic (lua_State *L);
 int L_GetDungeon (lua_State *L);
+int L_GetBricks (lua_State *L);
+int L_GetGems (lua_State *L);
+int L_GetRecruits (lua_State *L);
 int L_GetTower (lua_State *L);
 int L_GetWall (lua_State *L);
 

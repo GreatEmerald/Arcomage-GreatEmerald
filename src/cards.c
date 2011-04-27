@@ -1157,7 +1157,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 int L_Damage (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("Damage: Received a call with faulty parameters.");
+	error(L, "Damage: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1179,7 +1179,7 @@ int L_Damage (lua_State *L)
 int L_AddQuarry (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddQuarry: Received a call with faulty parameters.");
+	error(L, "AddQuarry: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1198,7 +1198,7 @@ int L_AddQuarry (lua_State *L)
 int L_AddMagic (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddMagic: Received a call with faulty parameters.");
+	error(L, "AddMagic: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1217,7 +1217,7 @@ int L_AddMagic (lua_State *L)
 int L_AddDungeon (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddDungeon: Received a call with faulty parameters.");
+	error(L, "AddDungeon: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1236,7 +1236,7 @@ int L_AddDungeon (lua_State *L)
 int L_AddBricks (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddBricks: Received a call with faulty parameters.");
+	error(L, "AddBricks: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1255,7 +1255,7 @@ int L_AddBricks (lua_State *L)
 int L_AddGems (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddGems: Received a call with faulty parameters.");
+	error(L, "AddGems: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1274,7 +1274,7 @@ int L_AddGems (lua_State *L)
 int L_AddRecruits (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddRecruits: Received a call with faulty parameters.");
+	error(L, "AddRecruits: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1293,7 +1293,7 @@ int L_AddRecruits (lua_State *L)
 int L_AddTower (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddTower: Received a call with faulty parameters.");
+	error(L, "AddTower: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1312,7 +1312,7 @@ int L_AddTower (lua_State *L)
 int L_AddWall (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("AddWall: Received a call with faulty parameters.");
+	error(L, "AddWall: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1331,7 +1331,7 @@ int L_AddWall (lua_State *L)
 int L_RemoveQuarry (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveQuarry: Received a call with faulty parameters.");
+	error(L, "RemoveQuarry: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1350,7 +1350,7 @@ int L_RemoveQuarry (lua_State *L)
 int L_RemoveMagic (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveMagic: Received a call with faulty parameters.");
+	error(L, "RemoveMagic: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1369,7 +1369,7 @@ int L_RemoveMagic (lua_State *L)
 int L_RemoveDungeon (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveDungeon: Received a call with faulty parameters.");
+	error(L, "RemoveDungeon: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1388,7 +1388,7 @@ int L_RemoveDungeon (lua_State *L)
 int L_RemoveBricks (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveBricks: Received a call with faulty parameters.");
+	error(L, "RemoveBricks: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1407,7 +1407,7 @@ int L_RemoveBricks (lua_State *L)
 int L_RemoveGems (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveGems: Received a call with faulty parameters.");
+	error(L, "RemoveGems: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1426,7 +1426,7 @@ int L_RemoveGems (lua_State *L)
 int L_RemoveRecruits (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveRecruits: Received a call with faulty parameters.");
+	error(L, "RemoveRecruits: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1445,7 +1445,7 @@ int L_RemoveRecruits (lua_State *L)
 int L_RemoveTower (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveTower: Received a call with faulty parameters.");
+	error(L, "RemoveTower: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1461,7 +1461,7 @@ int L_RemoveTower (lua_State *L)
 int L_RemoveWall (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("RemoveWall: Received a call with faulty parameters.");
+	error(L, "RemoveWall: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1480,7 +1480,7 @@ int L_RemoveWall (lua_State *L)
 int L_GetQuarry (lua_State *L)
 {
     if (!lua_isnumber(L, -1))
-	error("GetQuarry: Received a call with faulty parameters.");
+	error(L, "GetQuarry: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
@@ -1494,7 +1494,7 @@ int L_GetQuarry (lua_State *L)
 int L_GetMagic (lua_State *L)
 {
     if (!lua_isnumber(L, -1))
-	error("GetMagic: Received a call with faulty parameters.");
+	error(L, "GetMagic: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
@@ -1508,7 +1508,7 @@ int L_GetMagic (lua_State *L)
 int L_GetDungeon (lua_State *L)
 {
     if (!lua_isnumber(L, -1))
-	error("GetDungeon: Received a call with faulty parameters.");
+	error(L, "GetDungeon: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
@@ -1518,11 +1518,53 @@ int L_GetDungeon (lua_State *L)
     return 1;
 }
 
+//int GetBricks(int Who);
+int L_GetBricks (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error(L, "GetBricks: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+
+    lua_pushnumber(L, Player[Who].b);
+
+    return 1;
+}
+
+//int GetGems(int Who);
+int L_GetGems (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error(L, "GetGems: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+
+    lua_pushnumber(L, Player[Who].g);
+
+    return 1;
+}
+
+//int GetRecruits(int Who);
+int L_GetRecruits (lua_State *L)
+{
+    if (!lua_isnumber(L, -1))
+	error(L, "GetRecruits: Received a call with faulty parameters.");
+    int Who = lua_tonumber(L, -1);
+
+    Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
+
+    lua_pushnumber(L, Player[Who].r);
+
+    return 1;
+}
+
 //int GetTower(int Who);
 int L_GetTower (lua_State *L)
 {
     if (!lua_isnumber(L, -1))
-	error("GetTower: Received a call with faulty parameters.");
+	error(L, "GetTower: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
@@ -1536,7 +1578,7 @@ int L_GetTower (lua_State *L)
 int L_GetWall (lua_State *L)
 {
     if (!lua_isnumber(L, -1))
-	error("GetWall: Received a call with faulty parameters.");
+	error(L, "GetWall: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -1);
     
     Who = GetAbsolutePlayer(Who); //GE: Relative to absolute conversion.
@@ -1550,7 +1592,7 @@ int L_GetWall (lua_State *L)
 int L_SetQuarry (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("SetQuarry: Received a call with faulty parameters.");
+	error(L, "SetQuarry: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1570,7 +1612,7 @@ int L_SetQuarry (lua_State *L)
 int L_SetMagic (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("SetMagic: Received a call with faulty parameters.");
+	error(L, "SetMagic: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     
@@ -1590,7 +1632,7 @@ int L_SetMagic (lua_State *L)
 int L_SetWall (lua_State *L)
 {
     if (!lua_isnumber(L, -1) || !lua_isnumber(L, -2))
-	error("SetWall: Received a call with faulty parameters.");
+	error(L, "SetWall: Received a call with faulty parameters.");
     int Who = lua_tonumber(L, -2);
     int Amount = lua_tonumber(L, -1);
     

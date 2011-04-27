@@ -10,3 +10,4 @@ The list of things that are still to be done in Arcomage Clone goes here.
 - Introduce particles.
 - Finish porting stuff to Lua.
 - Start working on MArcomage support.
+- Fix bug: victory screen not displayed
