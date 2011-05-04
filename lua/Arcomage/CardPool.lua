@@ -1195,3 +1195,161 @@ function GoblinMob()
     Damage(0, 3)
     return 1
 end
+
+function GoblinArchers()
+    RemoveTower(1, 3)
+    Damage(0, 1)
+    return 1
+end
+
+function ShadowFaerie()
+    RemoveTower(1, 2)
+    return 0
+end
+
+function Orc()
+    Damage(1, 5)
+    return 1
+end
+
+function Dwarves()
+    Damage(1, 4)
+    AddWall(0, 3)
+    return 1
+end
+
+function LittleSnakes()
+    RemoveTower(1, 4)
+    return 1
+end
+
+function TrollTrainer()
+    AddDungeon(0, 2)
+    return 1
+end
+
+function TowerGremlin()
+    Damage(1, 2)
+    AddWall(0, 4)
+    AddTower(0, 2)
+    return 1
+end
+
+function FullMoon()
+    AddDungeon(0, 1)
+    AddDungeon(1, 1)
+    AddRecruits(0, 3)
+    return 1
+end
+
+function Slasher()
+    Damage(1, 6)
+    return 1
+end
+
+function Ogre()
+    Damage(1, 7)
+    return 1
+end
+
+function RabidSheep()
+    Damage(1, 6)
+    RemoveRecruits(1, 3)
+    return 1
+end
+
+function Imp()
+    Damage(1, 6)
+    RemoveBricks(1, 5)
+    RemoveGems(1, 5)
+    RemoveRecruits(1, 5)
+    RemoveBricks(0, 5)
+    RemoveGems(0, 5)
+    RemoveRecruits(0, 5)
+    return 1
+end
+
+function Spizzer()
+    if GetWall(1) == 0 then
+	Damage(1, 10)
+    else
+	Damage(1, 6)
+    end
+    return 1
+end
+
+function Werewolf()
+    Damage(1, 9)
+    return 1
+end
+
+function CorrosionCloud()
+    if GetWall(1) > 0 then
+        Damage(1, 10)
+    else
+        Damage(1, 7)
+    end
+    return 1
+end
+
+function Unicorn()
+    if GetMagic(0) > GetMagic(1) then
+        Damage(1, 12)
+    else
+        Damage(1, 8)
+    end
+    return 1
+end
+
+function ElvenArchers()
+    if GetWall(0) > GetWall(1)
+        RemoveTower(1, 6)
+    else
+        Damage(1, 6)
+    end
+    return 1
+end
+
+function Succubus()
+    RemoveTower(1, 5)
+    RemoveRecruits(1, 8)
+    return 1
+end
+
+function RockStompers()
+    Damage(1, 8)
+    RemoveQuarry(1, 1)
+    return 1
+end
+
+function Thief()
+    if GetGems(1) >= 10 then
+        RemoveGems(1, 10)
+        AddGems(0, 5)
+    else
+        RemoveGems(1, 10)
+        AddGems(0, math.ceil(GetGems(1)/2))
+    end
+    if GetBricks(1) >= 5 then
+        RemoveBricks(1, 5)
+        AddBricks(0, 3)
+    else
+        RemoveBricks(1, 5)
+        AddBricks(0, math.ceil(GetBricks(1)/2))
+    end
+    return 1
+end
+
+function StoneGiant()
+    Damage(1, 10)
+    AddWall(0, 4)
+    return 1
+end
+
+function Vampire()
+    Damage(1, 10)
+    RemoveRecruits(1, 5)
+    RemoveDungeon(1, 1)
+    return 1
+end
+end
