@@ -56,6 +56,25 @@ void InitCardDB()
     
     //GE: NEW - use Lua
     
+    //GE: Get the amount of pools the program has access to.
+    lua_getglobal(L, "PoolSize");
+    if (!lua_isnumber(L, -1))
+        error(L, "This is not a number.");
+    int PoolSize = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+    
+    //GE: Get the name of the pools and the functions for them.
+    for (int pool = 0; pool < PoolSize; pool++)
+    {
+        lua_getglobal(L, "PoolInfo");
+        lua_pushnumber(L, pool+1);
+        lua_gettable(L, -2); //GE: Here we have PoolInfo cell on the stack.
+        lua_getfield(L, -1, "Name");
+        D_setPoolName(pool, lua_tostring(L, -1));
+        lua_pop(L, 1);
+        
+    }
+    
     //GE: Copyright settings. Send bUseOriginalCards to Lua.
     lua_pushboolean(L, bUseOriginalCards);
     lua_setglobal(L, "bUseOriginalCards");
@@ -428,8 +447,8 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	int x;
 
 	//GE: Get the function name from D and call it through the stack.
-	if (D_getLuaFunctionSize(0,card) > 2)//GE: FIXME, this should not be needed under proper Lua coding
-	{
+	//if (D_getLuaFunctionSize(0,card) > 2)//GE: FIXME, this should not be needed under proper Lua coding
+	//{
 	    lua_getfield( L, LUA_GLOBALSINDEX, D_getLuaFunction(0, card) ); //GE: Push a function to the stack. STACK: -1: function
 	    if (!lua_isfunction(L, -1)) //GE: Sanity check.
 		error(L, "Failed to get the function from Lua. Returning.");
@@ -442,13 +461,13 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 	    
 	    //GE: Consume resources.
 	    Require(s1, D_getBrickCost(0,card), D_getGemCost(0,card), D_getRecruitCost(0,card));
-	}
+	//}
 	
 	
 	
-  switch (card)
+  /*switch (card)
 	{
-		/*case 0:		// Brick Shortage
+		case 0:		// Brick Shortage
 			s1->b-=8;
 			s2->b-=8;
 			Sound_Play(RESS_DOWN);
@@ -908,7 +927,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			s1->b+=6;
 			Sound_Play(TOWER_UP);
 			Sound_Play(RESS_UP);
-			break;*/
+			break;
 		case 68:	// Mad Cow Disease
 			s1->r-=6;
 			s2->r-=6;
@@ -1148,7 +1167,7 @@ int Deck(struct Stats *s1,struct Stats *s2,int card,int turn)
 			Sound_Play(DAMAGE);
 			s2->t-=12;
 			break;
-	}
+	}*/
 
 	return next;
 }
