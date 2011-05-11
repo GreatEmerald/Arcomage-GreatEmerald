@@ -21,6 +21,7 @@
 -- take a single loop, too, and I can do it in D!
 
 bUseOriginalCards = False
+DeckSize = 0
 
 function ArcomageInit()
 
@@ -714,7 +715,7 @@ function ArcomageInit()
      --CardDB[Iteration].Picture.H = CardInfo.Picture.H
      CardDB[Iteration].Keywords = CardInfo.Keywords
      CardDB[Iteration].LuaFunction = CardInfo.LuaFunction
-     print(CardDB[1]["Name"])
+     --print(CardDB[1]["Name"])
   end
   
   for i,v in ipairs(CardDB) do print(i,v) end
@@ -771,8 +772,6 @@ function ArcomageInit()
   Colour = "Black"},
   
   } ]]
-  
-  --print(CardDB[1].Name)
   return CardDB
 end
 

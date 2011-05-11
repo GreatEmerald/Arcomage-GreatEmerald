@@ -52,239 +52,251 @@ void InitCardDB()
 {
     int i, card;
     int X,Y,W,H;
+    const char* InitFunction;
     
     
     //GE: NEW - use Lua
-    
-    //GE: Get the amount of pools the program has access to.
-    lua_getglobal(L, "PoolSize");
-    if (!lua_isnumber(L, -1))
-        error(L, "This is not a number.");
-    int PoolSize = lua_tonumber(L, -1);
-    lua_pop(L, 1);
-    
-    //GE: Get the name of the pools and the functions for them.
-    for (int pool = 0; pool < PoolSize; pool++)
-    {
-        lua_getglobal(L, "PoolInfo");
-        lua_pushnumber(L, pool+1);
-        lua_gettable(L, -2); //GE: Here we have PoolInfo cell on the stack.
-        lua_getfield(L, -1, "Name");
-        D_setPoolName(pool, lua_tostring(L, -1));
-        lua_pop(L, 1);
-        
-    }
     
     //GE: Copyright settings. Send bUseOriginalCards to Lua.
     lua_pushboolean(L, bUseOriginalCards);
     lua_setglobal(L, "bUseOriginalCards");
     
-    lua_getglobal(L, "ArcomageInit"); //GE: Ask Lua to put the ArcomageInit function into the stack.
-    //GE: Added a function. STACK: -1: function
-    if (!lua_isfunction(L, -1)) //GE: Sanity check
-        error(L, "This is not a function.");
-    lua_pcall(L, 0, 1, 0); //GE: Call ArcomageInit(). Expect to get one return value, passing no parameters.
-    //GE: Got results. STACK: -1: table
+    lua_getglobal(L, "PoolInfo"); //GE: We get the whole PoolInfo here.
+    if (!lua_istable(L, -1))
+        error(L, "This is not a table. =GPF72=");
     
-    for (card = 0; card < CARDS; card++)
+    //GE: Get the name of the pools and the functions for them.
+    for (int pool = 0; pool < lua_len(L, -1); pool++)
     {
-        lua_pushnumber(L, card+1); //GE: Read the first element from the CardDB table.
-        //GE: Added a number. STACK: -1: number, -2: table
-        if (!lua_istable(L, -2)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_gettable(L, -2); //GE: Put CardDB[1] onto the stack. It's CardInfo{}. Note that lua_gettable means "get from table", not "get a table" - the fact that we got a table is coincidence.
-        //GE: Replaced the key with a table. STACK: -1: table, -2: table
+        lua_pushnumber(L, pool+1);
+        lua_gettable(L, -2); //GE: Here we have PoolInfo cell on the stack.
+        if (!lua_istable(L, -1))
+            error(L, "This is not a table. =GPF80=");
+            
+            lua_getfield(L, -1, "Name"); //GE: Get PoolInfo.cell.Name on the stack.
+            if (!lua_isstring(L, -1))
+            error(L, "This is not a string. =GPF84=");
+                D_setPoolName(pool, lua_tostring(L, -1)); //GE: Send the name to D.
+            lua_pop(L, 1);//GE: Get rid of the name.
+            lua_getfield(L, -1, "InitFunction"); //GE: Get InitFunction.
+            if (!lua_isstring(L, -1))
+            error(L, "This is not a string. =GPF89=");
+                InitFunction = lua_tostring(L, -1); //GE: Set it as a variable.
         
+        lua_getglobal(L, InitFunction); //GE: Ask Lua to put the ArcomageInit function into the stack.
+        //GE: Added a function. STACK: -1: function
+        if (!lua_isfunction(L, -1)) //GE: Sanity check
+            error(L, "This is not a function.");
+        lua_pcall(L, 0, 1, 0); //GE: Call ArcomageInit(). Expect to get two return values, passing no parameters.
+        //GE: Got results. STACK: -1: table
         if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "ID"); //GE: Put CardInfo.ID onto the stack. It's a number.
-        //GE: Received an element. STACK: -1: number, -2: table, -3: table
-        if (!lua_isnumber(L, -1)) //GE: Sanity check
-            error(L, "This is not a number.");
-        D_setID(0,card,(int)lua_tonumber(L, -1));
-        //CardDB[card].ID = (int)lua_tonumber(L, -1); //GE: Assign the number.
-        //printf("Snagged ID: %d", CardDB[0].ID);
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        //StackDump(L);
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "Frequency"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
-        //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
-        if (!lua_isnumber(L, -1)) //GE: Sanity check
-            error(L, "This is not a number.");
-        D_setFrequency(0,card,(int)lua_tonumber(L, -1));
-        //CardDB[card].Frequency = (int)lua_tonumber(L, -1); //GE: Assign the number.
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "Name"); //GE: Put CardInfo.Name onto the stack. It's a string.
-        //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
-        if (!lua_isstring(L, -1)) //GE: Sanity check
-            error(L, "This is not a string.");
-        printf("Received string: %s\n", lua_tostring(L, -1));
-        D_setName(0, card, lua_tostring(L, -1));
-        D_printCardDB();
-        //strcpy(CardDB[0].Name, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
-        //printf("Snagged Name: %s", CardDB[0].Name);
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "Description"); //GE: Put CardInfo.Name onto the stack. It's a string.
-        //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
-        if (!lua_isstring(L, -1)) //GE: Sanity check
-            error(L, "This is not a string.");
-        D_setDescription(0, card, lua_tostring(L, -1));
-        D_printCardDB();
-        //strcpy(CardDB[0].Description, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "BrickCost"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
-        //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
-        if (!lua_isnumber(L, -1)) //GE: Sanity check
-            error(L, "This is not a number.");
-        D_setBrickCost(0,card,(int)lua_tonumber(L, -1));
-        //CardDB[card].BrickCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "GemCost"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
-        //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
-        if (!lua_isnumber(L, -1)) //GE: Sanity check
-            error(L, "This is not a number.");
-        D_setGemCost(0,card,(int)lua_tonumber(L, -1));
-        //CardDB[card].GemCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "RecruitCost"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
-        //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
-        if (!lua_isnumber(L, -1)) //GE: Sanity check
-            error(L, "This is not a number.");
-        D_setRecruitCost(0,card,(int)lua_tonumber(L, -1));
-        //CardDB[card].RecruitCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "Cursed"); //GE: Put CardInfo.Name onto the stack. It's a string.
-        //GE: Replaced the key with the table. STACK: -1: boolean, -2: table, -3: table
-        if (!lua_isboolean(L, -1))// && !lua_isnil(L, -1)) //GE: Sanity check
-            error(L, "This is neither a boolean nor nil.");
-        D_setCursed(0, card, lua_toboolean(L, -1));
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-        if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "Colour"); //GE: Put CardInfo.Name onto the stack. It's a string.
-        //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
-        if (!lua_isstring(L, -1)) //GE: Sanity check
-            error(L, "This is not a string.");
-        D_setColour(0, card, lua_tostring(L, -1));
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
-        
-	    if (!lua_istable(L, -1)) //GE: Sanity check
-		error(L, "This is not a table.");
-	    lua_getfield(L, -1, "Picture"); //GE: Put CardInfo.Name onto the stack. It's a table.
-	    //GE: Replaced the key with the table. STACK: -1: table, -2: table, -3: table
-        
-            /*
-             * GE: What we do here is as follows: we get the filename as a string
-             * from Lua, then store it in D. After that's done, we ask D for the
-             * length of the SDL_Surface array and to return the needed strings.
-             * From that information we load all of the surfaces, and when
-             * rendering, we ask D for the filename, which we use to find the
-             * right file. And then we get the coordinates.
-             */
-        
+                error(L, "This is not a table.");
+
+        for (card = 0; card < lua_len(L, -1); card++)
+        {
+            lua_pushnumber(L, card+1); //GE: Read the first element from the CardDB table.
+            //GE: Added a number. STACK: -1: number, -2: table
+            lua_gettable(L, -2); //GE: Put CardDB[1] onto the stack. It's CardInfo{}. Note that lua_gettable means "get from table", not "get a table" - the fact that we got a table is coincidence.
+            //GE: Replaced the key with a table. STACK: -1: table, -2: table
+
             if (!lua_istable(L, -1)) //GE: Sanity check
                 error(L, "This is not a table.");
-            lua_getfield(L, -1, "File"); //GE: Put CardInfo.Picture.File onto the stack. It's a string.
-            //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table, -4: table
+            lua_getfield(L, -1, "ID"); //GE: Put CardInfo.ID onto the stack. It's a number.
+            //GE: Received an element. STACK: -1: number, -2: table, -3: table
+            if (!lua_isnumber(L, -1)) //GE: Sanity check
+                error(L, "This is not a number.");
+            D_setID(0,card,(int)lua_tonumber(L, -1));
+            //CardDB[card].ID = (int)lua_tonumber(L, -1); //GE: Assign the number.
+            //printf("Snagged ID: %d", CardDB[0].ID);
+            lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+            //GE: Removed an element. STACK: -1: table, -2: table
+            //StackDump(L);
+
+            if (!lua_istable(L, -1)) //GE: Sanity check
+                error(L, "This is not a table.");
+            lua_getfield(L, -1, "Frequency"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
+            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
+            if (!lua_isnumber(L, -1)) //GE: Sanity check
+                error(L, "This is not a number.");
+            D_setFrequency(0,card,(int)lua_tonumber(L, -1));
+            //CardDB[card].Frequency = (int)lua_tonumber(L, -1); //GE: Assign the number.
+            lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+            //GE: Removed an element. STACK: -1: table, -2: table
+
+            if (!lua_istable(L, -1)) //GE: Sanity check
+                error(L, "This is not a table.");
+            lua_getfield(L, -1, "Name"); //GE: Put CardInfo.Name onto the stack. It's a string.
+            //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
             if (!lua_isstring(L, -1)) //GE: Sanity check
                 error(L, "This is not a string.");
-            printf("Currently held string is: %s\n", lua_tostring(L, -1));
-            if (lua_objlen(L, -1) != 0) //GE: Don't load this in memory if it's empty.
-                PrecacheCard(lua_tostring(L, -1), lua_objlen(L, -1)); //GE: Put this into the linked list and load the image in memory.
-            D_setPictureFile(0, card, lua_tostring(L, -1));
+            printf("Received string: %s\n", lua_tostring(L, -1));
+            D_setName(0, card, lua_tostring(L, -1));
+            D_printCardDB();
+            //strcpy(CardDB[0].Name, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
+            //printf("Snagged Name: %s", CardDB[0].Name);
             lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-            //GE: Removed an element. STACK: -1: table, -2: table, -3: table
-            
+            //GE: Removed an element. STACK: -1: table, -2: table
+
             if (!lua_istable(L, -1)) //GE: Sanity check
                 error(L, "This is not a table.");
-            lua_getfield(L, -1, "X"); //GE: Put CardInfo.Picture.X onto the stack. It's a number.
-            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
-            if (!lua_isnumber(L, -1)) //GE: Sanity check
-                error(L, "This is not a number.");
-            X = (int)lua_tonumber(L, -1);
+            lua_getfield(L, -1, "Description"); //GE: Put CardInfo.Name onto the stack. It's a string.
+            //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
+            if (!lua_isstring(L, -1)) //GE: Sanity check
+                error(L, "This is not a string.");
+            D_setDescription(0, card, lua_tostring(L, -1));
+            D_printCardDB();
+            //strcpy(CardDB[0].Description, lua_tostring(L, -1)); //GE: Assign the string. It gets garbage'd, so make sure we copy it instead of pointing at it. Also, what kind of logic is destination, source anyway?!
             lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-            //GE: Removed an element. STACK: -1: table, -2: table, -3: table
-            
+            //GE: Removed an element. STACK: -1: table, -2: table
+
             if (!lua_istable(L, -1)) //GE: Sanity check
                 error(L, "This is not a table.");
-            lua_getfield(L, -1, "Y"); //GE: Put CardInfo.Picture.Y onto the stack. It's a number.
-            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+            lua_getfield(L, -1, "BrickCost"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
+            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
             if (!lua_isnumber(L, -1)) //GE: Sanity check
                 error(L, "This is not a number.");
-            Y = (int)lua_tonumber(L, -1);
+            D_setBrickCost(0,card,(int)lua_tonumber(L, -1));
+            //CardDB[card].BrickCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
             lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-            //GE: Removed an element. STACK: -1: table, -2: table, -3: table
-            
+            //GE: Removed an element. STACK: -1: table, -2: table
+
             if (!lua_istable(L, -1)) //GE: Sanity check
                 error(L, "This is not a table.");
-            lua_getfield(L, -1, "W"); //GE: Put CardInfo.Picture.W onto the stack. It's a number.
-            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+            lua_getfield(L, -1, "GemCost"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
+            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
             if (!lua_isnumber(L, -1)) //GE: Sanity check
                 error(L, "This is not a number.");
-            W = (int)lua_tonumber(L, -1);
+            D_setGemCost(0,card,(int)lua_tonumber(L, -1));
+            //CardDB[card].GemCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
             lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-            //GE: Removed an element. STACK: -1: table, -2: table, -3: table
-            
+            //GE: Removed an element. STACK: -1: table, -2: table
+
             if (!lua_istable(L, -1)) //GE: Sanity check
                 error(L, "This is not a table.");
-            lua_getfield(L, -1, "H"); //GE: Put CardInfo.Picture.H onto the stack. It's a number.
-            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+            lua_getfield(L, -1, "RecruitCost"); //GE: Put CardInfo.Frequncy onto the stack. It's a number.
+            //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table
             if (!lua_isnumber(L, -1)) //GE: Sanity check
                 error(L, "This is not a number.");
-            H = (int)lua_tonumber(L, -1);
+            D_setRecruitCost(0,card,(int)lua_tonumber(L, -1));
+            //CardDB[card].RecruitCost = (int)lua_tonumber(L, -1); //GE: Assign the number.
             lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-            //GE: Removed an element. STACK: -1: table, -2: table, -3: table
-            D_setPictureCoords(0,card,X,Y,W,H); //GE: Send the coordinates to D.
+            //GE: Removed an element. STACK: -1: table, -2: table
+
+            if (!lua_istable(L, -1)) //GE: Sanity check
+                error(L, "This is not a table.");
+            lua_getfield(L, -1, "Cursed"); //GE: Put CardInfo.Name onto the stack. It's a string.
+            //GE: Replaced the key with the table. STACK: -1: boolean, -2: table, -3: table
+            if (!lua_isboolean(L, -1))// && !lua_isnil(L, -1)) //GE: Sanity check
+                error(L, "This is neither a boolean nor nil.");
+            D_setCursed(0, card, lua_toboolean(L, -1));
+            lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+            //GE: Removed an element. STACK: -1: table, -2: table
+
+            if (!lua_istable(L, -1)) //GE: Sanity check
+                error(L, "This is not a table.");
+            lua_getfield(L, -1, "Colour"); //GE: Put CardInfo.Name onto the stack. It's a string.
+            //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table
+            if (!lua_isstring(L, -1)) //GE: Sanity check
+                error(L, "This is not a string.");
+            D_setColour(0, card, lua_tostring(L, -1));
+            lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+            //GE: Removed an element. STACK: -1: table, -2: table
+
+    	    if (!lua_istable(L, -1)) //GE: Sanity check
+    		error(L, "This is not a table.");
+    	    lua_getfield(L, -1, "Picture"); //GE: Put CardInfo.Name onto the stack. It's a table.
+    	    //GE: Replaced the key with the table. STACK: -1: table, -2: table, -3: table
+
+                /*
+                 * GE: What we do here is as follows: we get the filename as a string
+                 * from Lua, then store it in D. After that's done, we ask D for the
+                 * length of the SDL_Surface array and to return the needed strings.
+                 * From that information we load all of the surfaces, and when
+                 * rendering, we ask D for the filename, which we use to find the
+                 * right file. And then we get the coordinates.
+                 */
+
+                if (!lua_istable(L, -1)) //GE: Sanity check
+                    error(L, "This is not a table.");
+                lua_getfield(L, -1, "File"); //GE: Put CardInfo.Picture.File onto the stack. It's a string.
+                //GE: Replaced the key with the table. STACK: -1: string, -2: table, -3: table, -4: table
+                if (!lua_isstring(L, -1)) //GE: Sanity check
+                    error(L, "This is not a string.");
+                printf("Currently held string is: %s\n", lua_tostring(L, -1));
+                if (lua_objlen(L, -1) != 0) //GE: Don't load this in memory if it's empty.
+                    PrecacheCard(lua_tostring(L, -1), lua_objlen(L, -1)); //GE: Put this into the linked list and load the image in memory.
+                D_setPictureFile(0, card, lua_tostring(L, -1));
+                lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+                //GE: Removed an element. STACK: -1: table, -2: table, -3: table
+
+                if (!lua_istable(L, -1)) //GE: Sanity check
+                    error(L, "This is not a table.");
+                lua_getfield(L, -1, "X"); //GE: Put CardInfo.Picture.X onto the stack. It's a number.
+                //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+                if (!lua_isnumber(L, -1)) //GE: Sanity check
+                    error(L, "This is not a number.");
+                X = (int)lua_tonumber(L, -1);
+                lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+                //GE: Removed an element. STACK: -1: table, -2: table, -3: table
+
+                if (!lua_istable(L, -1)) //GE: Sanity check
+                    error(L, "This is not a table.");
+                lua_getfield(L, -1, "Y"); //GE: Put CardInfo.Picture.Y onto the stack. It's a number.
+                //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+                if (!lua_isnumber(L, -1)) //GE: Sanity check
+                    error(L, "This is not a number.");
+                Y = (int)lua_tonumber(L, -1);
+                lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+                //GE: Removed an element. STACK: -1: table, -2: table, -3: table
+
+                if (!lua_istable(L, -1)) //GE: Sanity check
+                    error(L, "This is not a table.");
+                lua_getfield(L, -1, "W"); //GE: Put CardInfo.Picture.W onto the stack. It's a number.
+                //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+                if (!lua_isnumber(L, -1)) //GE: Sanity check
+                    error(L, "This is not a number.");
+                W = (int)lua_tonumber(L, -1);
+                lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+                //GE: Removed an element. STACK: -1: table, -2: table, -3: table
+
+                if (!lua_istable(L, -1)) //GE: Sanity check
+                    error(L, "This is not a table.");
+                lua_getfield(L, -1, "H"); //GE: Put CardInfo.Picture.H onto the stack. It's a number.
+                //GE: Replaced the key with the table. STACK: -1: number, -2: table, -3: table, -4: table
+                if (!lua_isnumber(L, -1)) //GE: Sanity check
+                    error(L, "This is not a number.");
+                H = (int)lua_tonumber(L, -1);
+                lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+                //GE: Removed an element. STACK: -1: table, -2: table, -3: table
+                D_setPictureCoords(0,card,X,Y,W,H); //GE: Send the coordinates to D.
+
+    	    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+    	    //GE: Removed an element. STACK: -1: table, -2: table
+
+    	if (!lua_istable(L, -1)) //GE: Sanity check
+                error(L, "This is not a table.");
+            lua_getfield(L, -1, "LuaFunction"); //GE: Put CardInfo.LuaFunction onto the stack. It's a string.
+            //GE: Replaced the key with the string. STACK: -1: string, -2: table, -3: table
+            if (!lua_isstring(L, -1)) //GE: Sanity check
+                error(L, "This is not a string.");
+            D_setLuaFunction(0, card, lua_tostring(L, -1));
+            lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+            //GE: Removed an element. STACK: -1: table, -2: table
+
+            lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
+            //GE: Removed an element. STACK: -1: table
+        }
+
+        lua_pop(L, 1); //GE: Clear the stack. Finished dealing with the function.
+        printf("Finished setting up the CardDB!");
         
-	    lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-	    //GE: Removed an element. STACK: -1: table, -2: table
-	
-	if (!lua_istable(L, -1)) //GE: Sanity check
-            error(L, "This is not a table.");
-        lua_getfield(L, -1, "LuaFunction"); //GE: Put CardInfo.LuaFunction onto the stack. It's a string.
-        //GE: Replaced the key with the string. STACK: -1: string, -2: table, -3: table
-        if (!lua_isstring(L, -1)) //GE: Sanity check
-            error(L, "This is not a string.");
-        D_setLuaFunction(0, card, lua_tostring(L, -1));
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table, -2: table
+        lua_pop(L, 2);//GE: Get rid of the InitFunction and cell.
         
-        lua_pop(L, 1); //GE: Removed one element from the stack, counting from the top.
-        //GE: Removed an element. STACK: -1: table
+        
     }
+    lua_pop(L, 1);//GE: Get rid of the PoolInfo.
     
-    lua_pop(L, 1); //GE: Clear the stack. Finished dealing with the function.
-    printf("Finished setting up the CardDB!");
+    
     
     DeckTotal++;
     for (i=0; i<CARDS; i++)

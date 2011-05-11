@@ -44,6 +44,7 @@ struct CardInfo { //GE: Holds information about a single card.
     string Name;
 } */
 CardInfo[][] CardDB; //GE: Holds information about all the different loaded Card Pools.
+string[] PoolNames; //GE: Holds the names of each pool. Becareful to align this to CardDB.
 string[] PrecachePictures;
 //int[] Queue; //GE: This is the list of card IDs in the bank.
 
@@ -81,6 +82,13 @@ extern(C):
     {
         version(linux)
             main();
+    }
+    
+    void D_setPoolName(int Pool, const char* Name)
+    {
+        if (Pool >= PoolNames.length) //GE: Make sure we're not out of bounds.
+            PoolNames.length = Pool+1;
+        PoolNames[Pool] = to!string(Name);
     }
     
     void D_setID(int Pool, int Card, int ID)

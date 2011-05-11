@@ -73,6 +73,7 @@ void D_LinuxInit(); //GE: Special initialisation needed to link the D lib in Lin
 int rt_init(); //GE: Initialisation and termination of the D runtime.
 int rt_term();
 
+void D_setPoolName(int Pool, const char* Name);
 void D_setID(int Pool, int Card, int ID); //GE: These all are responsible for maintaining the Card pools.
 void D_setFrequency(int Pool, int Card, int Frequency);
 void D_setName(int Pool, int Card, const char* Name);
