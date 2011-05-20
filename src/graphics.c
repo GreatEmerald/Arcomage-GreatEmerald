@@ -91,13 +91,13 @@ void Graphics_Init(int fullscreen)
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE)<0)
 		FatalError("Couldn't initialize SDL");
 	SDL_WM_SetCaption("Arcomage v" ARCOVER,NULL);
-	GfxData[SCREEN]=SDL_SetVideoMode(resX,resY,0,SDL_SWSURFACE|(fullscreen*SDL_FULLSCREEN));
+	GfxData[SCREEN]=SDL_SetVideoMode(resX,resY,0,SDL_SWSURFACE|(fullscreen*SDL_FULLSCREEN)|SDL_ASYNCBLIT); //GE: Enabling async blitting. It's useful for muticore PCs.
 	if (!GfxData[SCREEN])
 		FatalError("Couldn't set 640x480 video mode");
 	GfxData[BUFFER]=SDL_AllocSurface(GfxData[SCREEN]->flags,GfxData[SCREEN]->w,GfxData[SCREEN]->h,GfxData[SCREEN]->format->BitsPerPixel,GfxData[SCREEN]->format->Rmask,GfxData[SCREEN]->format->Gmask,GfxData[SCREEN]->format->Bmask,0);
 	if (!GfxData[BUFFER])
 		FatalError("Unable to create double buffer!");
-	if (bUseOriginalMenu)
+	if (bUseOriginalMenu) //GE: HACK
 	{
 		buttonWidth=125;
 		buttonHeight=54;
