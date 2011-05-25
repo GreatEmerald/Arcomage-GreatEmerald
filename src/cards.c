@@ -50,7 +50,7 @@ void PutCard(int c)
 
 void InitCardDB()
 {
-    int i, card;
+    int i, card, pool;
     int X,Y,W,H;
     const char* InitFunction;
     
@@ -66,7 +66,7 @@ void InitCardDB()
         error(L, "This is not a table. =GPF72=");
     
     //GE: Get the name of the pools and the functions for them.
-    for (int pool = 0; pool < lua_len(L, -1); pool++)
+    for (pool = 0; pool < lua_objlen(L, -1); pool++)
     {
         lua_pushnumber(L, pool+1);
         lua_gettable(L, -2); //GE: Here we have PoolInfo cell on the stack.
@@ -92,7 +92,7 @@ void InitCardDB()
         if (!lua_istable(L, -1)) //GE: Sanity check
                 error(L, "This is not a table.");
 
-        for (card = 0; card < lua_len(L, -1); card++)
+        for (card = 0; card < lua_objlen(L, -1); card++)
         {
             lua_pushnumber(L, card+1); //GE: Read the first element from the CardDB table.
             //GE: Added a number. STACK: -1: number, -2: table
