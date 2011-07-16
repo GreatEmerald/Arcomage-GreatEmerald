@@ -13,6 +13,7 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include "common.h"
+#include "config.h"
 #include "graphics.h"
 #include "input.h"
 #include "network.h"
@@ -22,8 +23,6 @@
 
 SDL_Event event; ///< Event placeholder.
 
-int /*config*/ fullscreen=0; ///< Fullscreen configuration, handled by minIni.
-int /*config*/ soundenabled=1; ///< Sound configuration, handled by minIni.
 int turn=0; ///< Number of the player whose turn it is.
 int nextturn=0; ///< Number of the player who will go next.
 int lastturn=0; ///< Number of the player whose turn ended before.
@@ -33,36 +32,7 @@ int aiplayer=-1; ///< Used in AI games.
 int netplayer=-1; ///< Used in network games.
 struct Stats Player[2]; ///< Players. Bugs: Doesn't support more than 2 players.
 lua_State *L; ///< Lua support, main state.
-int /*config*/ TowerLevels=20; ///< Starting tower levels, handled by minIni.
-int /*config*/ WallLevels=10; ///< Starting wall levels, handled by minIni.
-int /*config*/ QuarryLevels=1; ///< Starting quarry levels, handled by minIni.
-int /*config*/ MagicLevels=1; ///< Starting magic levels, handled by minIni.
-int /*config*/ DungeonLevels=1; ///< Starting dungeon levels, handled by minIni.
-int /*config*/ BrickQuantities=15;///< Starting brick amount, handled by minIni.
-int /*config*/ GemQuantities=15; ///< Starting gem amount, handled by minIni.
-int /*config*/ RecruitQuantities=15; ///< Starting recruit amount, handled by minIni.
-int /*config*/ TowerVictory=200; ///< Tower victory condition, handled by minIni.
-int /*config*/ ResourceVictory=500; ///< Resource victory condition, handled by minIni.
-int /*config*/ bOneResourceVictory=0;///< Allow victory for getting only one of the resources to required level, handled by minIni.
-int /*config*/ CardTranslucency=64;///< Controls the level of alpha channel on the inactive cards, handled by minIni.
 
-/**
- * Evaluate game victory conditions.
- *
- * Authors: GreatEmerald, STiCK.
- *
- * \param a Player number.
- * \return An int that indicates whether the player in question has won the game.
- */
-int Winner(int a)
-{
-    if (bOneResourceVictory)
-        return (Player[a].t>=TowerVictory)||(Player[!a].t<=0)||
-            (Player[a].b>=ResourceVictory)||(Player[a].g>=ResourceVictory)||(Player[a].r>=ResourceVictory);
-    else
-        return (Player[a].t>=TowerVictory)||(Player[!a].t<=0)||
-            ((Player[a].b>=ResourceVictory)&&(Player[a].g>=ResourceVictory)&&(Player[a].r>=ResourceVictory));
-}
 
 /**
  * Draws the cards on the screen.
@@ -119,33 +89,6 @@ void Boss()
     UpdateScreen();
     SDL_WM_SetCaption("Arcomage v"ARCOVER,NULL);
     WaitForKey(0);
-}
-
-/**
- * minIni initialisation.
- *
- * Bugs: Does not read long lines.
- *
- * Authors: GreatEmerald.
- */
-void ReadConfig()
-{
-    fullscreen=ini_getl("Engine", "Fullscreen", 0, CONFIGFILE);
-    soundenabled=ini_getl("Engine", "SoundEnabled", 1, CONFIGFILE);
-
-    TowerLevels=ini_getl("StartingConditions", "TowerLevels", 20, CONFIGFILE);
-    WallLevels=ini_getl("StartingConditions", "WallLevels", 10, CONFIGFILE);
-    QuarryLevels=ini_getl("StartingConditions", "QuarryLevels", 1, CONFIGFILE);
-    MagicLevels=ini_getl("StartingConditions", "MagicLevels", 1, CONFIGFILE);
-    DungeonLevels=ini_getl("StartingConditions", "DungeonLevels", 1, CONFIGFILE);
-    BrickQuantities=ini_getl("StartingConditions", "BrickQuantities", 15, CONFIGFILE);
-    GemQuantities=ini_getl("StartingConditions", "GemQuantities", 15, CONFIGFILE);
-    RecruitQuantities=ini_getl("StartingConditions", "RecruitQuantities", 15, CONFIGFILE);
-    TowerVictory=ini_getl("VictoryConditions", "TowerVictory", 200, CONFIGFILE);
-    ResourceVictory=ini_getl("VictoryConditions", "ResourceVictory", 500, CONFIGFILE);
-    bOneResourceVictory=ini_getl("VictoryConditions", "bOneResourceVictory", 0, CONFIGFILE);
-
-    CardTranslucency=ini_getl("Graphics", "CardTranslucency", 64, CONFIGFILE);
 }
 
 /**

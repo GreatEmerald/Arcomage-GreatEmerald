@@ -4,6 +4,7 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include "cards.h"
+#include "config.h"
 #include "sound.h"
 
 int req[3][35] = {
@@ -1694,6 +1695,24 @@ int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)
 	normalize(s1);
 	normalize(s2);
 	return next;
+}
+
+/**
+ * Evaluate game victory conditions.
+ *
+ * Authors: GreatEmerald, STiCK.
+ *
+ * \param a Player number.
+ * \return An int that indicates whether the player in question has won the game.
+ */
+int Winner(int a)
+{
+    if (bOneResourceVictory)
+        return (Player[a].t>=TowerVictory)||(Player[!a].t<=0)||
+            (Player[a].b>=ResourceVictory)||(Player[a].g>=ResourceVictory)||(Player[a].r>=ResourceVictory);
+    else
+        return (Player[a].t>=TowerVictory)||(Player[!a].t<=0)||
+            ((Player[a].b>=ResourceVictory)&&(Player[a].g>=ResourceVictory)&&(Player[a].r>=ResourceVictory));
 }
 
 char* CardName(int card)
