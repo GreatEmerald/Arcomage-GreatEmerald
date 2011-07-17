@@ -9,6 +9,10 @@ struct Stats {
 	int Hand[6];		// player's hand
 };
 
+struct Stats Player[2]; ///< Players. Bugs: Doesn't support more than 2 players.
+int aiplayer; ///< Used in AI games.
+int netplayer; ///< Used in network games.
+
 /*struct CardInfo { //GE: OBSOLETE -- Use D instead!
     int ID;
     int Frequency; //GE: This is the number of cards of this type in the deck. 1=Rare, 2=Uncommon, 3=Common

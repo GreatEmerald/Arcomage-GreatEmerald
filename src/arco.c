@@ -1,7 +1,8 @@
 /**
  * The main class of Arcomage.
  * Initialisation, configuration, input loop, card play event loop and certain
- * other important functions are here.
+ * other important functions are here. Scheduled for elimination - code should
+ * be put into config.c/graphics.c/input.c.
  */
 
 #include <stdio.h>
@@ -28,68 +29,8 @@ int nextturn=0; ///< Number of the player who will go next.
 int lastturn=0; ///< Number of the player whose turn ended before.
 int bSpecialTurn=0; ///< Used for determining whether or not this is a discarding turn.
 int bRefreshNeeded=0; ///< True if we need to refresh the screen. Used in the input loop.
-int aiplayer=-1; ///< Used in AI games.
-int netplayer=-1; ///< Used in network games.
-struct Stats Player[2]; ///< Players. Bugs: Doesn't support more than 2 players.
 lua_State *L; ///< Lua support, main state.
 
-
-/**
- * Draws the cards on the screen.
- *
- * This function is only used for drawing the cards at the bottom of the screen.
- * Works for all types of players.
- *
- * Authors: GreatEmerald, STiCK.
- *
- * \param turn Player number.
- */
-void DrawCards(int turn)
-{
-    int i,j;
-
-    if (turn==aiplayer || turn==netplayer)
-    {
-        j=aiplayer;if (j==-1) j=netplayer;
-        for (i=0;i<6;i++)
-        //GE: This is info on where to put in on the screen.
-            DrawFolded(j,8+106*i,342);
-    }
-    else
-        for (i=0;i<6;i++)
-            if (Requisite(&Player[turn],i))
-                DrawCard(Player[turn].Hand[i],8+106*i,342,255);
-            else
-                DrawCard(Player[turn].Hand[i],8+106*i,342,CardTranslucency);
-}
-
-/**
- * Draws the 'boss' screen.
- *
- * Easter egg, can be used to protect players from angry bosses. Activated by
- * pressing the B button.
- *
- * Authors: STiCK.
- */
-void Boss()
-{
-    Blit(SCREEN,BUFFER);
-    Blit(BOSS,SCREEN);
-    UpdateScreen();
-    switch (OPERATINGSYSTEM)
-    {
-        case 1:
-            SDL_WM_SetCaption("mc - ~/.xmms",NULL);break;                   // Linux
-        default:
-            SDL_WM_SetCaption("C:\\WINNT\\system32\\cmd.exe",NULL);break;   // Windows
-    }
-    WaitForKey(0);
-    WaitForKey(SDLK_b);
-    Blit(BUFFER,SCREEN);
-    UpdateScreen();
-    SDL_WM_SetCaption("Arcomage v"ARCOVER,NULL);
-    WaitForKey(0);
-}
 
 /**
  * Dumps the contents of the Lua stack.
@@ -209,6 +150,9 @@ void InitD()
 /// Authors: GreatEmerald, STiCK.
 void Init()
 {
+    aiplayer=-1;
+    netplayer=-1;
+    
     InitLua();
     InitD();
 

@@ -1,3 +1,9 @@
+/**
+ * Configuration support handling.
+ * This class should interface directly with minIni. Scheduled to be replaced
+ * by D code and integrated into libarcomage.
+ */
+
 #include "common.h"
 
 int /*config*/ fullscreen=0; ///< Fullscreen configuration, handled by minIni.
