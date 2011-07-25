@@ -163,6 +163,35 @@ void Graphics_Quit()
 		SDL_FreeSurface(GfxData[i]);
 }
 
+/**
+ * Draws the cards on the screen.
+ *
+ * This function is only used for drawing the cards at the bottom of the screen.
+ * Works for all types of players.
+ *
+ * Authors: GreatEmerald, STiCK.
+ *
+ * \param turn Player number.
+ */
+void DrawCards(int turn)
+{
+    int i,j;
+
+    if (turn==aiplayer || turn==netplayer)
+    {
+        j=aiplayer;if (j==-1) j=netplayer;
+        for (i=0;i<6;i++)
+        //GE: This is info on where to put in on the screen.
+            DrawFolded(j,8+106*i,342);
+    }
+    else
+        for (i=0;i<6;i++)
+            if (Requisite(&Player[turn],i))
+                DrawCard(Player[turn].Hand[i],8+106*i,342,255);
+            else
+                DrawCard(Player[turn].Hand[i],8+106*i,342,CardTranslucency);
+}
+
 void Blit(int a,int b)
 {
 	SDL_BlitSurface(GfxData[a],NULL,GfxData[b],NULL);
@@ -183,6 +212,22 @@ void RedrawScreen(int turn, struct Stats* Player)
     //DrawStatus(turn,Player);
 	//DrawCards(turn);
 	//UpdateScreen();
+}
+
+/**
+ * Redraws all the information on the screen the hard way.
+ * 
+ * You want to use RedrawScreen() instead most of the time, because this
+ * function draws new things on screen. It's a very dumb way to update stuff.
+ * 
+ * Authors: STiCK, GreatEmerald
+ */ 
+void RedrawScreenFull()
+{
+    DrawStatus(turn,Player);
+
+    DrawCards(turn);
+    UpdateScreen();
 }
 
 inline void UpdateScreenRect(int x1,int y1,int x2,int y2)
@@ -346,35 +391,6 @@ void DrawDiscard(int X, int Y)
 }
 
 /**
- * Draws the cards on the screen.
- *
- * This function is only used for drawing the cards at the bottom of the screen.
- * Works for all types of players.
- *
- * Authors: GreatEmerald, STiCK.
- *
- * \param turn Player number.
- */
-void DrawCards(int turn)
-{
-    int i,j;
-
-    if (turn==aiplayer || turn==netplayer)
-    {
-        j=aiplayer;if (j==-1) j=netplayer;
-        for (i=0;i<6;i++)
-        //GE: This is info on where to put in on the screen.
-            DrawFolded(j,8+106*i,342);
-    }
-    else
-        for (i=0;i<6;i++)
-            if (Requisite(&Player[turn],i))
-                DrawCard(Player[turn].Hand[i],8+106*i,342,255);
-            else
-                DrawCard(Player[turn].Hand[i],8+106*i,342,CardTranslucency);
-}
-
-/**
  * Draws the 'boss' screen.
  *
  * Easter egg, can be used to protect players from angry bosses. Activated by
@@ -400,6 +416,42 @@ void Boss()
     UpdateScreen();
     SDL_WM_SetCaption("Arcomage v"ARCOVER,NULL);
     WaitForKey(0);
+}
+
+/**
+ * Draws the card being played to imitate animation.
+ * 
+ * Bugs: There should be no need to do that manually; coordinates need to be
+ * relative.
+ * 
+ * Authors: STiCK, GreatEmerald.
+ */
+void PlayCardAnimation(int c, int discrd)
+{
+    #define STEPS 10
+    double d,x,y;
+    
+    FillRect(8+106*c,342,96,128,0,0,0);
+    Blit(SCREEN,BUFFER);
+    for (d=0.0;d<=1.0;d+=1.0/STEPS)
+    {
+        x=(8.0+106.0*c)+d*(272.0-(8.0+106.0*c));
+        y=342.0+d*(96.0-342.0);
+        Blit(BUFFER,SCREEN);
+        DrawCard(Player[turn].Hand[c],(int)x,(int)y,CardTranslucency);
+        if (discrd)
+            DrawDiscard((int)x,(int)y);
+        UpdateScreen();
+        SDL_Delay(20);
+    }
+    Blit(GAMEBG,SCREEN);
+    if (discrd)
+    {
+        DrawCard(Player[turn].Hand[c],272,96,CardTranslucency);
+        DrawDiscard(272,96);
+    }
+    else
+        DrawCard(Player[turn].Hand[c],272,96,255);
 }
 
 void DrawSmallNumber(int Resource, int X, int Y, int Offset)

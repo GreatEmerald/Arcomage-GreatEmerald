@@ -20,6 +20,10 @@ int *Q;//GE: Queue?
 int Qs=0,Qe=0;
 int DeckTotal; //GE: The total card number in the deck.
 int bInitComplete=0;
+int bSpecialTurn=0; ///< Used for determining whether or not this is a discarding turn.
+int turn=0; ///< Number of the player whose turn it is.
+int nextturn=0; ///< Number of the player who will go next.
+int lastturn=0; ///< Number of the player whose turn ended before.
 
 int bUseOriginalCards; //GE: From graphics.h
 
@@ -1678,6 +1682,78 @@ int L_SetWall (lua_State *L)
     Player[Who].w = Amount;
     
     return 0;
+}
+
+/**
+ * Check whether the card the payer is attempting to play is playable.
+ */ 
+int CanPlayCard(int c, int bDiscarded)
+{
+    if (bDiscarded && D_getCursed(0,Player[turn].Hand[c]))
+        return 0;     // Cursed cards like LodeStone can't be discarded
+
+    if (bSpecialTurn && !bDiscarded) //GE: You're trying to play a card during a discard round. Bad.
+       return 0;
+       
+    return 1;
+}
+
+/**
+ * Functionality when playing a card.
+ *
+ * Plays the animation, handles the turn sequence, distributes resources
+ *
+ * Bugs: Should be split to different functions for readability.
+ *
+ * Authors: GreatEmerald, STiCK.
+ * \param c Card ID.
+ * \param discrd Whether to discard the card. It's used as a boolean.
+ */
+void PlayCard(int c,int discrd)
+{
+    int sound;
+    int bGiveResources=0, i;
+
+    //GE: You get resources when you use a card and next up is the enemy's turn.
+
+    if (!CanPlayCard(c, discrd))
+        return;
+
+    PlayCardAnimation(c, discrd);
+    sound=-1; //GE: What's this?..
+    if (discrd)
+    {
+        if (!bSpecialTurn)
+            nextturn=!turn;
+        else
+        {
+            nextturn=turn;
+            bSpecialTurn=0;
+        }
+    }
+    else
+        nextturn=Turn(&Player[turn],&Player[!turn],Player[turn].Hand[c],turn);
+    if (nextturn == -1) //GE: If the card inits a discard turn.
+    {
+        bSpecialTurn=1;
+        nextturn=turn;
+    }
+    if (turn != nextturn)
+        bGiveResources = 1;
+    
+    PutCard(Player[turn].Hand[c]);
+    if (bGiveResources) //GE: if you didn't put a play again card or you have discarded
+    {
+        Player[nextturn].b+=Player[nextturn].q; //GE: The enemy gets resources.
+        Player[nextturn].g+=Player[nextturn].m;
+        Player[nextturn].r+=Player[nextturn].d;
+    }
+    Player[turn].Hand[c]=GetCard();
+    printf("We received a card: %d\n", Player[turn].Hand[c]); //GE: DEBUG
+    lastturn=turn;
+    turn=nextturn;
+
+    RedrawScreenFull();
 }
 
 int Turn(struct Stats *s1,struct Stats *s2,int card,int turn)

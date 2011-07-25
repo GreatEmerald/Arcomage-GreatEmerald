@@ -12,6 +12,10 @@ struct Stats {
 struct Stats Player[2]; ///< Players. Bugs: Doesn't support more than 2 players.
 int aiplayer; ///< Used in AI games.
 int netplayer; ///< Used in network games.
+int bSpecialTurn; ///< Used for determining whether or not this is a discarding turn.
+int turn; ///< Number of the player whose turn it is.
+int nextturn; ///< Number of the player who will go next.
+int lastturn; ///< Number of the player whose turn ended before.
 
 /*struct CardInfo { //GE: OBSOLETE -- Use D instead!
     int ID;
