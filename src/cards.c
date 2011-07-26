@@ -1719,7 +1719,6 @@ void PlayCard(int c,int discrd)
     if (!CanPlayCard(c, discrd))
         return;
 
-    PlayCardAnimation(c, discrd);
     sound=-1; //GE: What's this?..
     if (discrd)
     {
