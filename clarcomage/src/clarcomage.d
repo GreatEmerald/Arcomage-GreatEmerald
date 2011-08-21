@@ -3,7 +3,8 @@ import arco;
 
 int main()
 {
-	writeln("We didn't crash!");
+    InitArcomage();
+    writeln("We didn't crash!");
     readln();
     return 0;
 } 
