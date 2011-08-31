@@ -13,7 +13,13 @@ int main()
     FrontendFunctions.Sound_Play = function(SoundTypes){}; //GE: Init all the frontend functions. Frontends must do that, although I guess it could be in the library and then overridden.
     FrontendFunctions.RedrawScreenFull = function(){};
     FrontendFunctions.PrecacheCard = function(const char*, int){};
-    FrontendFunctions.PlayCardAnimation = function(CardInfo CI, int i){writeln("Player ", Turn, " just played ", CI.Name);};
+    FrontendFunctions.PlayCardAnimation = function(CardInfo CI, int Discarded)
+    {
+        if (!Discarded)
+            writeln("Player ", Turn, " just played ", CI.Name);
+        else
+            writeln("Player ", Turn, " just discarded ", CI.Name);
+    };
     initGame(); //GE: Start a local player vs bot game. Later on will have more options.
     Player[GetEnemy()].AI = true; //GE: Put a bot in there.
     
@@ -41,9 +47,14 @@ int main()
             writeln("Would you like to discard this card?");
             readf(" ");//GE: Workaround of the silly D reading process.
             Discarding = chomp(readln());
+            if (!CanAffordCard(Player[Turn].Hand[SelectedCard]))
+            {
+                writeln("This card is too expensive!");
+                continue;
+            }
             CanPlayCard = PlayCard(SelectedCard, stringToBool(Discarding));
             if (!CanPlayCard)
-                writeln("You don't have enough resources or the card is cursed!");
+                writeln("The card is cursed!");
         }
         else
             AIPlay();
