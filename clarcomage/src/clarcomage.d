@@ -58,6 +58,11 @@ int main()
         }
         else
             AIPlay();
+        if (IsVictorious(Turn) || IsVictorious(GetEnemy()))
+        {
+            writeln("Player ", Turn, "is victorious!");
+            break;
+        }
         writeln("Now the turn is ", Turn);
         readln();
     } while (Discarding != "quit");
