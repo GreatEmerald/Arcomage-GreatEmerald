@@ -22,6 +22,7 @@ int main()
     };
     initGame(); //GE: Start a local player vs bot game. Later on will have more options.
     Player[GetEnemy()].AI = true; //GE: Put a bot in there.
+    //Player[Turn].AI = true; //GE: DEBUG
     
     do
     {
@@ -47,7 +48,7 @@ int main()
             writeln("Would you like to discard this card?");
             readf(" ");//GE: Workaround of the silly D reading process.
             Discarding = chomp(readln());
-            if (!CanAffordCard(Player[Turn].Hand[SelectedCard]))
+            if (!stringToBool(Discarding) && !CanAffordCard(Player[Turn].Hand[SelectedCard]))
             {
                 writeln("This card is too expensive!");
                 continue;
@@ -60,7 +61,7 @@ int main()
             AIPlay();
         if (IsVictorious(Turn) || IsVictorious(GetEnemy()))
         {
-            writeln("Player ", Turn, "is victorious!");
+            writeln("Player ", GetEnemy(), " is victorious!"); //GE: After PlayCard() the turn is already over
             break;
         }
         writeln("Now the turn is ", Turn);
