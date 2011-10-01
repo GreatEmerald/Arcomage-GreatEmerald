@@ -21,7 +21,7 @@ int main()
         else
             writeln("Player ", Turn, " just discarded ", CI.Name);
     };
-    initGame(); //GE: Start a local player vs bot game. Later on will have more options.
+    initGame();
     
     writeln("Welcome to CLArcomage, the Command Line Arcomage! This is the release version b1, made entirely in D by GreatEmerald. Have a good game!");
     writeln("Would you like to have control of player no. 1? If not, it will be assigned to an AI.");
