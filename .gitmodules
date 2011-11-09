@@ -1,0 +1,9 @@
+[submodule "libarcomage"]
+	path = libarcomage
+	url = git://github.com/GreatEmerald/libarcomage.git
+[submodule "clarcomage"]
+	path = clarcomage
+	url = git://github.com/GreatEmerald/Command-Line-Arcomage.git
+[submodule "arcomage"]
+	path = arcomage
+	url = git://github.com/GreatEmerald/Arcomage-Clone.git
